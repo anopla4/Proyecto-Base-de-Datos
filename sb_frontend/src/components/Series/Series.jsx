@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
+import "./Series.css";
 
 class Series extends Component {
   state = {
@@ -42,15 +43,17 @@ class Series extends Component {
             <th>Cantidad de equipos</th>
           </tr>
         </thead>
-        {this.state.series.map((serie) => (
-          <tr key={serie.id}>
-            <td>{serie.name}</td>
-            <td>{serie.season}</td>
-            <td>{serie.reach}</td>
-            <td>{serie.ng}</td>
-            <td>{serie.nt}</td>
-          </tr>
-        ))}
+        <tbody>
+          {this.state.series.map((serie) => (
+            <tr key={serie.id}>
+              <td>{serie.name}</td>
+              <td>{serie.season}</td>
+              <td>{serie.reach}</td>
+              <td>{serie.ng}</td>
+              <td>{serie.nt}</td>
+            </tr>
+          ))}
+        </tbody>
       </Table>
     );
   }
