@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./Allstarteams.css";
 import { Card, CardDeck, Table, Col, Container } from "react-bootstrap";
+import star from "../../logos/star.png";
 
 class AllStarTeams extends Component {
   state = {
@@ -100,21 +101,27 @@ class AllStarTeams extends Component {
   render() {
     return (
       <Container>
+        <h1 className="mb-5 my-style-header">
+          Equipos "TODOS ESTRELLAS"{" "}
+          <img src={star} width="30" height="30" alt="" />
+        </h1>
         <CardDeck>
           {this.state.series.map((serie) => (
             <Col md="4">
               <Card
-                border="secondary"
-                bg={"info"}
+                border="dark"
+                bg={"secondary"}
                 key={serie.id}
                 text={"white"}
-                className="mb-3 my-style"
+                className="mb-3 my-style-card"
               >
                 <Card.Header>
-                  <Card.Title className="my-style-header">
+                  <Card.Title className="my-style-card-header">
                     {serie.name}
                   </Card.Title>
-                  <Card.Subtitle>{serie.season}</Card.Subtitle>
+                  <Card.Subtitle style={{ color: "midnightblue" }}>
+                    {serie.season}
+                  </Card.Subtitle>
                 </Card.Header>
                 <Card.Body>
                   <Table>

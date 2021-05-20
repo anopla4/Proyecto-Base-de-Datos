@@ -1,10 +1,15 @@
-.my-style {
+.my-style-card {
   font-size: 10px;
   width: "18rem";
 }
 
-.my-style-header {
+.my-style-card-header {
   font-weight: bold;
   font-size: 15px;
-  width: "18rem";
+}
+
+.my-style-header {
+  font-weight: bold;
+  font-size: 30px;
+  align-items: center;
 }
