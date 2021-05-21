@@ -9,7 +9,7 @@ import {
   Form,
   NavDropdown,
 } from "react-bootstrap";
-import logo from "../../logos/logo.png";
+import logo from "../../static/logo.png";
 
 const navigation = (props) => {
   return (

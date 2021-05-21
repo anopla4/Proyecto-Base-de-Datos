@@ -45,3 +45,9 @@ body {
 .table-hover tbody tr:hover th {
   background-color: lightskyblue;
 }
+
+.my-style-header {
+  font-weight: bold;
+  font-size: 30px;
+  align-items: center;
+}

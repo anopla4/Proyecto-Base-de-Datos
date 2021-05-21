@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./Allstarteams.css";
 import { Card, CardDeck, Table, Col, Container } from "react-bootstrap";
-import star from "../../logos/star.png";
+import star from "../../static/star.png";
 
 class AllStarTeams extends Component {
   state = {

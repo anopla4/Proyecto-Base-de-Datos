@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 
 class Players extends Component {
-  state = {};
+  state = {
+    players: [
+      {
+        name: "Alexander Malleta",
+      },
+    ],
+  };
   render() {
     return;
   }

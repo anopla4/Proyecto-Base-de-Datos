@@ -1,15 +1,17 @@
 import "./App.css";
 import { Component } from "react";
-import Layout from "../components/Layout/Layout";
-import Home from "../components/Home/Home";
+import Layout from "../../components/Layout/Layout";
+import Home from "../../components/Home/Home";
 import { Route, Switch } from "react-router";
 import { BrowserRouter } from "react-router-dom";
-import Series from "../components/Series/Series";
-import Players from "../components/Players/Players";
-import Teams from "../components/Teams/Teams";
-import Games from "../components/Games/Games";
-import Directors from "../components/Directors/Directors";
-import AllStarTeams from "../components/AllStarTeams/AllStarTeams";
+import Series from "../../components/Series/Series";
+import Players from "../../components/Players/Players";
+import Teams from "../../components/Teams/Teams";
+import Games from "../../components/Games/Games";
+import Directors from "../../components/Directors/Directors";
+import AllStarTeams from "../../components/AllStarTeams/AllStarTeams";
+import Team from "../../components/Team/Team";
+// import Player from "../../components/Player/Player";
 
 class App extends Component {
   render() {
@@ -24,6 +26,8 @@ class App extends Component {
             <Route path="/teams" component={Teams} />
             <Route path="/games" component={Games} />
             <Route path="/directors" component={Directors} />
+            <Route path="/team/id" component={Team} />
+            {/* <Route path="/player/id" component={Player} /> */}
           </Switch>
         </Layout>
       </BrowserRouter>
