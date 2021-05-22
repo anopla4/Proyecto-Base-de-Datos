@@ -88,38 +88,40 @@ class Players extends Component {
               </Card.Header>
               <Accordion.Collapse eventKey={player.id}>
                 <Card.Body>
-                  <Table>
-                    <tr>
-                      <th>Edad</th>
-                      <th>Equipo actual</th>
-                      <th>Equipos</th>
-                      <th>Años de experiencia</th>
-                      {player.positions.includes("Lanzador") && <th>Mano</th>}
-                      {player.positions.includes("Lanzador") && <th>ERA</th>}
-                      {player.positions.length === 1 &&
-                        !player.positions.includes("Lanzador") && <th>AVE</th>}
-                    </tr>
-                    <tr>
-                      <td>{player.age}</td>
-                      <td>{player.current_team}</td>
-                      <td>
-                        {player.teams.map((team) => (
-                          <li>{team} </li>
-                        ))}
-                      </td>
-                      <td>{player.years_of_experience}</td>
-                      {player.positions.includes("Lanzador") && (
-                        <td>{player.era}</td>
+                  <Row className="my-header-player-card">
+                    <Col md={1}>Edad</Col>
+                    <Col>Equipo actual</Col>
+                    <Col>Equipos</Col>
+                    <Col>Años de experiencia</Col>
+                    {player.positions.includes("Lanzador") && <Col>Mano</Col>}
+                    {player.positions.includes("Lanzador") && (
+                      <Col md={1}>ERA</Col>
+                    )}
+                    {player.positions.length === 1 &&
+                      !player.positions.includes("Lanzador") && (
+                        <Col md={1}>AVE</Col>
                       )}
-                      {player.positions.includes("Lanzador") && (
-                        <td>{player.hand}</td>
+                  </Row>
+                  <Row>
+                    <Col md={1}>{player.age}</Col>
+                    <Col>{player.current_team}</Col>
+                    <Col>
+                      {player.teams.map((team) => (
+                        <li>{team} </li>
+                      ))}
+                    </Col>
+                    <Col>{player.years_of_experience}</Col>
+                    {player.positions.includes("Lanzador") && (
+                      <Col>{player.hand}</Col>
+                    )}
+                    {player.positions.includes("Lanzador") && (
+                      <Col md={1}>{player.era}</Col>
+                    )}
+                    {player.positions.length === 1 &&
+                      !player.positions.includes("Lanzador") && (
+                        <Col md={1}>{player.ave}</Col>
                       )}
-                      {player.positions.length === 1 &&
-                        !player.positions.includes("Lanzador") && (
-                          <td>{player.ave}</td>
-                        )}
-                    </tr>
-                  </Table>
+                  </Row>
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
