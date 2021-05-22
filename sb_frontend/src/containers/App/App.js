@@ -11,7 +11,7 @@ import Games from "../../components/Games/Games";
 import Directors from "../../components/Directors/Directors";
 import AllStarTeams from "../../components/AllStarTeams/AllStarTeams";
 import Team from "../../components/Team/Team";
-// import Player from "../../components/Player/Player";
+import Player from "../../components/Player/Player";
 
 class App extends Component {
   render() {
