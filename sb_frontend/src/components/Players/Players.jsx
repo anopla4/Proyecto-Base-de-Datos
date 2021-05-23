@@ -64,14 +64,7 @@ class Players extends Component {
                     <h6>{player.name}</h6>
                     <p style={{ display: "inline" }}>
                       <h className="header-posiciones">Posiciones: </h>
-                      {player.positions.map((team) => (
-                        <li
-                          className="list-posiciones"
-                          style={{ display: "inline" }}
-                        >
-                          {team}{" "}
-                        </li>
-                      ))}
+                      {player.positions.join(", ")}.
                     </p>
                   </Col>
                   <Col md={1}>
@@ -105,11 +98,7 @@ class Players extends Component {
                   <Row>
                     <Col md={1}>{player.age}</Col>
                     <Col>{player.current_team}</Col>
-                    <Col>
-                      {player.teams.map((team) => (
-                        <li>{team} </li>
-                      ))}
-                    </Col>
+                    <Col>{player.teams.join(", ")}.</Col>
                     <Col>{player.years_of_experience}</Col>
                     {player.positions.includes("Lanzador") && (
                       <Col>{player.hand}</Col>
