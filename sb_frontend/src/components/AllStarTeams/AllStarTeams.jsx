@@ -109,11 +109,10 @@ class AllStarTeams extends Component {
           {this.state.series.map((serie) => (
             <Col md="4">
               <Card
-                border="dark"
-                bg={"secondary"}
+                border="info"
                 key={serie.id}
-                text={"white"}
-                className="mb-3 my-style-card"
+                text={"black"}
+                className="mb-3 my-style-card active_hover"
               >
                 <Card.Header>
                   <Card.Title className="my-style-card-header">

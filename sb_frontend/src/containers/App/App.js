@@ -11,6 +11,7 @@ import Games from "../../components/Games/Games";
 import Directors from "../../components/Directors/Directors";
 import AllStarTeams from "../../components/AllStarTeams/AllStarTeams";
 import Team from "../../components/Team/Team";
+import Game from "../../components/Game/Game";
 import Player from "../../components/Player/Player";
 
 class App extends Component {
@@ -27,6 +28,8 @@ class App extends Component {
             <Route path="/games" component={Games} />
             <Route path="/directors" component={Directors} />
             <Route path="/team/id" component={Team} />
+            <Route path="/game/id" component={Game} />
+
             {/* <Route path="/player/id" component={Player} /> */}
           </Switch>
         </Layout>
