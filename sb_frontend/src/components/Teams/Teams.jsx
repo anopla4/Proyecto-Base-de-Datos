@@ -42,6 +42,11 @@ class Teams extends Component {
       },
     ],
   };
+
+  handleOnClick = (idT) => {
+    this.props.history.push({ pathname: "/team", state: { idTeam: idT } });
+  };
+
   render() {
     return (
       <Container>
@@ -64,7 +69,12 @@ class Teams extends Component {
                   <ListGroupItem>Color: {team.color}</ListGroupItem>
                 </ListGroup>
                 <Card.Body>
-                  <Card.Link href="/team/id">Saber más</Card.Link>
+                  <Card.Link
+                    href="/team"
+                    onClick={() => this.handleOnClick(team.id)}
+                  >
+                    Saber más
+                  </Card.Link>
                 </Card.Body>
               </Card>
             </Col>
