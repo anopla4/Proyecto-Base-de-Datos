@@ -1,15 +1,27 @@
-import React from "react";
-import { Col, Row } from "react-bootstrap";
+import React, { Component } from "react";
+import { Carousel } from "react-bootstrap";
 import "./Home.css";
 
-const home = (props) => {
-  return (
-    <Row>
-      <Col md={12}>
-        <div className={"homeText"}>"WELCOME"</div>
-      </Col>
-    </Row>
-  );
-};
+class Home extends Component {
+  state = {
+    image_src: [
+      "http://localhost:8000/src/logos/home-4.jpg",
+      "http://localhost:8000/src/logos/home-1.jpg",
+      "http://localhost:8000/src/logos/home-2.jpg",
+      "http://localhost:8000/src/logos/home-3.jpg",
+    ],
+  };
+  render() {
+    return (
+      <Carousel className="carousel" fade>
+        {this.state.image_src.map((src) => (
+          <Carousel.Item className="item">
+            <img className="d-block w-100" src={src} alt="" />
+          </Carousel.Item>
+        ))}
+      </Carousel>
+    );
+  }
+}
 
-export default home;
+export default Home;

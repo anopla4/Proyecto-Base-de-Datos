@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Card, Container, Col, Row, Image } from "react-bootstrap";
+import "../../containers/App/App.css";
+
 class Directors extends Component {
   state = {
     directors: [
@@ -37,7 +39,7 @@ class Directors extends Component {
                 <Col>
                   <h5>{dir.name}</h5>
                   <p style={{ display: "inline" }}>
-                    <h className="my-header-player-card">Equipos dirigidos: </h>
+                    <h className="bold">Equipos dirigidos: </h>
                     {dir.directed_teams.join(", ")}.
                   </p>
                 </Col>

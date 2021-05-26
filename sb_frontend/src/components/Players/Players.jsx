@@ -81,7 +81,7 @@ class Players extends Component {
               </Card.Header>
               <Accordion.Collapse eventKey={player.id}>
                 <Card.Body>
-                  <Row className="my-header-player-card">
+                  <Row className="bold">
                     <Col md={1}>Edad</Col>
                     <Col>Equipo actual</Col>
                     <Col>Equipos</Col>

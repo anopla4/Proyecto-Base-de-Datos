@@ -1,0 +1,8 @@
+.header-posiciones-team {
+  font-weight: bold;
+  font-size: medium;
+}
+
+.player-hover:hover {
+  border: 1px solid lightskyblue;
+}

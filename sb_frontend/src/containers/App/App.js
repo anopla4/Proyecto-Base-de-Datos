@@ -13,6 +13,8 @@ import AllStarTeams from "../../components/AllStarTeams/AllStarTeams";
 import Team from "../../components/Team/Team";
 import Game from "../../components/Game/Game";
 import Player from "../../components/Player/Player";
+import Serie from "../../components/Serie/Serie";
+import TeamInSerie from "../../components/TeamInSerie/TeamInSerie";
 
 class App extends Component {
   render() {
@@ -29,6 +31,8 @@ class App extends Component {
             <Route path="/directors" component={Directors} />
             <Route path="/team/id" component={Team} />
             <Route path="/game/id" component={Game} />
+            <Route path="/serie" component={Serie} />
+            <Route path="/serie_team" component={TeamInSerie} />
 
             {/* <Route path="/player/id" component={Player} /> */}
           </Switch>

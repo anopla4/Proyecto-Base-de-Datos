@@ -10,6 +10,7 @@ import {
   Container,
 } from "react-bootstrap";
 import "./Games.css";
+import "../../containers/App/App.css";
 
 class Games extends Component {
   state = {
@@ -125,9 +126,7 @@ class Games extends Component {
                   </Container>
                   <Container>
                     <p style={{ display: "inline" }}>
-                      <h className="my-header-list-group-item">
-                        Lanzador ganador:{" "}
-                      </h>{" "}
+                      <h className="bold">Lanzador ganador: </h>{" "}
                       {game.winner_pitcher.name}.
                     </p>
                   </Container>
