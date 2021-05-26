@@ -38,7 +38,7 @@ const navigation = (props) => {
             </NavDropdown.Item>
           </NavDropdown>
           <NavItem>
-            <Nav.Link href="/players">Jugadores</Nav.Link>
+            <Nav.Link href="/players_general">Jugadores</Nav.Link>
           </NavItem>
           <NavItem>
             <Nav.Link href="/teams">Equipos</Nav.Link>

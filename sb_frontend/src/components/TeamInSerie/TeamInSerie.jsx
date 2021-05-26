@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Container, Row, Col, Card, Image } from "react-bootstrap";
 import "./TeamInSerie.css";
+import Players from "../../components/Players/Players";
 
 class TeamInSerie extends Component {
   state = {
@@ -14,12 +15,22 @@ class TeamInSerie extends Component {
         name: "Alexander Malleta",
         positions: ["Primera base"],
         img: "http://localhost:8000/src/logos/malleta.jpg",
+        age: 44,
+        teams: ["Industriales", "Metropolitano"],
+        current_team: "Retirado",
+        years_of_experience: 20,
+        ave: 301,
       },
       {
-        id: 1,
+        id: 2,
         name: "Frank Camilo Morejón",
         positions: ["Catcher"],
         img: "http://localhost:8000/src/logos/frank-camilo.jpg",
+        age: 44,
+        teams: ["Industriales"],
+        current_team: "Retirado",
+        years_of_experience: 17,
+        ave: 253,
       },
     ],
   };
@@ -35,8 +46,9 @@ class TeamInSerie extends Component {
           <h5 style={{ display: "inline" }}>Directores: </h5>
           {this.state.directors.map((dir) => dir.name).join(", ")}.
         </p>
-        <Container className="">
-          {this.state.players.map((player) => (
+        <Container>
+          <Players players={this.state.players} />
+          {/* {this.state.players.map((player) => (
             <Card key={player.id} className="player-hover">
               <Card.Header style={{ padding: "0.5%" }}>
                 <Row className="row align-items-center">
@@ -61,7 +73,7 @@ class TeamInSerie extends Component {
                 </Row>
               </Card.Header>
             </Card>
-          ))}
+          ))} */}
         </Container>
       </Container>
     );
