@@ -10,8 +10,8 @@ using SB_backend.Models;
 namespace SB_backend.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20210526011230_FirstMigration")]
-    partial class FirstMigration
+    [Migration("20210526164939_first")]
+    partial class first
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,44 @@ namespace SB_backend.Migrations
                 .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("SB_backend.Models.Caracter", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Caracter_Name")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Caracters");
+                });
+
+            modelBuilder.Entity("SB_backend.Models.Date", b =>
+                {
+                    b.Property<string>("Day");
+
+                    b.Property<string>("Hour");
+
+                    b.HasKey("Day", "Hour");
+
+                    b.ToTable("Dates");
+                });
+
+            modelBuilder.Entity("SB_backend.Models.Director", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Directors");
+                });
 
             modelBuilder.Entity("SB_backend.Models.Player", b =>
                 {
@@ -41,6 +79,30 @@ namespace SB_backend.Migrations
                     b.HasIndex("Current_TeamId");
 
                     b.ToTable("Players");
+                });
+
+            modelBuilder.Entity("SB_backend.Models.Serie", b =>
+                {
+                    b.Property<Guid>("Id");
+
+                    b.Property<DateTime>("Init_Date")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime>("End_Date")
+                        .HasColumnType("date");
+
+                    b.Property<Guid>("CaracterId");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("Id", "Init_Date", "End_Date");
+
+                    b.HasAlternateKey("End_Date", "Id", "Init_Date");
+
+                    b.HasIndex("CaracterId");
+
+                    b.ToTable("Series");
                 });
 
             modelBuilder.Entity("SB_backend.Models.Team", b =>
@@ -67,6 +129,14 @@ namespace SB_backend.Migrations
                     b.HasOne("SB_backend.Models.Team", "Current_Team")
                         .WithMany()
                         .HasForeignKey("Current_TeamId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SB_backend.Models.Serie", b =>
+                {
+                    b.HasOne("SB_backend.Models.Caracter", "Caracter_Serie")
+                        .WithMany()
+                        .HasForeignKey("CaracterId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

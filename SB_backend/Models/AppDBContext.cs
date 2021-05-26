@@ -17,6 +17,9 @@ namespace SB_backend.Models
                 .HasKey(c => new { c.Day, c.Hour });
             modelBuilder.Entity<Serie>()
                 .HasKey(c => new { c.Id, c.Init_Date,c.End_Date });
+            modelBuilder.Entity<Position>()
+    .HasKey(c => new { c.Id, c.Position_Name});
+            modelBuilder.Entity<Position>().HasData(new Position { Id = Guid.NewGuid(),Position_Name = "C" }, new Position { Id = Guid.NewGuid(), Position_Name = "1B" }, new Position { Position_Name = "2B" }, new Position { Id = Guid.NewGuid(), Position_Name = "3B" }, new Position { Id = Guid.NewGuid(), Position_Name = "SS" }, new Position { Id = Guid.NewGuid(), Position_Name = "Lanzador" }, new Position { Id = Guid.NewGuid(), Position_Name = "LF" }, new Position { Id = Guid.NewGuid(), Position_Name = "RF" }, new Position { Id = Guid.NewGuid(), Position_Name = "CF" }, new Position { Id = Guid.NewGuid(), Position_Name = "BD" });
         }
 
         public DbSet<Player> Players { get; set; }
@@ -25,5 +28,6 @@ namespace SB_backend.Models
         public DbSet<Date> Dates { get; set; }
         public DbSet<Serie> Series { get; set; }
         public DbSet<Director> Directors { get; set; }
+        public DbSet<Position> Positions { get; set; }
     }
 }

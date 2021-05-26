@@ -10,8 +10,8 @@ using SB_backend.Models;
 namespace SB_backend.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20210526153215_TablesDates&Caracters&Directors&Series")]
-    partial class TablesDatesCaractersDirectorsSeries
+    [Migration("20210526221930_PositionTable")]
+    partial class PositionTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -81,13 +81,39 @@ namespace SB_backend.Migrations
                     b.ToTable("Players");
                 });
 
+            modelBuilder.Entity("SB_backend.Models.Position", b =>
+                {
+                    b.Property<Guid>("Id");
+
+                    b.Property<string>("Position_Name");
+
+                    b.HasKey("Id", "Position_Name");
+
+                    b.ToTable("Positions");
+
+                    b.HasData(
+                        new { Id = new Guid("648d796e-78da-4249-a4be-f66ae0abb79c"), Position_Name = "C" },
+                        new { Id = new Guid("2c709e68-1add-42ec-839b-681fec1eb9b6"), Position_Name = "1B" },
+                        new { Id = new Guid("00000000-0000-0000-0000-000000000000"), Position_Name = "2B" },
+                        new { Id = new Guid("e761a488-e708-4f04-a35e-0726877cd83e"), Position_Name = "3B" },
+                        new { Id = new Guid("877da458-a2b7-4fed-969a-7a94578b2947"), Position_Name = "SS" },
+                        new { Id = new Guid("4c6465b8-6861-41d2-8ccb-b968978a2f52"), Position_Name = "Lanzador" },
+                        new { Id = new Guid("b9a2f3f4-c493-4a5f-bc83-4e307543f405"), Position_Name = "LF" },
+                        new { Id = new Guid("1ae49d37-92f2-4f34-89b2-8950d54fa999"), Position_Name = "RF" },
+                        new { Id = new Guid("1e9ff5c1-2ea0-4f58-a0ba-9c543626b080"), Position_Name = "CF" },
+                        new { Id = new Guid("88c53dfd-6f39-4710-82c2-256f3f35c418"), Position_Name = "BD" }
+                    );
+                });
+
             modelBuilder.Entity("SB_backend.Models.Serie", b =>
                 {
                     b.Property<Guid>("Id");
 
-                    b.Property<string>("Init_Date");
+                    b.Property<DateTime>("Init_Date")
+                        .HasColumnType("date");
 
-                    b.Property<string>("End_Date");
+                    b.Property<DateTime>("End_Date")
+                        .HasColumnType("date");
 
                     b.Property<Guid>("CaracterId");
 

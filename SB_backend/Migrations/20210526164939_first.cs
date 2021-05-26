@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SB_backend.Migrations
 {
-    public partial class TablesDatesCaractersDirectorsSeries : Migration
+    public partial class first : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,12 +44,26 @@ namespace SB_backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Teams",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Color = table.Column<string>(nullable: false),
+                    Initials = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Teams", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Series",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Init_Date = table.Column<string>(nullable: false),
-                    End_Date = table.Column<string>(nullable: false),
+                    Init_Date = table.Column<DateTime>(type: "date", nullable: false),
+                    End_Date = table.Column<DateTime>(type: "date", nullable: false),
                     Name = table.Column<string>(nullable: false),
                     CaracterId = table.Column<Guid>(nullable: false)
                 },
@@ -64,6 +78,32 @@ namespace SB_backend.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Players",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    Current_TeamId = table.Column<Guid>(nullable: false),
+                    Age = table.Column<int>(nullable: false),
+                    Year_Experience = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Players", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Players_Teams_Current_TeamId",
+                        column: x => x.Current_TeamId,
+                        principalTable: "Teams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Players_Current_TeamId",
+                table: "Players",
+                column: "Current_TeamId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Series_CaracterId",
@@ -80,7 +120,13 @@ namespace SB_backend.Migrations
                 name: "Directors");
 
             migrationBuilder.DropTable(
+                name: "Players");
+
+            migrationBuilder.DropTable(
                 name: "Series");
+
+            migrationBuilder.DropTable(
+                name: "Teams");
 
             migrationBuilder.DropTable(
                 name: "Caracters");
