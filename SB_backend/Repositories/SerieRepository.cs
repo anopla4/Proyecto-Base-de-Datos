@@ -1,4 +1,5 @@
-﻿using SB_backend.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using SB_backend.Interfaces;
 using SB_backend.Models;
 using System;
 using System.Collections.Generic;
@@ -25,12 +26,12 @@ namespace SB_backend.Repositories
 
         public Serie getSerie(Guid id)
         {
-            return _context.Series.SingleOrDefault(c => c.Id == id);
+            return _context.Series.Include(c => c.Caracter_Serie).SingleOrDefault(c => c.Id == id);
         }
 
         public List<Serie> getSeries()
         {
-            return _context.Series.ToList();
+            return _context.Series.Include(c => c.Caracter_Serie).ToList();
         }
 
         public bool RemoveSerie(Serie serie)

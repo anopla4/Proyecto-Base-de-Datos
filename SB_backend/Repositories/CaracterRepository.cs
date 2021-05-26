@@ -18,6 +18,7 @@ namespace SB_backend.Repositories
         {
             caracter.Id = Guid.NewGuid();
             _context.Caracters.Add(caracter);
+            _context.SaveChanges();
             return caracter;
         }
 
