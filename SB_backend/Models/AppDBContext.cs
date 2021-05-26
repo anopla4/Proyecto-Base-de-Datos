@@ -14,5 +14,8 @@ namespace SB_backend.Models
 
         public DbSet<Player> Players { get; set; }
         public DbSet<Team> Teams { get; set; }
+        public DbSet<Caracter> Caracters { get; set; }
+        public DbSet<Date> Dates { get; set; }
+        public DbSet<Serie> Series { get; set; }
     }
 }
