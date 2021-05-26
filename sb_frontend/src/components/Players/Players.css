@@ -22,3 +22,94 @@
 .header:hover {
   font-weight: bolder;
 }
+
+.set-size {
+  font-size: inherit;
+}
+
+.star::before {
+  pointer-events: none;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: calc(var(--hexOffset) * -1);
+  width: var(--hexOverCol);
+  height: 0;
+  padding-top: calc(100% * (var(--hexHeight) / var(--colWidth)));
+  content: "";
+  background-color: #698f3f;
+  z-index: -10;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  -webkit-clip-path: polygon(
+    50% 0%,
+    100% 25%,
+    100% 75%,
+    50% 100%,
+    0% 75%,
+    0% 25%
+  );
+}
+.star::after {
+  pointer-events: none;
+  position: absolute;
+  width: var(--legsOverCol);
+  height: 0;
+  padding-top: var(--legsOverCol);
+  top: calc(-1 * 100% * (var(--cos30) / var(--rowHeight)));
+  left: calc(var(--legsOffset) * -1);
+  content: "";
+  z-index: -20;
+  background-color: #ddd1c7;
+  clip-path: polygon(
+    13.3975% 13.3975%,
+    36.603% 0%,
+    50% 23.205%,
+    63.397% 0%,
+    86.6025% 13.3975%,
+    73.205% 36.603%,
+    100% 36.603%,
+    100% 63.397%,
+    73.205% 63.397%,
+    86.6025% 86.6025%,
+    63.397% 100%,
+    50% 76.795%,
+    36.603% 100%,
+    13.3975% 86.6025%,
+    26.795% 63.397%,
+    0% 63.397%,
+    0% 36.603%,
+    26.795% 36.603%
+  );
+  -webkit-clip-path: polygon(
+    13.3975% 13.3975%,
+    36.603% 0%,
+    50% 23.205%,
+    63.397% 0%,
+    86.6025% 13.3975%,
+    73.205% 36.603%,
+    100% 36.603%,
+    100% 63.397%,
+    73.205% 63.397%,
+    86.6025% 86.6025%,
+    63.397% 100%,
+    50% 76.795%,
+    36.603% 100%,
+    13.3975% 86.6025%,
+    26.795% 63.397%,
+    0% 63.397%,
+    0% 36.603%,
+    26.795% 36.603%
+  );
+}
+/* 
+.star:hover::before {
+  background-color: #f1615a;
+} */
+.star:hover::after {
+  background-color: #e0f2e9;
+}
+.star:hover img {
+  transform: rotate(0) scale(1.8) translateZ(0);
+  -webkit-filter: drop-shadow(0 20px 20px rgba(0, 0, 0, 0.7));
+  filter: drop-shadow(0 20px 20px rgba(0, 0, 0, 0.7));
+}

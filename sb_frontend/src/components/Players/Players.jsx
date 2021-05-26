@@ -43,7 +43,7 @@ class Players extends Component {
                     {player.positions.join(", ")}.
                   </p>
                 </Col>
-                <Col md={1}>
+                <Col md={2}>
                   <Accordion.Toggle
                     as={Button}
                     variant="link"
@@ -57,22 +57,22 @@ class Players extends Component {
             </Card.Header>
             <Accordion.Collapse eventKey={player.id}>
               <Card.Body>
-                <Row className="bold">
-                  <Col md={1}>Edad</Col>
+                <Row className="bold set-size">
+                  <Col md={2}>Edad</Col>
                   <Col>Equipo actual</Col>
                   <Col>Equipos</Col>
                   <Col>Años de experiencia</Col>
                   {player.positions.includes("Lanzador") && <Col>Mano</Col>}
                   {player.positions.includes("Lanzador") && (
-                    <Col md={1}>ERA</Col>
+                    <Col md={2}>ERA</Col>
                   )}
                   {player.positions.length === 1 &&
                     !player.positions.includes("Lanzador") && (
-                      <Col md={1}>AVE</Col>
+                      <Col md={2}>AVE</Col>
                     )}
                 </Row>
-                <Row>
-                  <Col md={1}>{player.age}</Col>
+                <Row className="set-size">
+                  <Col md={2}>{player.age}</Col>
                   <Col>{player.current_team}</Col>
                   <Col>{player.teams.join(", ")}.</Col>
                   <Col>{player.years_of_experience}</Col>
@@ -80,11 +80,11 @@ class Players extends Component {
                     <Col>{player.hand}</Col>
                   )}
                   {player.positions.includes("Lanzador") && (
-                    <Col md={1}>{player.era}</Col>
+                    <Col md={2}>{player.era}</Col>
                   )}
                   {player.positions.length === 1 &&
                     !player.positions.includes("Lanzador") && (
-                      <Col md={1}>{player.ave}</Col>
+                      <Col md={2}>{player.ave}</Col>
                     )}
                 </Row>
               </Card.Body>

@@ -16,6 +16,7 @@ class Games extends Component {
   state = {
     games: [
       {
+        id: 1,
         winner: {
           id: 2,
           name: "Industriales",
@@ -41,6 +42,7 @@ class Games extends Component {
         winner_pitcher: { name: "Rivero" },
       },
       {
+        id: 2,
         winner: {
           id: 2,
           name: "Matanzas",
@@ -66,6 +68,7 @@ class Games extends Component {
         winner_pitcher: { name: "Rivero" },
       },
       {
+        id: 3,
         winner: {
           id: 9,
           name: "Sancti Spíritus",
@@ -92,6 +95,11 @@ class Games extends Component {
       },
     ],
   };
+
+  handleOnClick = (idG) => {
+    this.props.history.push({ pathname: "/game", state: { idGame: idG } });
+  };
+
   render() {
     return (
       <Container>
@@ -100,7 +108,7 @@ class Games extends Component {
         <CardDeck>
           {this.state.games.map((game) => (
             <Col md={4}>
-              <Card className="mb-3 active_hover">
+              <Card className="mb-3 active_hover" key={game.id}>
                 <Card.Header>
                   <Row className="mb-2">
                     <Col className="my-series-name">{game.serie.name}</Col>
@@ -131,7 +139,12 @@ class Games extends Component {
                     </p>
                   </Container>
                   <Container className="my-link">
-                    <Card.Link href="/game/id">Saber más</Card.Link>
+                    <Card.Link
+                      href="/game"
+                      onClick={() => this.handleOnClick(game.id)}
+                    >
+                      Saber más
+                    </Card.Link>
                   </Container>
                 </Card.Body>
               </Card>
