@@ -9,13 +9,13 @@ import {
   Button,
   Table,
 } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import chevron from "../../static/chevron-compact-down.svg";
 import "./Players.css";
 import "../../containers/App/App.css";
 
 class Players extends Component {
   render() {
-    console.log(this.props);
     return (
       <Accordion>
         {this.props.players.map((player) => (
@@ -32,7 +32,12 @@ class Players extends Component {
                   />
                 </Col>
                 <Col>
-                  <h6>{player.name}</h6>
+                  <h6
+                    className="header"
+                    onClick={() => this.props.onClick(player.id)}
+                  >
+                    {player.name}
+                  </h6>
                   <p style={{ display: "inline" }}>
                     <h className="header-posiciones">Posiciones: </h>
                     {player.positions.join(", ")}.

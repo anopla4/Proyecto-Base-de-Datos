@@ -33,8 +33,7 @@ class App extends Component {
             <Route path="/game/id" component={Game} />
             <Route path="/serie" component={Serie} />
             <Route path="/serie_team" component={TeamInSerie} />
-
-            {/* <Route path="/player/id" component={Player} /> */}
+            <Route path="/player" component={Player} />
           </Switch>
         </Layout>
       </BrowserRouter>

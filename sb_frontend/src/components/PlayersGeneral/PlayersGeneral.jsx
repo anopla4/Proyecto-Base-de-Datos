@@ -32,11 +32,15 @@ class PlayersGeneral extends Component {
     ],
   };
 
+  handleOnClick = (id) => {
+    this.props.history.push({ pathname: "/player", state: { idPlayer: id } });
+  };
+
   render() {
     return (
       <Container>
         <h1 className="mb-5 my-style-header">Jugadores de pelota</h1>
-        <Players players={this.state.players} />
+        <Players players={this.state.players} onClick={this.handleOnClick} />
       </Container>
     );
   }

@@ -18,3 +18,7 @@
 .custom-circle-image img {
   object-fit: cover;
 }
+
+.header:hover {
+  font-weight: bolder;
+}
