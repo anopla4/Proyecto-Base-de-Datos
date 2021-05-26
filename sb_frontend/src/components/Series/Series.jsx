@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table } from "react-bootstrap";
+import { Table, Container, Button } from "react-bootstrap";
 import "./Series.css";
 class Series extends Component {
   state = {
@@ -100,40 +100,53 @@ class Series extends Component {
     });
   };
 
+  handleOnClickButton = () => {
+    this.props.history.push("/serieForm");
+  };
+
   render() {
     // if (this.state.redirect) {
     //   return <Redirect to={this.state.redirect}></Redirect>;
     // }
     return (
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Temporada</th>
-            <th>Carácter</th>
-            <th>Cantidad de juegos</th>
-            <th>Cantidad de equipos</th>
-            <th>Primer lugar</th>
-            <th>Último lugar</th>
-          </tr>
-        </thead>
-        <tbody>
-          {this.state.series.map((serie) => (
-            <tr
-              key={serie.id}
-              onClick={() => this.handleOnClick(serie.id, serie.name)}
-            >
-              <td>{serie.name}</td>
-              <td>{serie.season}</td>
-              <td>{serie.reach}</td>
-              <td>{serie.ng}</td>
-              <td>{serie.nt}</td>
-              <td>{serie.winner}</td>
-              <td>{serie.loser}</td>
+      <Container>
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Temporada</th>
+              <th>Carácter</th>
+              <th>Cantidad de juegos</th>
+              <th>Cantidad de equipos</th>
+              <th>Primer lugar</th>
+              <th>Último lugar</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {this.state.series.map((serie) => (
+              <tr
+                key={serie.id}
+                onClick={() => this.handleOnClick(serie.id, serie.name)}
+              >
+                <td>{serie.name}</td>
+                <td>{serie.season}</td>
+                <td>{serie.reach}</td>
+                <td>{serie.ng}</td>
+                <td>{serie.nt}</td>
+                <td>{serie.winner}</td>
+                <td>{serie.loser}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        <Button
+          style={{ float: "right" }}
+          onClick={this.handleOnClickButton}
+          variant="primary"
+        >
+          Agregar Serie
+        </Button>
+      </Container>
     );
   }
 }
