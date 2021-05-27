@@ -1,19 +1,8 @@
 import React, { Component } from "react";
-import {
-  Container,
-  Accordion,
-  Card,
-  Col,
-  Row,
-  Image,
-  Button,
-  Table,
-} from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Accordion, Card, Col, Row, Image, Button } from "react-bootstrap";
 import chevron from "../../static/chevron-compact-down.svg";
 import "./Players.css";
 import "../../containers/App/App.css";
-import { TrashFill, PencilSquare } from "react-bootstrap-icons";
 import DeleteEdit from "../../components/DeleteEdit/DeleteEdit";
 
 class Players extends Component {

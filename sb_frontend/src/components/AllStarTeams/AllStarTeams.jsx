@@ -1,7 +1,18 @@
 import React, { Component } from "react";
 import "./Allstarteams.css";
-import { Card, CardDeck, Table, Col, Container } from "react-bootstrap";
+import {
+  Accordion,
+  Card,
+  Row,
+  CardDeck,
+  Table,
+  Col,
+  Container,
+  Button,
+  Image,
+} from "react-bootstrap";
 import star from "../../static/star.png";
+import chevron from "../../static/chevron-compact-down.svg";
 
 class AllStarTeams extends Component {
   state = {
@@ -103,9 +114,51 @@ class AllStarTeams extends Component {
       <Container>
         <h1 className="mb-5 my-style-header">
           Equipos "TODOS ESTRELLAS"{" "}
-          <img src={star} width="30" height="30" alt="" />
+          {/* <img src={star} width="30" height="30" alt="" /> */}
         </h1>
-        <CardDeck>
+        <Accordion className="mb-3">
+          {this.state.series.map((serie) => (
+            <Card key={serie.id}>
+              <Card.Header>
+                <Row>
+                  <Col>
+                    <Card.Title className="my-style-card-header">
+                      {serie.name}
+                    </Card.Title>
+                    <Card.Subtitle style={{ color: "midnightblue" }}>
+                      {serie.season}
+                    </Card.Subtitle>
+                  </Col>
+                  <Col md={2}>
+                    <Accordion.Toggle
+                      as={Button}
+                      variant="link"
+                      eventKey={serie.id}
+                      className="my-button star"
+                    >
+                      <img src={star} width="30" height="30" alt="" />
+
+                      {/* <Image src={chevron} /> */}
+                    </Accordion.Toggle>
+                  </Col>
+                </Row>
+              </Card.Header>
+              <Accordion.Collapse eventKey={serie.id}>
+                <Card.Body>
+                  <Table>
+                    {serie.players.map((player) => (
+                      <tr>
+                        <td>{player.name}</td>
+                        <td>{player.team}</td>
+                      </tr>
+                    ))}
+                  </Table>
+                </Card.Body>
+              </Accordion.Collapse>
+            </Card>
+          ))}
+        </Accordion>
+        {/* <CardDeck>
           {this.state.series.map((serie) => (
             <Col md="4">
               <Card
@@ -135,7 +188,7 @@ class AllStarTeams extends Component {
               </Card>
             </Col>
           ))}
-        </CardDeck>
+        </CardDeck> */}
       </Container>
     );
   }
