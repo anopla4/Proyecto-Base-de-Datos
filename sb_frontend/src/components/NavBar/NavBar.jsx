@@ -23,8 +23,8 @@ const navigation = (props) => {
           className="d-inline-block align-top"
         />
       </Navbar.Brand>
-      <Navbar.Toggle aria-controls="navbarScroll" />
-      <Navbar.Collapse id="navbarScroll">
+      <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+      <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="ml.auto" navbarScroll>
           <NavItem>
             <Nav.Link onCollapse="" href="/">
@@ -50,10 +50,15 @@ const navigation = (props) => {
             <Nav.Link href="/directors">Directores</Nav.Link>
           </NavItem>
         </Nav>
-        <Form inline className="ml-auto" navbarScroll>
+        <Nav className="ml-auto">
+          <Nav.Item>
+            <Nav.Link href="/login">Iniciar sesión</Nav.Link>
+          </Nav.Item>
+        </Nav>
+        {/* <Form inline className="ml-auto" navbarScroll>
           <FormControl type="text" placeholder="Search" className="mr-sm-2" />
           <Button variant="outline-info">Search</Button>
-        </Form>
+        </Form> */}
       </Navbar.Collapse>
     </Navbar>
   );
