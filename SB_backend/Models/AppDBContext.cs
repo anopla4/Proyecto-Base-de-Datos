@@ -21,6 +21,11 @@ namespace SB_backend.Models
                 .HasKey(c => new { c.PlayerId, c.PositionId});
             modelBuilder.Entity<TeamSerie>()
                 .HasKey(c => new { c.TeamId, c.SerieId, c.SerieInitDate, c.SerieEndDate });
+            modelBuilder.Entity<TeamSeriePlayer>()
+                .HasOne(c => c.TeamSerie)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<TeamSeriePlayer>().HasKey(c => new { c.PlayerId, c.SerieId, c.SerieInitDate, c.SerieEndDate });
             modelBuilder.Entity<Position>().HasData(new Position { Id = Guid.NewGuid(),Position_Name = "C" }, new Position { Id = Guid.NewGuid(), Position_Name = "1B" }, new Position { Id = Guid.NewGuid(),Position_Name = "2B" }, new Position { Id = Guid.NewGuid(), Position_Name = "3B" }, new Position { Id = Guid.NewGuid(), Position_Name = "SS" }, new Position { Id = Guid.NewGuid(), Position_Name = "Lanzador" }, new Position { Id = Guid.NewGuid(), Position_Name = "LF" }, new Position { Id = Guid.NewGuid(), Position_Name = "RF" }, new Position { Id = Guid.NewGuid(), Position_Name = "CF" }, new Position { Id = Guid.NewGuid(), Position_Name = "BD" });
             
         }
@@ -34,5 +39,6 @@ namespace SB_backend.Models
         public DbSet<Position> Positions { get; set; }
         public DbSet<PositionPlayer> PositionPlayers { get; set; }
         public DbSet<TeamSerie> TeamsSeries { get; set; }
+        public DbSet<TeamSeriePlayer> TeamsSeriesPlayers { get; set; }
     }
 }

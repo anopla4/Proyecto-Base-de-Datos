@@ -22,12 +22,12 @@ namespace SB_backend.Controllers
         [HttpGet]
         public IActionResult GetSeries()
         {
-            return Ok(_serRep.getSeries());
+            return Ok(_serRep.GetSeries());
         }
         [HttpGet("{Id}")]
         public IActionResult GetSerie(Guid Id)
         {
-            var serie = _serRep.getSerie(Id);
+            var serie = _serRep.GetSerie(Id);
             if(serie != null)
             {
                 return Ok(serie);
@@ -43,7 +43,7 @@ namespace SB_backend.Controllers
         [HttpPatch("{Id}")]
         public IActionResult UpdateSerie(Guid Id,Serie serie)
         {
-            var current_serie = _serRep.getSerie(Id);
+            var current_serie = _serRep.GetSerie(Id);
 
             if (current_serie != null)
             {

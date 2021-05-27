@@ -22,12 +22,12 @@ namespace SB_backend.Controllers
         [HttpGet]
         public IActionResult GetDirectors()
         {
-            return Ok(_dirRep.getDirectors());
+            return Ok(_dirRep.GetDirectors());
         }
         [HttpGet("{Id}")]
         public IActionResult GetDirector(Guid Id)
         {
-            var director = _dirRep.getDirector(Id);
+            var director = _dirRep.GetDirector(Id);
             if (director != null)
             {
                 return Ok(director);
@@ -43,7 +43,7 @@ namespace SB_backend.Controllers
         [HttpPatch("{Id}")]
         public IActionResult UpdateDirector(Guid Id, Director director)
         {
-            var current_director = _dirRep.getDirector(Id);
+            var current_director = _dirRep.GetDirector(Id);
 
             if (current_director != null)
             {

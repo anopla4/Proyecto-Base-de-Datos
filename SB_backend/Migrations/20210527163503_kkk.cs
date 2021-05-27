@@ -77,12 +77,12 @@ namespace SB_backend.Migrations
                     InitDate = table.Column<DateTime>(type: "date", nullable: false),
                     EndDate = table.Column<DateTime>(type: "date", nullable: false),
                     Name = table.Column<string>(nullable: false),
-                    CaracterId = table.Column<Guid>(nullable: false)
+                    CaracterId = table.Column<Guid>(nullable: false),
+                    NumberOfGames = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Series", x => new { x.Id, x.InitDate, x.EndDate });
-                    table.UniqueConstraint("AK_Series_EndDate_Id_InitDate", x => new { x.EndDate, x.Id, x.InitDate });
                     table.ForeignKey(
                         name: "FK_Series_Caracters_CaracterId",
                         column: x => x.CaracterId,
@@ -127,7 +127,6 @@ namespace SB_backend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TeamsSeries", x => new { x.TeamId, x.SerieId, x.SerieInitDate, x.SerieEndDate });
-                    table.UniqueConstraint("AK_TeamsSeries_SerieEndDate_SerieId_SerieInitDate_TeamId", x => new { x.SerieEndDate, x.SerieId, x.SerieInitDate, x.TeamId });
                     table.ForeignKey(
                         name: "FK_TeamsSeries_Teams_TeamId",
                         column: x => x.TeamId,
@@ -167,21 +166,54 @@ namespace SB_backend.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "TeamsSeriesPlayers",
+                columns: table => new
+                {
+                    PlayerId = table.Column<Guid>(nullable: false),
+                    SerieId = table.Column<Guid>(nullable: false),
+                    SerieInitDate = table.Column<DateTime>(nullable: false),
+                    SerieEndDate = table.Column<DateTime>(nullable: false),
+                    TeamSerieId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TeamsSeriesPlayers", x => new { x.PlayerId, x.SerieId, x.SerieInitDate, x.SerieEndDate });
+                    table.ForeignKey(
+                        name: "FK_TeamsSeriesPlayers_Players_PlayerId",
+                        column: x => x.PlayerId,
+                        principalTable: "Players",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TeamsSeriesPlayers_Teams_TeamSerieId",
+                        column: x => x.TeamSerieId,
+                        principalTable: "Teams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_TeamsSeriesPlayers_Series_SerieId_SerieInitDate_SerieEndDate",
+                        columns: x => new { x.SerieId, x.SerieInitDate, x.SerieEndDate },
+                        principalTable: "Series",
+                        principalColumns: new[] { "Id", "InitDate", "EndDate" },
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "Positions",
                 columns: new[] { "Id", "Position_Name" },
                 values: new object[,]
                 {
-                    { new Guid("e23434d9-6c35-4f62-91ac-0152e1bc4cb4"), "C" },
-                    { new Guid("183e7636-eec7-4d37-8fd0-87e872909fde"), "1B" },
-                    { new Guid("bfaf4961-3569-454e-9112-e7af3ebf2396"), "2B" },
-                    { new Guid("aae78b11-3984-4ddd-87d3-d103bd1bd80f"), "3B" },
-                    { new Guid("6e172738-02d9-428f-b499-d8b281b6f867"), "SS" },
-                    { new Guid("57d4d18b-5e65-4827-a6aa-c7f2d4aad39d"), "Lanzador" },
-                    { new Guid("6d92a831-bb12-4c54-9b30-6f0917f318aa"), "LF" },
-                    { new Guid("db763417-09b0-432c-a2d2-70c5fb037cc3"), "RF" },
-                    { new Guid("87fb0ed1-83ca-4101-bd26-9d0f1d828d49"), "CF" },
-                    { new Guid("5ceec714-df72-4144-a361-9618d846b8c6"), "BD" }
+                    { new Guid("f4a74e66-0307-4771-91e1-29c39bef8781"), "C" },
+                    { new Guid("2303c988-2283-47c3-8509-5d42724bd2a2"), "1B" },
+                    { new Guid("57307906-6132-471e-93f8-d57d272b545e"), "2B" },
+                    { new Guid("6b06a626-6ae4-4710-a058-0bf90824b1a5"), "3B" },
+                    { new Guid("0495a2ca-b6e5-456c-be5a-96223ccaf2cc"), "SS" },
+                    { new Guid("7854f0a9-04fa-4a5c-bb84-41db52ad4bcd"), "Lanzador" },
+                    { new Guid("c7ba4130-ed5a-4c31-8deb-2096344b5403"), "LF" },
+                    { new Guid("afef3de9-578d-4185-94d8-1b165caf79ec"), "RF" },
+                    { new Guid("2af415a2-f1b8-4f68-8e71-0a581cf8cb15"), "CF" },
+                    { new Guid("3c383560-3658-45ff-9089-7ef0eaafa5e8"), "BD" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -203,6 +235,16 @@ namespace SB_backend.Migrations
                 name: "IX_TeamsSeries_SerieId_SerieInitDate_SerieEndDate",
                 table: "TeamsSeries",
                 columns: new[] { "SerieId", "SerieInitDate", "SerieEndDate" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeamsSeriesPlayers_TeamSerieId",
+                table: "TeamsSeriesPlayers",
+                column: "TeamSerieId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeamsSeriesPlayers_SerieId_SerieInitDate_SerieEndDate",
+                table: "TeamsSeriesPlayers",
+                columns: new[] { "SerieId", "SerieInitDate", "SerieEndDate" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -220,10 +262,13 @@ namespace SB_backend.Migrations
                 name: "TeamsSeries");
 
             migrationBuilder.DropTable(
-                name: "Players");
+                name: "TeamsSeriesPlayers");
 
             migrationBuilder.DropTable(
                 name: "Positions");
+
+            migrationBuilder.DropTable(
+                name: "Players");
 
             migrationBuilder.DropTable(
                 name: "Series");

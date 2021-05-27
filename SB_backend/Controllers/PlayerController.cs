@@ -18,13 +18,13 @@ namespace SB_backend.Controllers
         [HttpGet]
         public IActionResult GetPlayers()
         {
-            return Ok(_plrep.getPlayers());
+            return Ok(_plrep.GetPlayers());
         }
 
         [HttpGet("{id}")]
         public IActionResult GetPlayer(Guid Id)
         {
-            var player = _plrep.getPlayer(Id);
+            var player = _plrep.GetPlayer(Id);
 
             if (player != null)
             {
@@ -42,13 +42,12 @@ namespace SB_backend.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult RemovePlayer(Guid Id)
+        public IActionResult RemovePlayer(Guid Id, Player player)
         {
-            var player = _plrep.getPlayer(Id);
+            var flag = _plrep.RemovePlayer(player);
 
-            if (player != null)
+            if (flag)
             {
-                _plrep.RemovePlayer(player);
                 return Ok();
             }
 
@@ -58,7 +57,7 @@ namespace SB_backend.Controllers
         [HttpPatch("{id}")]
         public IActionResult UpdatePlayer(Guid Id, Player player)
         {
-            var current_player = _plrep.getPlayer(Id);
+            var current_player = _plrep.GetPlayer(Id);
 
             if (current_player != null)
             {

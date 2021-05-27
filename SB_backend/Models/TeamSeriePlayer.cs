@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace SB_backend.Models
 {
-    public class TeamSerie
+    public class TeamSeriePlayer
     {
-        [ForeignKey("Team"), Column(Order = 0)]
-        public Guid TeamId { get; set; }
-        public Team Team { get; set; }
+        [ForeignKey("Player")]
+        public Guid PlayerId { get; set; }
+        public Player Player { get; set; }
         //[Key, ForeignKey("Serie"), Column(Order = 1)]
         public Guid SerieId { get; set; }
         //[Key, ForeignKey("Serie"), Column(Order = 2, TypeName = "date")]
@@ -21,8 +19,8 @@ namespace SB_backend.Models
         public DateTime SerieEndDate { get; set; }
         [ForeignKey("SerieId,SerieInitDate,SerieEndDate")]
         public Serie Serie { get; set; }
-        public int WinnerGames { get; set; }
-        public int LosserGames { get; set; }
-        public int FinalPosition { get; set; }
+        [ForeignKey("TeamSerie")]
+        public Guid TeamSerieId { get; set; }
+        public Team TeamSerie { get; set; }
     }
 }

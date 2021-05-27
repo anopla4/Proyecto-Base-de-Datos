@@ -8,8 +8,8 @@ namespace SB_backend.Interfaces
 {
     public interface ISerieRepository
     {
-        List<Serie> getSeries();
-        Serie getSerie(Guid id);
+        List<Serie> GetSeries();
+        Serie GetSerie(Guid id);
 
         Serie AddSerie(Serie serie);
 

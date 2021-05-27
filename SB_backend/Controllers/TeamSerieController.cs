@@ -57,7 +57,7 @@ namespace SB_backend.Controllers
         public IActionResult AddTeamSerie(TeamSerie teamSerie)
         {
             var teamSerieAux = _tsRep.AddTeamSerie(teamSerie);
-            if (teamSerie == null)
+            if (teamSerieAux == null)
             {
                 return NotFound($"TeamId or SerieId are not valid");
             }
