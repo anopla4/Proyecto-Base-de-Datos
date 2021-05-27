@@ -34,7 +34,7 @@ namespace SB_backend.Controllers
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + team.Id, team);
         }
 
-        [HttpGet("{id}")]
+        [HttpDelete("{id}")]
         public IActionResult RemoveTeam(Guid Id)
         {
             var team = _teamRep.getTeam(Id);

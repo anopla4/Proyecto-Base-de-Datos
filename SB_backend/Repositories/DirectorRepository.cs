@@ -23,12 +23,12 @@ namespace SB_backend.Repositories
             return director;
         }
 
-        public Director getDirector(Guid id)
+        public Director GetDirector(Guid id)
         {
             return _context.Directors.SingleOrDefault(c => c.Id == id);
         }
 
-        public List<Director> getDirectors()
+        public List<Director> GetDirectors()
         {
             return _context.Directors.ToList();
         }

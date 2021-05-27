@@ -8,8 +8,8 @@ namespace SB_backend.Interfaces
 {
     public interface IPlayerRepository
     {
-        List<Player> getPlayers();
-        Player getPlayer(Guid id);
+        List<Player> GetPlayers();
+        Player GetPlayer(Guid id);
 
         Player AddPlayer(Player player);
 

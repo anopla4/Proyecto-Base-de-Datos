@@ -25,14 +25,14 @@ namespace SB_backend.Repositories
             return player;
         }
 
-        public Player getPlayer(Guid id)
+        public Player GetPlayer(Guid id)
         {
             //var player = _playerContext.Players.Find(id);
             var player = _playerContext.Players.Include(c => c.Current_Team).SingleOrDefault(c => c.Id == id);
             return player;
         }
 
-        public List<Player> getPlayers()
+        public List<Player> GetPlayers()
         {
             return _playerContext.Players.Include(c => c.Current_Team).ToList();
         }

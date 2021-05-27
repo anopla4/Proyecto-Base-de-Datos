@@ -92,16 +92,16 @@ namespace SB_backend.Migrations
                     b.ToTable("Positions");
 
                     b.HasData(
-                        new { Id = new Guid("9fe87af2-d11c-43b7-b8e6-c6afabcf6013"), Position_Name = "C" },
-                        new { Id = new Guid("375f4c73-0ed4-4acc-ac98-3651f33c7d00"), Position_Name = "1B" },
-                        new { Id = new Guid("9cb56e55-7148-4e9d-bdc5-3fcf4b352718"), Position_Name = "2B" },
-                        new { Id = new Guid("4d67b338-fd3e-4834-9033-119f506ca359"), Position_Name = "3B" },
-                        new { Id = new Guid("5d2a72c3-d120-4950-9ce1-1df9abdb3221"), Position_Name = "SS" },
-                        new { Id = new Guid("b4bdb725-c061-42c0-94f1-24915d60c476"), Position_Name = "Lanzador" },
-                        new { Id = new Guid("383cc980-a611-435b-a3eb-12daecf4b799"), Position_Name = "LF" },
-                        new { Id = new Guid("9411e2b7-71d6-49bd-a7f0-795a4cf43b56"), Position_Name = "RF" },
-                        new { Id = new Guid("19c45da0-76fb-4a36-8505-2c92d240f1ae"), Position_Name = "CF" },
-                        new { Id = new Guid("d0d3cf5e-54e8-4ab5-aa5f-a18d2ab87295"), Position_Name = "BD" }
+                        new { Id = new Guid("e23434d9-6c35-4f62-91ac-0152e1bc4cb4"), Position_Name = "C" },
+                        new { Id = new Guid("183e7636-eec7-4d37-8fd0-87e872909fde"), Position_Name = "1B" },
+                        new { Id = new Guid("bfaf4961-3569-454e-9112-e7af3ebf2396"), Position_Name = "2B" },
+                        new { Id = new Guid("aae78b11-3984-4ddd-87d3-d103bd1bd80f"), Position_Name = "3B" },
+                        new { Id = new Guid("6e172738-02d9-428f-b499-d8b281b6f867"), Position_Name = "SS" },
+                        new { Id = new Guid("57d4d18b-5e65-4827-a6aa-c7f2d4aad39d"), Position_Name = "Lanzador" },
+                        new { Id = new Guid("6d92a831-bb12-4c54-9b30-6f0917f318aa"), Position_Name = "LF" },
+                        new { Id = new Guid("db763417-09b0-432c-a2d2-70c5fb037cc3"), Position_Name = "RF" },
+                        new { Id = new Guid("87fb0ed1-83ca-4101-bd26-9d0f1d828d49"), Position_Name = "CF" },
+                        new { Id = new Guid("5ceec714-df72-4144-a361-9618d846b8c6"), Position_Name = "BD" }
                     );
                 });
 
@@ -124,10 +124,10 @@ namespace SB_backend.Migrations
                 {
                     b.Property<Guid>("Id");
 
-                    b.Property<DateTime>("Init_Date")
+                    b.Property<DateTime>("InitDate")
                         .HasColumnType("date");
 
-                    b.Property<DateTime>("End_Date")
+                    b.Property<DateTime>("EndDate")
                         .HasColumnType("date");
 
                     b.Property<Guid>("CaracterId");
@@ -135,9 +135,9 @@ namespace SB_backend.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.HasKey("Id", "Init_Date", "End_Date");
+                    b.HasKey("Id", "InitDate", "EndDate");
 
-                    b.HasAlternateKey("End_Date", "Id", "Init_Date");
+                    b.HasAlternateKey("EndDate", "Id", "InitDate");
 
                     b.HasIndex("CaracterId");
 
@@ -163,6 +163,31 @@ namespace SB_backend.Migrations
                     b.ToTable("Teams");
                 });
 
+            modelBuilder.Entity("SB_backend.Models.TeamSerie", b =>
+                {
+                    b.Property<Guid>("TeamId");
+
+                    b.Property<Guid>("SerieId");
+
+                    b.Property<DateTime>("SerieInitDate");
+
+                    b.Property<DateTime>("SerieEndDate");
+
+                    b.Property<int>("FinalPosition");
+
+                    b.Property<int>("LosserGames");
+
+                    b.Property<int>("WinnerGames");
+
+                    b.HasKey("TeamId", "SerieId", "SerieInitDate", "SerieEndDate");
+
+                    b.HasAlternateKey("SerieEndDate", "SerieId", "SerieInitDate", "TeamId");
+
+                    b.HasIndex("SerieId", "SerieInitDate", "SerieEndDate");
+
+                    b.ToTable("TeamsSeries");
+                });
+
             modelBuilder.Entity("SB_backend.Models.Player", b =>
                 {
                     b.HasOne("SB_backend.Models.Team", "Current_Team")
@@ -186,9 +211,22 @@ namespace SB_backend.Migrations
 
             modelBuilder.Entity("SB_backend.Models.Serie", b =>
                 {
-                    b.HasOne("SB_backend.Models.Caracter", "Caracter_Serie")
+                    b.HasOne("SB_backend.Models.Caracter", "CaracterSerie")
                         .WithMany()
                         .HasForeignKey("CaracterId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SB_backend.Models.TeamSerie", b =>
+                {
+                    b.HasOne("SB_backend.Models.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SB_backend.Models.Serie", "Serie")
+                        .WithMany()
+                        .HasForeignKey("SerieId", "SerieInitDate", "SerieEndDate")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

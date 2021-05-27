@@ -24,14 +24,14 @@ namespace SB_backend.Repositories
             return serie;
         }
 
-        public Serie getSerie(Guid id)
+        public Serie GetSerie(Guid id)
         {
-            return _context.Series.Include(c => c.Caracter_Serie).SingleOrDefault(c => c.Id == id);
+            return _context.Series.Include(c => c.CaracterSerie).SingleOrDefault(c => c.Id == id);
         }
 
-        public List<Serie> getSeries()
+        public List<Serie> GetSeries()
         {
-            return _context.Series.Include(c => c.Caracter_Serie).ToList();
+            return _context.Series.Include(c => c.CaracterSerie).ToList();
         }
 
         public bool RemoveSerie(Serie serie)
@@ -55,11 +55,12 @@ namespace SB_backend.Repositories
             {
                 curr_serie.Name = serie.Name;
                 curr_serie.CaracterId = serie.CaracterId;
-                curr_serie.Caracter_Serie = curr_serie.Caracter_Serie;
+                curr_serie.CaracterSerie = curr_serie.CaracterSerie;
                 _context.Series.Update(curr_serie);
                 _context.SaveChanges();
+                return curr_serie;
             }
-            return curr_serie;
+            return null;
         }
     }
 }

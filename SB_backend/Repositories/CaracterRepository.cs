@@ -22,13 +22,13 @@ namespace SB_backend.Repositories
             return caracter;
         }
 
-        public Caracter getCaracter(Guid id)
+        public Caracter GetCaracter(Guid id)
         {
             Caracter caracter = _context.Caracters.SingleOrDefault(c => c.Id == id);
             return caracter;
         }
 
-        public List<Caracter> getCaracters()
+        public List<Caracter> GetCaracters()
         {
             return _context.Caracters.ToList();
         }
@@ -55,8 +55,9 @@ namespace SB_backend.Repositories
                 curr_car.Caracter_Name = caracter.Caracter_Name;
                 _context.Caracters.Update(curr_car);
                 _context.SaveChanges();
+                return curr_car;
             }
-            return curr_car;
+            return null;
         }
     }
 }

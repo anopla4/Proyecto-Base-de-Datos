@@ -8,8 +8,8 @@ namespace SB_backend.Interfaces
 {
     public interface ICaracterRepository
     {
-        List<Caracter> getCaracters();
-        Caracter getCaracter(Guid id);
+        List<Caracter> GetCaracters();
+        Caracter GetCaracter(Guid id);
 
         Caracter AddCaracter(Caracter caracter);
 

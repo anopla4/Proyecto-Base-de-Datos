@@ -22,12 +22,12 @@ namespace SB_backend.Controllers
         [HttpGet]
         public IActionResult GetCaracters()
         {
-            return Ok(_caractRep.getCaracters());
+            return Ok(_caractRep.GetCaracters());
         }
         [HttpGet("{Id}")]
         public IActionResult GetCaracter(Guid Id)
         {
-            var caracter = _caractRep.getCaracter(Id);
+            var caracter = _caractRep.GetCaracter(Id);
 
             if (caracter != null)
             {
@@ -45,13 +45,13 @@ namespace SB_backend.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult RemoveCaracter(Guid Id)
+        public IActionResult RemoveCaracter(Guid Id,Caracter caracter)
         {
-            var caracter = _caractRep.getCaracter(Id);
+            var flag = _caractRep.RemoveCaracter(caracter);
 
-            if (caracter != null)
+            if (flag)
             {
-                _caractRep.RemoveCaracter(caracter);
+                
                 return Ok();
             }
 
@@ -61,12 +61,10 @@ namespace SB_backend.Controllers
         [HttpPatch("{id}")]
         public IActionResult UpdateCaracter(Guid Id, Caracter caracter)
         {
-            var current_caracter = _caractRep.getCaracter(Id);
+            var current_caracter_Upd = _caractRep.UpdateCaracter(caracter);
 
-            if (current_caracter != null)
+            if (current_caracter_Upd != null)
             {
-                caracter.Id = current_caracter.Id;
-                _caractRep.UpdateCaracter(caracter);
                 return Ok(caracter);
             }
 

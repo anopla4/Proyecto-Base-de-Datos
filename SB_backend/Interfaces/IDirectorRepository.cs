@@ -8,8 +8,8 @@ namespace SB_backend.Interfaces
 {
     public interface IDirectorRepository
     {
-        List<Director> getDirectors();
-        Director getDirector(Guid id);
+        List<Director> GetDirectors();
+        Director GetDirector(Guid id);
 
         Director AddDirector(Director director);
 

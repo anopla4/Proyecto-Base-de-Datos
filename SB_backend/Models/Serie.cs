@@ -9,18 +9,20 @@ namespace SB_backend.Models
 {
     public class Serie
     {
-        [Key]
+        public Serie()
+        {
+            this.NumberOfGames = 0;
+        }
         public Guid Id { get; set; }
-        [Key]
         [Column(TypeName = "date")]
-        public DateTime Init_Date { get; set; }
-        [Key]
+        public DateTime InitDate { get; set; }
         [Column(TypeName = "date")]
-        public DateTime End_Date { get; set; }
+        public DateTime EndDate { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
         public Guid CaracterId { get; set; }
-        public Caracter Caracter_Serie { get; set; }
+        public Caracter CaracterSerie { get; set; }
+        public int NumberOfGames { get; set; }
     }
 }
