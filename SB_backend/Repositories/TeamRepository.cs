@@ -39,7 +39,7 @@ namespace SB_backend.Repositories
 
             if (curr_team != null)
             {
-                _teamContext.Remove(team);
+                _teamContext.Teams.Remove(curr_team);
                 _teamContext.SaveChanges();
                 return true;
             }
@@ -52,8 +52,10 @@ namespace SB_backend.Repositories
 
             if (curr_team != null)
             {
-                //ver esto bien
-                _teamContext.Update(team);
+                curr_team.Color = team.Color;
+                curr_team.Initials = team.Initials;
+                curr_team.Name = team.Name;
+                _teamContext.Teams.Update(curr_team);
                 _teamContext.SaveChanges();
             }
             return team;

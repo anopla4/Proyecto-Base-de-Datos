@@ -21,19 +21,6 @@ namespace SB_backend.Controllers
         {
             return Ok(_posRep.GetPositions());
         }
-        [HttpGet("{Position_Name}")]
-        public IActionResult GetPosition(string Position_Name)
-        {
-            var position = _posRep.GetPosition(Position_Name);
-
-            if (position != null)
-            {
-                return Ok(position);
-            }
-
-            return NotFound($"Not position with name = {Position_Name}");
-        }
-
         [HttpPost]
         public IActionResult AddPosition(Position position)
         {
@@ -41,10 +28,10 @@ namespace SB_backend.Controllers
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + position.Position_Name,position);
         }
 
-        [HttpDelete("{Position_Name}")]
-        public IActionResult RemovePosition(string Position_name)
+        [HttpDelete("{Id}")]
+        public IActionResult RemovePosition(Guid Id)
         {
-            var position = _posRep.GetPosition(Position_name);
+            var position = _posRep.GetPosition(Id);
 
             if (position != null)
             {
@@ -52,7 +39,7 @@ namespace SB_backend.Controllers
                 return Ok();
             }
 
-            return NotFound($"Not position with name = {Position_name}");
+            return NotFound($"Not position with id = {Id}");
         }
 
         [HttpPatch("{id}")]

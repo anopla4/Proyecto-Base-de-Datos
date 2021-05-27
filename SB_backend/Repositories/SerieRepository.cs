@@ -40,7 +40,7 @@ namespace SB_backend.Repositories
 
             if (curr_serie != null)
             {
-                _context.Remove(curr_serie);
+                _context.Series.Remove(curr_serie);
                 _context.SaveChanges();
                 return true;
             }
@@ -56,7 +56,7 @@ namespace SB_backend.Repositories
                 curr_serie.Name = serie.Name;
                 curr_serie.CaracterId = serie.CaracterId;
                 curr_serie.Caracter_Serie = curr_serie.Caracter_Serie;
-                _context.Update(curr_serie);
+                _context.Series.Update(curr_serie);
                 _context.SaveChanges();
             }
             return curr_serie;

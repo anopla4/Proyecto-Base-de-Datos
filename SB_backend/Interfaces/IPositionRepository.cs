@@ -9,7 +9,6 @@ namespace SB_backend.Interfaces
     public interface IPositionRepository
     {
         List<Position> GetPositions();
-        Position GetPosition(string Position_Name);
         Position GetPosition(Guid Id);
         Position AddPosition(Position position);
         Position UpdatePosition(Position position);

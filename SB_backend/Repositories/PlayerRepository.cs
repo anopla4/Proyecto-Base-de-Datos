@@ -43,7 +43,7 @@ namespace SB_backend.Repositories
 
             if (curr_player != null)
             {
-                _playerContext.Remove(player);
+                _playerContext.Players.Remove(player);
                 _playerContext.SaveChanges();
                 return true;
             }
@@ -52,7 +52,7 @@ namespace SB_backend.Repositories
 
         public Player UpdatePlayer(Player player)
         {
-            var curr_player = _playerContext.Players.Find(player.Id);
+            var curr_player = _playerContext.Players.Include(c => c.Current_Team).SingleOrDefault(c => c.Id == player.Id);
 
             if (curr_player != null)
             {

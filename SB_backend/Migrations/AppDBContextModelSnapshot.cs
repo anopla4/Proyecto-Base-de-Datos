@@ -81,26 +81,43 @@ namespace SB_backend.Migrations
 
             modelBuilder.Entity("SB_backend.Models.Position", b =>
                 {
-                    b.Property<Guid>("Id");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Position_Name");
+                    b.Property<string>("Position_Name")
+                        .IsRequired();
 
-                    b.HasKey("Id", "Position_Name");
+                    b.HasKey("Id");
 
                     b.ToTable("Positions");
 
                     b.HasData(
-                        new { Id = new Guid("648d796e-78da-4249-a4be-f66ae0abb79c"), Position_Name = "C" },
-                        new { Id = new Guid("2c709e68-1add-42ec-839b-681fec1eb9b6"), Position_Name = "1B" },
-                        new { Id = new Guid("00000000-0000-0000-0000-000000000000"), Position_Name = "2B" },
-                        new { Id = new Guid("e761a488-e708-4f04-a35e-0726877cd83e"), Position_Name = "3B" },
-                        new { Id = new Guid("877da458-a2b7-4fed-969a-7a94578b2947"), Position_Name = "SS" },
-                        new { Id = new Guid("4c6465b8-6861-41d2-8ccb-b968978a2f52"), Position_Name = "Lanzador" },
-                        new { Id = new Guid("b9a2f3f4-c493-4a5f-bc83-4e307543f405"), Position_Name = "LF" },
-                        new { Id = new Guid("1ae49d37-92f2-4f34-89b2-8950d54fa999"), Position_Name = "RF" },
-                        new { Id = new Guid("1e9ff5c1-2ea0-4f58-a0ba-9c543626b080"), Position_Name = "CF" },
-                        new { Id = new Guid("88c53dfd-6f39-4710-82c2-256f3f35c418"), Position_Name = "BD" }
+                        new { Id = new Guid("9fe87af2-d11c-43b7-b8e6-c6afabcf6013"), Position_Name = "C" },
+                        new { Id = new Guid("375f4c73-0ed4-4acc-ac98-3651f33c7d00"), Position_Name = "1B" },
+                        new { Id = new Guid("9cb56e55-7148-4e9d-bdc5-3fcf4b352718"), Position_Name = "2B" },
+                        new { Id = new Guid("4d67b338-fd3e-4834-9033-119f506ca359"), Position_Name = "3B" },
+                        new { Id = new Guid("5d2a72c3-d120-4950-9ce1-1df9abdb3221"), Position_Name = "SS" },
+                        new { Id = new Guid("b4bdb725-c061-42c0-94f1-24915d60c476"), Position_Name = "Lanzador" },
+                        new { Id = new Guid("383cc980-a611-435b-a3eb-12daecf4b799"), Position_Name = "LF" },
+                        new { Id = new Guid("9411e2b7-71d6-49bd-a7f0-795a4cf43b56"), Position_Name = "RF" },
+                        new { Id = new Guid("19c45da0-76fb-4a36-8505-2c92d240f1ae"), Position_Name = "CF" },
+                        new { Id = new Guid("d0d3cf5e-54e8-4ab5-aa5f-a18d2ab87295"), Position_Name = "BD" }
                     );
+                });
+
+            modelBuilder.Entity("SB_backend.Models.PositionPlayer", b =>
+                {
+                    b.Property<Guid>("PlayerId");
+
+                    b.Property<Guid>("PositionId");
+
+                    b.Property<int>("Position_Average");
+
+                    b.HasKey("PlayerId", "PositionId");
+
+                    b.HasIndex("PositionId");
+
+                    b.ToTable("PositionPlayers");
                 });
 
             modelBuilder.Entity("SB_backend.Models.Serie", b =>
@@ -151,6 +168,19 @@ namespace SB_backend.Migrations
                     b.HasOne("SB_backend.Models.Team", "Current_Team")
                         .WithMany()
                         .HasForeignKey("Current_TeamId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SB_backend.Models.PositionPlayer", b =>
+                {
+                    b.HasOne("SB_backend.Models.Player", "Player")
+                        .WithMany()
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SB_backend.Models.Position", "Position")
+                        .WithMany()
+                        .HasForeignKey("PositionId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

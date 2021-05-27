@@ -39,7 +39,7 @@ namespace SB_backend.Repositories
 
             if (curr_car != null)
             {
-                _context.Remove(curr_car);
+                _context.Caracters.Remove(curr_car);
                 _context.SaveChanges();
                 return true;
             }

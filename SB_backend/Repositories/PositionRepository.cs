@@ -21,11 +21,6 @@ namespace SB_backend.Repositories
             return position;
         }
 
-        public Position GetPosition(string Position_Name)
-        {
-            return _context.Positions.SingleOrDefault(c => c.Position_Name == Position_Name);
-        }
-
         public Position GetPosition(Guid Id)
         {
             return _context.Positions.SingleOrDefault(c => c.Id == Id);
@@ -41,7 +36,7 @@ namespace SB_backend.Repositories
             Position current_position = _context.Positions.Find(position.Position_Name);
             if(current_position != null)
             {
-                _context.Remove(position);
+                _context.Positions.Remove(position);
                 _context.SaveChanges();
                 return true;
             }
