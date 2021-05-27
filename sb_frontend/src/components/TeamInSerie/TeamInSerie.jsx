@@ -1,7 +1,9 @@
 import React, { Component } from "react";
-import { Container, Row, Col, Card, Image } from "react-bootstrap";
+import { Container, Button, Row, Col, Card, Image } from "react-bootstrap";
 import "./TeamInSerie.css";
 import Players from "../../components/Players/Players";
+import Add from "../../components/Add/Add";
+import { PencilSquare } from "react-bootstrap-icons";
 
 class TeamInSerie extends Component {
   state = {
@@ -45,9 +47,17 @@ class TeamInSerie extends Component {
         <p className="mb-4">
           <h5 style={{ display: "inline" }}>Directores: </h5>
           {this.state.directors.map((dir) => dir.name).join(", ")}.
+          <Button
+            style={{ padding: "0px" }}
+            className={"ml-3 btn-outline-secondary"}
+            size={this.props.size}
+            variant="light"
+          >
+            <PencilSquare style={{ width: "100%" }} />
+          </Button>
         </p>
         <Container>
-          <Players players={this.state.players} />
+          <Players delete={true} players={this.state.players} />
           {/* {this.state.players.map((player) => (
             <Card key={player.id} className="player-hover">
               <Card.Header style={{ padding: "0.5%" }}>
@@ -74,6 +84,7 @@ class TeamInSerie extends Component {
               </Card.Header>
             </Card>
           ))} */}
+          <Add text="Agregar jugador" />
         </Container>
       </Container>
     );

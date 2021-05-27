@@ -1,6 +1,17 @@
 import React, { Component } from "react";
-import { Card, Nav, Table, Container, Row, Col, Image } from "react-bootstrap";
+import {
+  Card,
+  Nav,
+  Table,
+  Container,
+  Row,
+  Col,
+  Image,
+  Button,
+} from "react-bootstrap";
 import "./Serie.css";
+import DeleteEdit from "../../components/DeleteEdit/DeleteEdit";
+import Add from "../../components/Add/Add";
 
 class Serie extends Component {
   state = {
@@ -42,31 +53,44 @@ class Serie extends Component {
           </Card.Header>
           <Card.Body>
             {this.state.standings && (
-              <Table striped bordered hover>
-                <thead>
-                  <tr>
-                    <th></th>
-                    <th>Equipos</th>
-                    <th>Juegos ganados</th>
-                    <th>Juegos perdidos</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {standings.map((item) => (
-                    <tr
-                      key={item.team.id}
-                      onClick={() => this.handleOnClickTeam(item.team.id, id)}
-                    >
-                      <td style={{ width: "7%" }}>
-                        <Image fluid src={item.team.img} alt="" />
-                      </td>
-                      <td>{item.team.name}</td>
-                      <td>{item.won_games}</td>
-                      <td>{item.lost_games}</td>
+              <Container>
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th></th>
+                      <th>Equipos</th>
+                      <th>Juegos ganados</th>
+                      <th>Juegos perdidos</th>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
+                  </thead>
+                  <tbody>
+                    {standings.map((item) => (
+                      <tr
+                        key={item.team.id}
+                        onClick={() => this.handleOnClickTeam(item.team.id, id)}
+                      >
+                        <td>{item.team.place}</td>
+                        <td style={{ width: "7%" }}>
+                          <Image fluid src={item.team.img} alt="" />
+                        </td>
+                        <td>{item.team.name}</td>
+                        <td>{item.won_games}</td>
+                        <td>{item.lost_games}</td>
+                        <DeleteEdit
+                          delete={true}
+                          edit={true}
+                          size="lg"
+                          top="3"
+                          space="2"
+                          // style={{ paddingLeft: "20px" }}
+                        />
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+                <Add text="Agregar Equipo" />
+              </Container>
             )}
             {this.state.allstarteams && (
               <Container className="list-unstyled">
@@ -92,10 +116,20 @@ class Serie extends Component {
                             {player.position}
                           </p>
                         </Col>
+                        <Col md={2}>
+                          <DeleteEdit
+                            delete={true}
+                            size="lg"
+                            top="3"
+                            space="2"
+                            // style={{ paddingLeft: "20px" }}
+                          />
+                        </Col>
                       </Row>
                     </Card.Header>
                   </Card>
                 ))}
+                <Add text="Agregar Jugador" />
               </Container>
             )}
           </Card.Body>

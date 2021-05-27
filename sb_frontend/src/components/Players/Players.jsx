@@ -13,11 +13,13 @@ import { Link } from "react-router-dom";
 import chevron from "../../static/chevron-compact-down.svg";
 import "./Players.css";
 import "../../containers/App/App.css";
+import { TrashFill, PencilSquare } from "react-bootstrap-icons";
+import DeleteEdit from "../../components/DeleteEdit/DeleteEdit";
 
 class Players extends Component {
   render() {
     return (
-      <Accordion>
+      <Accordion className="mb-3">
         {this.props.players.map((player) => (
           <Card key={player.id}>
             <Card.Header style={{ padding: "0.5%" }}>
@@ -43,6 +45,7 @@ class Players extends Component {
                     {player.positions.join(", ")}.
                   </p>
                 </Col>
+
                 <Col md={2}>
                   <Accordion.Toggle
                     as={Button}
@@ -52,6 +55,15 @@ class Players extends Component {
                   >
                     <Image src={chevron} />
                   </Accordion.Toggle>
+                </Col>
+                <Col md={2}>
+                  <DeleteEdit
+                    delete={this.props.delete}
+                    edit={this.props.edit}
+                    space="2"
+                    size="sm"
+                    top="3"
+                  />
                 </Col>
               </Row>
             </Card.Header>

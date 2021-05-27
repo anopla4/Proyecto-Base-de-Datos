@@ -5,9 +5,12 @@ import {
   ListGroup,
   ListGroupItem,
   CardDeck,
+  Row,
   Col,
 } from "react-bootstrap";
 import "../../containers/App/App.css";
+import DeleteEdit from "../../components/DeleteEdit/DeleteEdit";
+import Add from "../../components/Add/Add";
 
 class Teams extends Component {
   state = {
@@ -51,6 +54,7 @@ class Teams extends Component {
     return (
       <Container>
         <h1 className="mb-5 my-style-header">Equipos de béisbol</h1>
+
         <CardDeck>
           {this.state.teams.map((team) => (
             <Col md="4">
@@ -75,11 +79,17 @@ class Teams extends Component {
                   >
                     Saber más
                   </Card.Link>
+                  <DeleteEdit delete={true} edit={true} />
                 </Card.Body>
               </Card>
             </Col>
           ))}
         </CardDeck>
+        <Row className="mb-4">
+          <Col>
+            <Add text="Agregar equipo" />
+          </Col>
+        </Row>
       </Container>
     );
   }

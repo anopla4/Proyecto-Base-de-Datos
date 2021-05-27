@@ -3,6 +3,8 @@ import "./Game.css";
 import { Container, Row, Col, Image, Card, Nav, Table } from "react-bootstrap";
 import Players from "../../components/Players/Players";
 import arrow from "../../static/arrow-left.svg";
+import Add from "../../components/Add/Add";
+import DeleteEdit from "../../components/DeleteEdit/DeleteEdit";
 
 class Game extends Component {
   state = {
@@ -145,11 +147,16 @@ class Game extends Component {
                 <Row style={{ fontSize: "10px" }}>
                   <Col>
                     <h6>Ganador</h6>
-                    <Players players={this.state.winner_players} />
+                    <Players
+                      delete={true}
+                      players={this.state.winner_players}
+                    />
+                    <Add text="Agregar jugador" />
                   </Col>
                   <Col>
                     <h6>Perdedor</h6>
-                    <Players players={this.state.loser_players} />
+                    <Players delete={true} players={this.state.loser_players} />
+                    <Add text="Agregar jugador" />
                   </Col>
                 </Row>
               )}
@@ -162,6 +169,7 @@ class Game extends Component {
                         <th>Jugador</th>
                         <th></th>
                         <th>Cambio</th>
+                        <th></th>
                       </thead>
                       <tbody>
                         {this.state.winner_changes.map((change) => (
@@ -171,19 +179,21 @@ class Game extends Component {
                               <Image src={arrow} />
                             </td>
                             <td>{change.change.name}</td>
+                            <DeleteEdit delete={true} />
                           </tr>
                         ))}
                       </tbody>
                     </Table>
+                    <Add text="Agregar cambio" />
                   </Col>
                   <Col>
                     <h6>Perdedor</h6>
                     <Table striped hover>
                       <thead>
                         <th>Jugador</th>
-
                         <th></th>
                         <th>Cambio</th>
+                        <th></th>
                       </thead>
                       <tbody>
                         {this.state.loser_changes.map((change) => (
@@ -193,10 +203,12 @@ class Game extends Component {
                               <Image src={arrow} />
                             </td>
                             <td>{change.change.name}</td>
+                            <DeleteEdit delete={true} />
                           </tr>
                         ))}
                       </tbody>
                     </Table>
+                    <Add text="Agregar cambio" />
                   </Col>
                 </Row>
               )}

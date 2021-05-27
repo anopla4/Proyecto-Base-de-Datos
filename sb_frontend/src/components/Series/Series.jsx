@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import { Table, Container, Button } from "react-bootstrap";
 import "./Series.css";
+import "../../containers/App/App.css";
+import DeleteEdit from "../../components/DeleteEdit/DeleteEdit";
+import Add from "../../components/Add/Add";
+
 class Series extends Component {
   state = {
     redirect: null,
@@ -49,6 +53,7 @@ class Series extends Component {
           standings: [
             {
               team: {
+                place: 1,
                 id: 1,
                 img: "http://localhost:8000/src/logos/industriales.png",
                 name: "Industriales",
@@ -58,6 +63,7 @@ class Series extends Component {
             },
             {
               team: {
+                place: 2,
                 id: 2,
                 img: "http://localhost:8000/src/logos/cienfuegos.png",
                 name: "Cienfuegos",
@@ -67,6 +73,7 @@ class Series extends Component {
             },
             {
               team: {
+                place: 3,
                 id: 1,
                 img: "http://localhost:8000/src/logos/ciego.png",
                 name: "Ciego de Ávila",
@@ -135,17 +142,19 @@ class Series extends Component {
                 <td>{serie.nt}</td>
                 <td>{serie.winner}</td>
                 <td>{serie.loser}</td>
+                <DeleteEdit
+                  delete={true}
+                  edit={true}
+                  size="sm"
+                  space={1}
+                  top={2}
+                />
               </tr>
             ))}
           </tbody>
         </Table>
-        <Button
-          style={{ float: "right" }}
-          onClick={this.handleOnClickButton}
-          variant="primary"
-        >
-          Agregar Serie
-        </Button>
+
+        <Add text="Agregar Serie" />
       </Container>
     );
   }

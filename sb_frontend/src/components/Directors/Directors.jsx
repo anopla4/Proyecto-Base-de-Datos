@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Card, Container, Col, Row, Image } from "react-bootstrap";
 import "../../containers/App/App.css";
 import "./Directors.css";
+import DeleteEdit from "../../components/DeleteEdit/DeleteEdit";
 
 class Directors extends Component {
   render() {
@@ -29,6 +30,12 @@ class Directors extends Component {
                       {dir.directed_teams.join(", ")}.
                     </p>
                   )}
+                </Col>
+                <Col>
+                  <DeleteEdit
+                    delete={this.props.delete}
+                    edit={this.props.edit}
+                  />
                 </Col>
               </Row>
             </Card.Header>

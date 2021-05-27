@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Container } from "react-bootstrap";
 import "../../containers/App/App.css";
 import Players from "../../components/Players/Players";
+import Add from "../../components/Add/Add";
 
 class PlayersGeneral extends Component {
   state = {
@@ -40,7 +41,13 @@ class PlayersGeneral extends Component {
     return (
       <Container>
         <h1 className="mb-5 my-style-header">Jugadores de pelota</h1>
-        <Players players={this.state.players} onClick={this.handleOnClick} />
+        <Players
+          delete={true}
+          edit={true}
+          players={this.state.players}
+          onClick={this.handleOnClick}
+        />
+        <Add text="Agregar jugador" />
       </Container>
     );
   }

@@ -1,16 +1,9 @@
 import React, { Component } from "react";
-import {
-  Card,
-  CardDeck,
-  Col,
-  Row,
-  Image,
-  ListGroup,
-  ListGroupItem,
-  Container,
-} from "react-bootstrap";
+import { Card, CardDeck, Col, Row, Image, Container } from "react-bootstrap";
 import "./Games.css";
 import "../../containers/App/App.css";
+import DeleteEdit from "../../components/DeleteEdit/DeleteEdit";
+import Add from "../../components/Add/Add";
 
 class Games extends Component {
   state = {
@@ -110,7 +103,10 @@ class Games extends Component {
             <Col md={4}>
               <Card className="mb-3 active_hover" key={game.id}>
                 <Card.Header>
-                  <Row className="mb-2">
+                  <Row className="mb-3">
+                    <Col md={4}>
+                      <DeleteEdit delete={true} edit={true} />
+                    </Col>
                     <Col className="my-series-name">{game.serie.name}</Col>
                   </Row>
                   <Row>
@@ -151,6 +147,7 @@ class Games extends Component {
             </Col>
           ))}
         </CardDeck>
+        <Add text="Agregar juego" />
       </Container>
     );
   }

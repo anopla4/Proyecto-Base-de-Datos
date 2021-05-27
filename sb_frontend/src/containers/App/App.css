@@ -62,3 +62,13 @@ body {
     0 8px 32px -8px hsla(0, 0%, 0%, 0.14),
     0 -6px 32px -6px hsla(0, 0%, 0%, 0.02);
 }
+
+.btn-outline-secondary {
+  color: #6c757d;
+  border-color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}

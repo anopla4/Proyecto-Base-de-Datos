@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Container } from "react-bootstrap";
 import "../../containers/App/App.css";
 import Directors from "../../components/Directors/Directors";
+import Add from "../../components/Add/Add";
 
 class DirectorsGeneral extends Component {
   state = {
@@ -24,7 +25,8 @@ class DirectorsGeneral extends Component {
     return (
       <Container className="list-unstyled">
         <h1 className="mb-5 my-style-header">Directores de béisbol</h1>
-        <Directors directors={this.state.directors} />
+        <Directors delete={true} edit={true} directors={this.state.directors} />
+        <Add text="Agregar director" />
       </Container>
     );
   }
