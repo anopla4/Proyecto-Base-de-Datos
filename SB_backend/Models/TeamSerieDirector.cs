@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace SB_backend.Models
 {
-    public class TeamSeriePlayer
+    public class TeamSerieDirector
     {
-        [ForeignKey("Player")]
-        public Guid PlayerId { get; set; }
-        public Player Player { get; set; }
+        [ForeignKey("Director")]
+        public Guid DirectorId { get; set; }
+        public Director Director { get; set; }
         //[Key, ForeignKey("Serie"), Column(Order = 1)]
         public Guid SerieId { get; set; }
         //[Key, ForeignKey("Serie"), Column(Order = 2, TypeName = "date")]

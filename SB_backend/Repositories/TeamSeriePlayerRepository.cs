@@ -39,6 +39,15 @@ namespace SB_backend.Repositories
             return _context.TeamsSeriesPlayers.Include(c => c.Player).Where(c => c.SerieId == SerieId && c.TeamSerieId == TeamId).Select(c => c.Player).ToList();
         }
 
+        public List<Player> GetTeamPlayers(Guid TeamId)
+        {
+            var aux = _context.TeamsSeriesPlayers.Any(c => c.TeamSerieId == TeamId);
+            if (!aux)
+                return null;
+            List<Player> players = _context.TeamsSeriesPlayers.Include(c => c.Player).Where(c => c.TeamSerieId == TeamId).Select(c => c.Player).ToList();
+            return players; 
+        }
+
         public TeamSeriePlayer GetTeamSeriePlayer(Guid SerieId, Guid PlayerId)
         {
             return _context.TeamsSeriesPlayers.Include(c => c.Serie).Include(c => c.Player).Include(c => c.TeamSerie).SingleOrDefault(c => c.PlayerId == PlayerId && c.SerieId == SerieId);
@@ -57,7 +66,7 @@ namespace SB_backend.Repositories
             {
                 return false;
             }
-            _context.TeamsSeriesPlayers.Remove(teamSeriePlayer);
+            _context.TeamsSeriesPlayers.Remove(currTeamSeriePlayer);
             _context.SaveChanges();
             return true;
         }

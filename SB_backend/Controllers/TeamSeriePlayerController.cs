@@ -39,6 +39,14 @@ namespace SB_backend.Controllers
                 return Ok(players);
             return NotFound("Not team {TeamId} in serie {SerieId}");
         }
+        [HttpGet("{TeamId}")]
+        public IActionResult GetTeamPlayers(Guid TeamId)
+        {
+            var players = _tspRep.GetTeamPlayers(TeamId);
+            if (players == null)
+                return NotFound($"Not team with Id {TeamId}");
+            return Ok(players);
+        }
         [HttpPost]
         public IActionResult AddTeamSeriePlayer(TeamSeriePlayer tsp)
         {
