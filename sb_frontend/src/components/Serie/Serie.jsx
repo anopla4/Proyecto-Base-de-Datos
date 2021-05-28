@@ -26,7 +26,15 @@ import "react-pro-sidebar/dist/css/styles.css";
 
 class Serie extends Component {
   state = {
-    formTeam: false,
+    teams: [{ name: "Industriales" }, { name: "Matanzas" }],
+    players: [
+      { name: "Alexander Malleta", team: "Industriales" },
+      { name: "Pedro Luis Lazo", team: "Pinar del Río" },
+    ],
+    positions: ["Primera base", "Segunda base", "Lanzador"],
+    editTeam: false,
+    addTeam: false,
+    addPlayer: false,
     itemEdit: {},
     standings: true,
     allstarteams: false,
@@ -40,7 +48,8 @@ class Serie extends Component {
     this.setState({
       standings: false,
       allstarteams: true,
-      formTeam: false,
+      editTeam: false,
+      addTeam: false,
       itemEdit: {},
     });
   };
@@ -52,20 +61,22 @@ class Serie extends Component {
     });
   };
 
-  handleFormTeam = (item) => {
-    this.setState(
-      this.state.formTeam
-        ? item === undefined
-          ? { formTeam: true, itemEdit: undefined }
-          : this.state.itemEdit.team.id === item.team.id
-          ? { formTeam: false, itemEdit: {} }
-          : { formTeam: true, itemEdit: item }
-        : { formTeam: true, itemEdit: item }
-    );
+  handleEditTeam = (item) => {
+    this.setState({ addTeam: false, editTeam: true, itemEdit: item });
   };
 
-  handleOnAddTeam = () => {};
-  handleOnAddPlayer = () => {};
+  handleOnAddTeam = () => {
+    this.setState({ addTeam: true, editTeam: false, itemEdit: {} });
+  };
+  handleOnAddPlayer = () => {
+    this.setState({ addPlayer: true });
+  };
+  handleCloseFormTeam = () => {
+    this.setState({ editTeam: false, addTeam: false, itemEdit: {} });
+  };
+  handleCloseAddPlayer = () => {
+    this.setState({ addPlayer: false });
+  };
 
   render() {
     const { id, name, standings, allstarteams } =
@@ -141,7 +152,7 @@ class Serie extends Component {
                             <DeleteEdit
                               delete={true}
                               edit={true}
-                              onEdit={() => this.handleFormTeam(item)}
+                              onEdit={() => this.handleEditTeam(item)}
                               size="lg"
                               top="3"
                               space="2"
@@ -150,7 +161,7 @@ class Serie extends Component {
                         ))}
                       </tbody>
                     </Table>
-                    <Add text="Agregar Equipo" onClick={this.handleFormTeam} />
+                    <Add text="Agregar Equipo" onClick={this.handleOnAddTeam} />
                   </Container>
                 )}
                 {this.state.allstarteams && (
@@ -199,23 +210,32 @@ class Serie extends Component {
               </Card.Body>
             </Card>
           </Col>
-          {this.state.formTeam && (
+          {(this.state.editTeam || this.state.addTeam) && (
             <Col md={3}>
               <Navbar fixed="right">
                 <Nav.Item>
                   <Form>
-                    <Form.Label>
-                      <h3>
-                        {this.state.itemEdit !== undefined
-                          ? this.state.itemEdit.team.name
-                          : ""}
-                      </h3>
-                    </Form.Label>
+                    {this.state.addTeam && (
+                      <Form.Group controlId="name">
+                        <Form.Label>Equipo:</Form.Label>
+                        <Form.Control as="select" custom>
+                          <option>{""}</option>
+                          {this.state.teams.map((team) => (
+                            <option>{team.name}</option>
+                          ))}
+                        </Form.Control>
+                      </Form.Group>
+                    )}
+                    {this.state.editTeam && (
+                      <Form.Label>
+                        <h3>{this.state.itemEdit.team.name}</h3>
+                      </Form.Label>
+                    )}
                     <Form.Group controlId="won_games">
                       <Form.Label>Juegos ganados:</Form.Label>
                       <Form.Control
                         value={
-                          this.state.itemEdit !== undefined
+                          this.state.editTeam
                             ? this.state.itemEdit.won_games
                             : ""
                         }
@@ -227,7 +247,7 @@ class Serie extends Component {
                       <Form.Label>Juegos perdidos:</Form.Label>
                       <Form.Control
                         value={
-                          this.state.itemEdit !== undefined
+                          this.state.editTeam
                             ? this.state.itemEdit.lost_games
                             : ""
                         }
@@ -239,13 +259,60 @@ class Serie extends Component {
                       <Form.Label>Posición:</Form.Label>
                       <Form.Control
                         value={
-                          this.state.itemEdit !== undefined
-                            ? this.state.itemEdit.place
-                            : ""
+                          this.state.editTeam ? this.state.itemEdit.place : ""
                         }
                         type="numeric"
                         name="position"
                       />
+                    </Form.Group>
+                    <Form.Group>
+                      <Button
+                        style={{ float: "right" }}
+                        onClick={this.handleCloseFormTeam}
+                        variant="secondary"
+                      >
+                        Cancelar
+                      </Button>
+                    </Form.Group>
+                  </Form>
+                </Nav.Item>
+              </Navbar>
+            </Col>
+          )}
+
+          {this.state.addPlayer && (
+            <Col md={3}>
+              <Navbar fixed="right">
+                <Nav.Item>
+                  <Form>
+                    <Form.Group controlId="name">
+                      <Form.Label>Jugador:</Form.Label>
+                      <Form.Control as="select" custom>
+                        <option>{""}</option>
+                        {this.state.players.map((player) => (
+                          <option>
+                            {player.name} ({player.team})
+                          </option>
+                        ))}
+                      </Form.Control>
+                    </Form.Group>
+                    <Form.Group controlId="name">
+                      <Form.Label>Posición:</Form.Label>
+                      <Form.Control as="select" custom>
+                        <option>{""}</option>
+                        {this.state.positions.map((pos) => (
+                          <option>{pos}</option>
+                        ))}
+                      </Form.Control>
+                    </Form.Group>
+                    <Form.Group>
+                      <Button
+                        style={{ float: "right" }}
+                        onClick={this.handleCloseAddPlayer}
+                        variant="secondary"
+                      >
+                        Cancelar
+                      </Button>
                     </Form.Group>
                   </Form>
                 </Nav.Item>
