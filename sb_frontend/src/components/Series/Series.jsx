@@ -10,8 +10,8 @@ import filterFactory, {
   numberFilter,
   Comparator,
 } from "react-bootstrap-table2-filter";
-import { BootstrapTable } from "react-bootstrap-table-next";
-import ReactDataTable from "react-datatable-with-bootstrap";
+// import { BootstrapTable } from "react-bootstrap-table-next";
+// import ReactDataTable from "react-datatable-with-bootstrap";
 
 class Series extends Component {
   state = {
