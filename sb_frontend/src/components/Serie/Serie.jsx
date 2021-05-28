@@ -41,7 +41,7 @@ class Serie extends Component {
   };
 
   handleOnClickStandings = () => {
-    this.setState({ standings: true, allstarteams: false });
+    this.setState({ standings: true, allstarteams: false, addPlayer: false });
   };
 
   handleOnClickAllStarTeams = () => {
@@ -267,6 +267,13 @@ class Serie extends Component {
                     </Form.Group>
                     <Form.Group>
                       <Button
+                        className="mr-2"
+                        style={{ float: "left" }}
+                        variant="primary"
+                      >
+                        Aceptar
+                      </Button>
+                      <Button
                         style={{ float: "right" }}
                         onClick={this.handleCloseFormTeam}
                         variant="secondary"
@@ -306,6 +313,13 @@ class Serie extends Component {
                       </Form.Control>
                     </Form.Group>
                     <Form.Group>
+                      <Button
+                        className="mr-2"
+                        style={{ float: "left" }}
+                        variant="primary"
+                      >
+                        Aceptar
+                      </Button>
                       <Button
                         style={{ float: "right" }}
                         onClick={this.handleCloseAddPlayer}

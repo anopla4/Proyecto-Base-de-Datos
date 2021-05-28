@@ -82,6 +82,8 @@ class TeamInSerie extends Component {
     this.setState({ addPlayer: false });
   };
 
+  handleEditDirectors = () => {};
+
   handleSelectChange = () => {};
 
   render() {
@@ -165,6 +167,13 @@ class TeamInSerie extends Component {
                       </Form.Control>
                     </Form.Group>
                     <Form.Group>
+                      <Button
+                        className="mr-2"
+                        style={{ float: "left" }}
+                        variant="primary"
+                      >
+                        Aceptar
+                      </Button>
                       <Button
                         style={{ float: "right" }}
                         onClick={this.handleCloseAddPlayer}

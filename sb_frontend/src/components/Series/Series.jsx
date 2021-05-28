@@ -16,6 +16,7 @@ import filterFactory, {
 class Series extends Component {
   state = {
     redirect: null,
+    // series: [],
     series: [
       {
         id: 1,
@@ -52,6 +53,14 @@ class Series extends Component {
       },
     ],
   };
+
+  // componentDidMount() {
+  //   let data = fetch("localhost:44334/api/serie").then((response) =>
+  //     response.json()
+  //   );
+  //   this.setState({ series: data });
+  // }
+
   handleOnClick = (id, name) => {
     // this.setState({ redirect: "/serie" });
     // fetch serie data from data base
