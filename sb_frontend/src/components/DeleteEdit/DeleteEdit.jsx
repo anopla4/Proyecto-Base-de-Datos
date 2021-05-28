@@ -17,6 +17,7 @@ class DeleteEdit extends Component {
               " btn-outline-secondary"
             }
             size={this.props.size}
+            onClick={this.props.onEdit}
             variant="light"
           >
             <PencilSquare style={{ width: "100%" }} />
@@ -27,6 +28,7 @@ class DeleteEdit extends Component {
             className={"mt-" + this.props.top + " mr-1"}
             style={{ padding: "0px", float: "right" }}
             size={this.props.size}
+            onClick={this.props.onDelete}
             variant="danger"
           >
             <TrashFill style={{ width: "100%" }} />

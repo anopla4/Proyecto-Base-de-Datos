@@ -9,7 +9,7 @@ class Add extends Component {
       <Button
         className="mr-3"
         style={{ float: "right" }}
-        onClick={this.props.handleOnClickAdd}
+        onClick={this.props.onClick}
         variant="primary"
       >
         <PlusLg className="mr-2" />

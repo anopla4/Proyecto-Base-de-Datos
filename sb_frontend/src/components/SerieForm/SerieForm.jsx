@@ -20,8 +20,14 @@ class SerieForm extends Component {
       { name: "Ciego de Ávila" },
     ],
   };
-
   render() {
+    let newDate = new Date();
+    let year = newDate.getFullYear();
+    let years = Array.from(Array(year).keys()).reverse();
+    const { id, name, reach, seasonStart, seasonEnd, ng, nt, winner, loser } = {
+      ...this.props.location.state.serie,
+    };
+    console.log(this.props);
     return (
       <Container alignSelf="center" className="mt-4">
         <Col className="center">
@@ -30,22 +36,46 @@ class SerieForm extends Component {
               <Col>
                 <Form.Group style={{ width: "100%" }} controlId="name">
                   <Form.Label>Nombre:</Form.Label>
-                  <Form.Control type="text" placeholder="" />
+                  <Form.Control type="text" defaultValue={name ? name : ""} />
                 </Form.Group>
               </Col>
             </Row>
             <Row>
               <Col>
-                <Form.Group controlId="date-begin" bsSize="large">
+                <Form.Group controlId="date-begin">
+                  <Form.Label>Fecha de incio:</Form.Label>
+                  <Form.Control
+                    defaultValue={seasonStart ? seasonStart : { year }}
+                    as="select"
+                    custom
+                  >
+                    {years.map((year) => (
+                      <option>{year}</option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
+                {/* <Form.Group controlId="date-begin" bsSize="large">
                   <Form.Label>Fecha de incio:</Form.Label>
                   <Form.Control type="date" />
-                </Form.Group>
+                </Form.Group> */}
               </Col>
               <Col>
-                <Form.Group controlId="date-end" bsSize="large">
+                <Form.Group controlId="date-end">
+                  <Form.Label>Fecha de culminación:</Form.Label>
+                  <Form.Control
+                    defaultValue={seasonEnd ? seasonEnd : { year }}
+                    as="select"
+                    custom
+                  >
+                    {years.map((year) => (
+                      <option>{year}</option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
+                {/* <Form.Group controlId="date-end" bsSize="large">
                   <Form.Label>Fecha de culminación:</Form.Label>
                   <Form.Control type="date" />
-                </Form.Group>
+                </Form.Group> */}
               </Col>
             </Row>
 
@@ -53,8 +83,12 @@ class SerieForm extends Component {
               <Col>
                 <Form.Group controlId="reach">
                   <Form.Label>Carácter:</Form.Label>
-                  <Form.Control as="select" custom>
-                    <option>Elija un carácter...</option>
+                  <Form.Control
+                    defaultValue={reach ? reach : ""}
+                    as="select"
+                    custom
+                  >
+                    <option>{""}</option>
                     {this.state.reaches.map((reach) => (
                       <option>{reach}</option>
                     ))}
@@ -64,7 +98,11 @@ class SerieForm extends Component {
               <Col>
                 <Form.Group controlId="number-of-games">
                   <Form.Label>Número de juegos:</Form.Label>
-                  <Form.Control type="numeric" name="number-of-games" />
+                  <Form.Control
+                    defaultValue={ng ? ng : ""}
+                    type="numeric"
+                    name="number-of-games"
+                  />
                 </Form.Group>
               </Col>
             </Row>

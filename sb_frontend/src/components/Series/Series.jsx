@@ -1,9 +1,17 @@
 import React, { Component } from "react";
-import { Table, Container, Button } from "react-bootstrap";
+import { Container, Button, Table } from "react-bootstrap";
+import { ToolkitProvider } from "react-bootstrap-table2-toolkit";
 import "./Series.css";
 import "../../containers/App/App.css";
 import DeleteEdit from "../../components/DeleteEdit/DeleteEdit";
 import Add from "../../components/Add/Add";
+import filterFactory, {
+  textFilter,
+  numberFilter,
+  Comparator,
+} from "react-bootstrap-table2-filter";
+import { BootstrapTable } from "react-bootstrap-table-next";
+import ReactDataTable from "react-datatable-with-bootstrap";
 
 class Series extends Component {
   state = {
@@ -13,7 +21,8 @@ class Series extends Component {
         id: 1,
         name: "Serie Nacional de Béisbol",
         reach: "Nacional",
-        season: "1994-1995",
+        seasonStart: "1994",
+        seasonEnd: "1995",
         ng: "50",
         nt: "15",
         winner: "Industriales",
@@ -23,7 +32,8 @@ class Series extends Component {
         id: 2,
         name: "Serie Nacional de Béisbol",
         reach: "Nacional",
-        season: "1996-1997",
+        seasonStart: "1996",
+        seasonEnd: "1997",
         ng: "40",
         nt: "15",
         winner: "Matanzas",
@@ -33,7 +43,8 @@ class Series extends Component {
         id: 3,
         name: "Serie Nacional de Béisbol",
         reach: "Nacional",
-        season: "1997-1998",
+        seasonStart: "1997",
+        seasonEnd: "1998",
         ng: "30",
         nt: "15",
         winner: "Industriales",
@@ -107,21 +118,58 @@ class Series extends Component {
     });
   };
 
-  handleOnClickButton = () => {
-    this.props.history.push("/serieForm");
+  handleOnClickAdd = (path, serie) => {
+    this.props.history.push({ pathname: path, state: { serie } });
   };
 
   render() {
     // if (this.state.redirect) {
     //   return <Redirect to={this.state.redirect}></Redirect>;
     // }
+    const columns = [
+      { dataField: "name", text: "Nombre", filter: textFilter() },
+      { dataField: "season", text: "Temporada", filter: textFilter() },
+      { dataField: "reach", text: "Carácter", filter: textFilter() },
+      {
+        dataField: "ng",
+        text: "Cantidad de juegos",
+        filter: numberFilter({
+          delay: 1000,
+          numberComparators: [Comparator.EQ, Comparator.GT, Comparator.LT],
+        }),
+      },
+      {
+        dataField: "nt",
+        text: "Cantidad de equipos",
+        filter: numberFilter({
+          delay: 1000,
+          numberComparators: [Comparator.EQ, Comparator.GT, Comparator.LT],
+        }),
+      },
+      { dataField: "winner", text: "Primer lugar", filter: textFilter() },
+      { dataField: "loser", text: "Último lugar", filter: textFilter() },
+    ];
+
+    // const tableRowEvents = {
+    //   onClick: (e, row) => this.props.history.push("/serieForm"),
+    // };
+
     return (
       <Container>
-        <Table striped bordered hover>
+        <Table
+          // keyField="id"
+          // data={this.state.series}
+          // columns={columns}
+          // filter={filterFactory()}
+          striped
+          bordered
+          hover
+        >
           <thead>
             <tr>
               <th>Nombre</th>
-              <th>Temporada</th>
+              <th>Inicio</th>
+              <th>Final</th>
               <th>Carácter</th>
               <th>Cantidad de juegos</th>
               <th>Cantidad de equipos</th>
@@ -131,19 +179,34 @@ class Series extends Component {
           </thead>
           <tbody>
             {this.state.series.map((serie) => (
-              <tr
-                key={serie.id}
-                onClick={() => this.handleOnClick(serie.id, serie.name)}
-              >
-                <td>{serie.name}</td>
-                <td>{serie.season}</td>
-                <td>{serie.reach}</td>
-                <td>{serie.ng}</td>
-                <td>{serie.nt}</td>
-                <td>{serie.winner}</td>
-                <td>{serie.loser}</td>
+              <tr key={serie.id}>
+                <td onClick={() => this.handleOnClick(serie.id, serie.name)}>
+                  {serie.name}
+                </td>
+                <td onClick={() => this.handleOnClick(serie.id, serie.name)}>
+                  {serie.seasonStart}
+                </td>
+                <td onClick={() => this.handleOnClick(serie.id, serie.name)}>
+                  {serie.seasonEnd}
+                </td>
+                <td onClick={() => this.handleOnClick(serie.id, serie.name)}>
+                  {serie.reach}
+                </td>
+                <td onClick={() => this.handleOnClick(serie.id, serie.name)}>
+                  {serie.ng}
+                </td>
+                <td onClick={() => this.handleOnClick(serie.id, serie.name)}>
+                  {serie.nt}
+                </td>
+                <td onClick={() => this.handleOnClick(serie.id, serie.name)}>
+                  {serie.winner}
+                </td>
+                <td onClick={() => this.handleOnClick(serie.id, serie.name)}>
+                  {serie.loser}
+                </td>
                 <DeleteEdit
                   delete={true}
+                  onEdit={() => this.handleOnClickAdd("/serieForm", serie)}
                   edit={true}
                   size="sm"
                   space={1}
@@ -153,8 +216,10 @@ class Series extends Component {
             ))}
           </tbody>
         </Table>
-
-        <Add text="Agregar Serie" />
+        <Add
+          text="Agregar Serie"
+          onClick={() => this.handleOnClickAdd("/serieForm")}
+        />
       </Container>
     );
   }
