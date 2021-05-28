@@ -36,7 +36,7 @@ class SerieForm extends Component {
               <Col>
                 <Form.Group style={{ width: "100%" }} controlId="name">
                   <Form.Label>Nombre:</Form.Label>
-                  <Form.Control type="text" defaultValue={name ? name : ""} />
+                  <Form.Control type="text" value={name ? name : ""} />
                 </Form.Group>
               </Col>
             </Row>
@@ -45,7 +45,7 @@ class SerieForm extends Component {
                 <Form.Group controlId="date-begin">
                   <Form.Label>Fecha de incio:</Form.Label>
                   <Form.Control
-                    defaultValue={seasonStart ? seasonStart : { year }}
+                    value={seasonStart ? seasonStart : { year }}
                     as="select"
                     custom
                   >
@@ -63,7 +63,7 @@ class SerieForm extends Component {
                 <Form.Group controlId="date-end">
                   <Form.Label>Fecha de culminación:</Form.Label>
                   <Form.Control
-                    defaultValue={seasonEnd ? seasonEnd : { year }}
+                    value={seasonEnd ? seasonEnd : { year }}
                     as="select"
                     custom
                   >
@@ -83,11 +83,7 @@ class SerieForm extends Component {
               <Col>
                 <Form.Group controlId="reach">
                   <Form.Label>Carácter:</Form.Label>
-                  <Form.Control
-                    defaultValue={reach ? reach : ""}
-                    as="select"
-                    custom
-                  >
+                  <Form.Control value={reach ? reach : ""} as="select" custom>
                     <option>{""}</option>
                     {this.state.reaches.map((reach) => (
                       <option>{reach}</option>
@@ -99,7 +95,7 @@ class SerieForm extends Component {
                 <Form.Group controlId="number-of-games">
                   <Form.Label>Número de juegos:</Form.Label>
                   <Form.Control
-                    defaultValue={ng ? ng : ""}
+                    value={ng ? ng : ""}
                     type="numeric"
                     name="number-of-games"
                   />

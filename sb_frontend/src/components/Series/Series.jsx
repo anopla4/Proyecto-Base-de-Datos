@@ -63,8 +63,8 @@ class Series extends Component {
           name: name,
           standings: [
             {
+              place: 1,
               team: {
-                place: 1,
                 id: 1,
                 img: "http://localhost:8000/src/logos/industriales.png",
                 name: "Industriales",
@@ -73,8 +73,8 @@ class Series extends Component {
               lost_games: 10,
             },
             {
+              place: 2,
               team: {
-                place: 2,
                 id: 2,
                 img: "http://localhost:8000/src/logos/cienfuegos.png",
                 name: "Cienfuegos",
@@ -83,9 +83,9 @@ class Series extends Component {
               lost_games: 8,
             },
             {
+              place: 3,
               team: {
-                place: 3,
-                id: 1,
+                id: 3,
                 img: "http://localhost:8000/src/logos/ciego.png",
                 name: "Ciego de Ávila",
               },
@@ -162,6 +162,7 @@ class Series extends Component {
           // columns={columns}
           // filter={filterFactory()}
           striped
+          responsive
           bordered
           hover
         >
