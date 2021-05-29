@@ -7,6 +7,11 @@ import {
   CardDeck,
   Row,
   Col,
+  Button,
+  Navbar,
+  Nav,
+  Form,
+  Image,
 } from "react-bootstrap";
 import "../../containers/App/App.css";
 import DeleteEdit from "../../components/DeleteEdit/DeleteEdit";
@@ -14,81 +19,196 @@ import Add from "../../components/Add/Add";
 
 class Teams extends Component {
   state = {
+    addTeam: false,
+    editTeam: false,
+    teamEdit: {},
+    colors: [
+      "Negro",
+      "Azul",
+      "Marrón",
+      "Gris",
+      "Verde",
+      "Naranja",
+      "Rosa",
+      "Púrpura",
+      "Rojo",
+      "Blanco",
+      "Amarillo",
+    ],
     teams: [
       {
         id: 1,
         name: "Matanzas",
-        color: "Rojo, Amarillo",
-        iniciales: "MTN",
+        color: "Rojo",
+        initials: "MTN",
         img: "http://localhost:8000/src/logos/matanzas.png",
       },
       {
         id: 2,
         name: "Pinar del Río",
-        color: "Verde, Blanco",
-        iniciales: "PR",
+        color: "Verde",
+        initials: "PR",
         img: "http://localhost:8000/src/logos/pinar-del-rio.jpg",
       },
       {
         id: 3,
         name: "Industriales",
         color: "Azul",
-        iniciales: "IND",
+        initials: "IND",
         img: "http://localhost:8000/src/logos/industriales.png",
       },
       {
         id: 4,
         name: "Cienfuegos",
-        color: "Verde, Blanco",
-        iniciales: "CFG",
+        color: "Verde",
+        initials: "CFG",
         img: "http://localhost:8000/src/logos/cienfuegos.png",
       },
     ],
   };
 
+  // componentDidMount() {
+  //   fetch("https://localhost:44334/api/Team", { mode: "cors" })
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw Error(response.statusText);
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((response) => {
+  //       this.setState({ teams: response });
+  //     })
+  //     .catch(function (error) {
+  //       console.log("Hubo un problema con la petición Fetch:" + error.message);
+  //     });
+  // }
+
   handleOnClick = (idT) => {
     this.props.history.push({ pathname: "/team", state: { idTeam: idT } });
+  };
+
+  handleAddClick = () => {
+    this.setState({ addTeam: true, editTeam: false, itemEdit: {} });
+  };
+
+  handleEditClick = (team) => {
+    this.setState({ addTeam: false, editTeam: true, itemEdit: team });
+  };
+
+  handleCloseAdd = () => {
+    this.setState({ editTeam: false, addTeam: false, itemEdit: {} });
   };
 
   render() {
     return (
       <Container>
         <h1 className="mb-5 my-style-header">Equipos de béisbol</h1>
-
-        <CardDeck>
-          {this.state.teams.map((team) => (
-            <Col md="4">
-              <Card
-                className="mb-3"
-                key={team.id}
-                style={{ width: "18rem" }}
-                border="primary"
-              >
-                <Card.Img height="250vw" variant="top" src={team.img} />
-                <Card.Body>
-                  <Card.Title>{team.iniciales}</Card.Title>
-                  <Card.Subtitle>{team.name}</Card.Subtitle>
-                </Card.Body>
-                <ListGroup className="list-group-flush">
-                  <ListGroupItem>Color: {team.color}</ListGroupItem>
-                </ListGroup>
-                <Card.Body>
-                  <Card.Link
-                    href="/team"
-                    onClick={() => this.handleOnClick(team.id)}
-                  >
-                    Saber más
-                  </Card.Link>
-                  <DeleteEdit delete={true} edit={true} />
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </CardDeck>
-        <Row className="mb-4">
+        <Row>
           <Col>
-            <Add text="Agregar equipo" />
+            <CardDeck>
+              {this.state.teams.map((team) => (
+                <Col>
+                  <Card
+                    className="mb-3"
+                    key={team.id}
+                    style={{ width: "18rem" }}
+                    border="primary"
+                  >
+                    <Card.Img height="250vw" variant="top" src={team.img} />
+                    <Card.Body>
+                      <Card.Title>{team.iniciales}</Card.Title>
+                      <Card.Subtitle>{team.name}</Card.Subtitle>
+                    </Card.Body>
+                    <ListGroup className="list-group-flush">
+                      <ListGroupItem>Color: {team.color}</ListGroupItem>
+                    </ListGroup>
+                    <Card.Body>
+                      <Card.Link
+                        href="/team"
+                        onClick={() => this.handleOnClick(team.id)}
+                      >
+                        Saber más
+                      </Card.Link>
+                      <DeleteEdit
+                        delete={true}
+                        edit={true}
+                        onEdit={() => this.handleEditClick(team)}
+                      />
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+            </CardDeck>
+            <Row className="mb-4">
+              <Col>
+                <Add text="Agregar equipo" onClick={this.handleAddClick} />
+              </Col>
+            </Row>
           </Col>
+
+          {(this.state.addTeam || this.state.editTeam) && (
+            <Col md={3}>
+              <Navbar fixed="right">
+                <Nav.Item>
+                  <Form>
+                    <Form.Group controlId="name">
+                      <Form.Label>Nombre:</Form.Label>
+                      <Form.Control
+                        type="text"
+                        value={
+                          this.state.editTeam ? this.state.itemEdit.name : ""
+                        }
+                      />
+                    </Form.Group>
+                    <Form.Group>
+                      {/* <Image src={img} /> */}
+                      <Form.File id="img" label="Logo del equipo" />
+                    </Form.Group>
+                    <Form.Group>
+                      <Form.Label>Iniciales:</Form.Label>
+                      <Form.Control
+                        type="text"
+                        value={
+                          this.state.editTeam
+                            ? this.state.itemEdit.initials
+                            : ""
+                        }
+                      />
+                    </Form.Group>
+                    <Form.Group controlId="name">
+                      <Form.Label>Color:</Form.Label>
+                      <Form.Control
+                        as="select"
+                        value={
+                          this.state.editTeam ? this.state.itemEdit.color : ""
+                        }
+                        custom
+                      >
+                        <option>{""}</option>
+                        {this.state.colors.map((col) => (
+                          <option>{col}</option>
+                        ))}
+                      </Form.Control>
+                    </Form.Group>
+                    <Button
+                      className="mr-2"
+                      style={{ float: "left" }}
+                      variant="primary"
+                    >
+                      Aceptar
+                    </Button>
+                    <Button
+                      style={{ float: "right" }}
+                      onClick={this.handleCloseAdd}
+                      variant="secondary"
+                    >
+                      Cancelar
+                    </Button>
+                  </Form>
+                </Nav.Item>
+              </Navbar>
+            </Col>
+          )}
         </Row>
       </Container>
     );

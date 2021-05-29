@@ -23,7 +23,7 @@ class Team extends Component {
       {
         id: 1,
         name: "Alexander Malleta",
-        positions: ["Primera base"],
+        position: [{ id: 1, positionName: "Primera base" }],
         img: "http://localhost:8000/src/logos/malleta.jpg",
         age: 44,
         teams: ["Industriales", "Metropolitano"],
@@ -34,7 +34,7 @@ class Team extends Component {
       {
         id: 2,
         name: "Frank Camilo Morejón",
-        positions: ["Catcher"],
+        position: [{ id: 4, positionName: "Catcher" }],
         img: "http://localhost:8000/src/logos/frank-camilo.jpg",
         age: 44,
         teams: ["Industriales"],
