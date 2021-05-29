@@ -7,6 +7,7 @@ import DeleteEdit from "../../components/DeleteEdit/DeleteEdit";
 
 class Players extends Component {
   render() {
+    console.log(this.props.players);
     return (
       <Accordion className="mb-3">
         {this.props.players.map((player) => (

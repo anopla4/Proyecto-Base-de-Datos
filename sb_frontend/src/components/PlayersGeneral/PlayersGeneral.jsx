@@ -42,8 +42,6 @@ class PlayersGeneral extends Component {
   };
 
   handleOnClickEdit = (player) => {
-    console.log("AAAAAA");
-    console.log(player);
     this.props.history.push({ pathname: "/playerForm", state: { player } });
   };
 
