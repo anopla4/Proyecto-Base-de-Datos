@@ -24,30 +24,30 @@ namespace SB_backend.Controllers
             return Ok(_ppRep.GetPositionPlayers());
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetPositionPlayer(Guid Id)
+        [HttpGet("{PlayerId}/{PositionId}")]
+        public IActionResult GetPositionPlayer(Guid PlayerId, Guid PositionId)
         {
-            var player = _ppRep.GetPositionPlayer(Id);
+            var player = _ppRep.GetPositionPlayer(PlayerId,PositionId);
 
             if (player != null)
             {
                 return Ok(player);
             }
 
-            return NotFound($"Not position player with id = {Id}");
+            return NotFound($"Not position player with id = {PlayerId}{PositionId}");
         }
 
         [HttpPost]
         public IActionResult AddPositionPlayer(PositionPlayer player)
         {
             _ppRep.AddPositionPlayer(player);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + player.PlayerId, player);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + player.PlayerId + player.PositionId, player);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult RemovePositionPlayer(Guid Id)
+        [HttpDelete("{PlayerId}/{PositionId}")]
+        public IActionResult RemovePositionPlayer(Guid PlayerId,Guid PositionId)
         {
-            var player = _ppRep.GetPositionPlayer(Id);
+            var player = _ppRep.GetPositionPlayer(PlayerId,PositionId);
 
             if (player != null)
             {
@@ -55,13 +55,13 @@ namespace SB_backend.Controllers
                 return Ok();
             }
 
-            return NotFound($"Not position player with id = {Id}");
+            return NotFound($"Not position player with id = {PlayerId}{PositionId}");
         }
 
-        [HttpPatch("{id}")]
-        public IActionResult UpdatePositionPlayer(Guid Id, PositionPlayer player)
+        [HttpPatch("{PlayerId}/{PositionId}")]
+        public IActionResult UpdatePositionPlayer(Guid PlayerId,Guid PositionId, PositionPlayer player)
         {
-            var current_player = _ppRep.GetPositionPlayer(Id);
+            var current_player = _ppRep.GetPositionPlayer(PlayerId,PositionId);
 
             if (current_player != null)
             {
@@ -70,7 +70,7 @@ namespace SB_backend.Controllers
                 return Ok(player);
             }
 
-            return NotFound($"Not position player with id = {Id}");
+            return NotFound($"Not position player with id = {PlayerId}{PositionId}");
         }
     }
 }

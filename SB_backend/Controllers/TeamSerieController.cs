@@ -33,7 +33,7 @@ namespace SB_backend.Controllers
             }
             return Ok(serie);
         }
-        [HttpGet("{TeamId}{SerieId}")]
+        [HttpGet("{TeamId}/{SerieId}")]
         public IActionResult GetTeamSerie(Guid TeamId, Guid SerieId)
         {
             TeamSerie teamSerie = _tsRep.GetTeamSerie(TeamId, SerieId);
@@ -63,7 +63,7 @@ namespace SB_backend.Controllers
             }
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + teamSerie.TeamId + teamSerie.SerieId, teamSerie);
         }
-        [HttpDelete("{TeamId}{SerieId}")]
+        [HttpDelete("{TeamId}/{SerieId}")]
         public IActionResult RemoveTeamSerie(Guid TeamId,Guid SerieID,TeamSerie teamSerie)
         {
             var flag = _tsRep.RemoveTeamSerie(teamSerie);
@@ -73,7 +73,7 @@ namespace SB_backend.Controllers
             }
             return NotFound($"Not valid TeamSerie");
         }
-        [HttpPatch("{TeamId}{SerieId}")]
+        [HttpPatch("{TeamId}/{SerieId}")]
         public IActionResult UpdateTeamSerie(Guid TeamId,Guid SerieId,TeamSerie teamSerie)
         {
             var teamSerieUpd = _tsRep.UpdateTeamSerie(teamSerie);

@@ -31,6 +31,14 @@ namespace SB_backend.Repositories
             return teamSeriePlayer;
         }
 
+        public List<Player> GetPlayersInSerie(Guid SerieId)
+        {
+            bool flag = _context.TeamsSeriesDirectors.Any(c => c.TeamSerieId == SerieId);
+            if (!flag)
+                return null;
+            return null;
+        }
+
         public List<Player> GetPlayersOfTeamInSerie(Guid TeamId, Guid SerieId)
         {
             bool teamSP = _context.TeamsSeriesPlayers.Any(c => c.TeamSerieId == TeamId && c.SerieId == SerieId);

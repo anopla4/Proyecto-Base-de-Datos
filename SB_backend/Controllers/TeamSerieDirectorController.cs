@@ -23,7 +23,7 @@ namespace SB_backend.Controllers
         {
             return Ok(_tsdRep.GetTeamsSeriesDirectors());
         }
-        [HttpGet("{DirectorId}{SerieId}")]
+        [HttpGet("{DirectorId}/{SerieId}")]
         public IActionResult GetTeamSerieDirector(Guid DirectorId, Guid SerieId)
         {
             var tsd = _tsdRep.GetTeamSerieDirector(SerieId, DirectorId);
@@ -31,7 +31,7 @@ namespace SB_backend.Controllers
                 return Ok(tsd);
             return NotFound($"Not Director {DirectorId} in Serie {SerieId}");
         }
-        [HttpGet("Directors{SerieId}{TeamId}")]
+        [HttpGet("Directors/{SerieId}/{TeamId}")]
         public IActionResult GetDirectorsOfTeamInSerie(Guid SerieId, Guid TeamId)
         {
             var directors = _tsdRep.GetDirectorsOfTeamInSerie(TeamId, SerieId);
@@ -57,7 +57,7 @@ namespace SB_backend.Controllers
             }
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + tsd.DirectorId + tsd.SerieId, tsd);
         }
-        [HttpDelete("{DirectorId}{SerieId}")]
+        [HttpDelete("{DirectorId}/{SerieId}")]
         public IActionResult RemoveTeamSerieDirector(Guid DirectorId, Guid SerieId, TeamSerieDirector tsd)
         {
             var tsdR = _tsdRep.RemoveTeamSerieDirector(tsd);
@@ -67,7 +67,7 @@ namespace SB_backend.Controllers
             }
             return NotFound($"Not Director {DirectorId} in Serie {SerieId}");
         }
-        [HttpPatch("{DirectorId}{SerieId}")]
+        [HttpPatch("{DirectorId}/{SerieId}")]
         public IActionResult UpdateTeamSerieDirector(Guid DirectorId, Guid SerieId, TeamSerieDirector tsd)
         {
             var tsdUpd = _tsdRep.UpdateTeamSerieDirector(tsd);

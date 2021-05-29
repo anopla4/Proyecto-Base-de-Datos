@@ -12,6 +12,6 @@ namespace SB_backend.Models
         [Key]
         public Guid Id { get; set; }
         [Required]
-        public string Position_Name { get; set; }
+        public string PositionName { get; set; }
     }
 }

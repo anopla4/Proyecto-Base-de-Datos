@@ -21,9 +21,9 @@ namespace SB_backend.Repositories
             return player;
         }
 
-        public PositionPlayer GetPositionPlayer(Guid id)
+        public PositionPlayer GetPositionPlayer(Guid PlayerId,Guid PositionId)
         {
-            return _context.PositionPlayers.Include(c => c.Player).Include(c => c.Position).SingleOrDefault(c => c.PlayerId == id);
+            return _context.PositionPlayers.Include(c => c.Player).Include(c => c.Position).SingleOrDefault(c => c.PlayerId == PlayerId && c.PositionId == PositionId);
         }
 
         public List<PositionPlayer> GetPositionPlayers()
@@ -33,7 +33,7 @@ namespace SB_backend.Repositories
 
         public bool RemovePositionPlayer(PositionPlayer player)
         {
-            var curr_player = _context.PositionPlayers.Find(player.PlayerId);
+            var curr_player = _context.PositionPlayers.SingleOrDefault(c => c.PlayerId == player.PlayerId && c.PositionId == player.PositionId);
 
             if (curr_player != null)
             {
@@ -46,7 +46,13 @@ namespace SB_backend.Repositories
 
         public PositionPlayer UpdatePositionPlayer(PositionPlayer player)
         {
-            throw new NotImplementedException();
+            var curr_player = _context.PositionPlayers.Include(c => c.Position).SingleOrDefault(c => c.PlayerId == player.PlayerId && c.PositionId == player.PositionId);
+            if (curr_player == null)
+                return null;
+            curr_player.Position_Average = player.Position_Average;
+            _context.PositionPlayers.Update(curr_player);
+            _context.SaveChanges();
+            return curr_player;
         }
     }
 }

@@ -25,7 +25,7 @@ namespace SB_backend.Controllers
         public IActionResult AddPosition(Position position)
         {
             _posRep.AddPosition(position);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + position.Position_Name,position);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + position.Id,position);
         }
 
         [HttpDelete("{Id}")]

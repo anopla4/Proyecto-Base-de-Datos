@@ -39,6 +39,7 @@ namespace SB_backend
             services.AddScoped<ITeamSerieRepository, TeamSerieRepository>();
             services.AddScoped<ITeamSeriePlayerRepository, TeamSeriePlayerRepository>();
             services.AddScoped<ITeamSerieDirectorRepository, TeamSerieDirectorRepository>();
+            services.AddScoped<IPitcherRepository, PitcherRepository>();
             services.AddDbContext<AppDBContext>(options =>
                 options.UseSqlServer(Configuration["Data:Baseball:ConnectionString"]));
         }

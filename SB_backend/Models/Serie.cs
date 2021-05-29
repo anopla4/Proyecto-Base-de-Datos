@@ -23,6 +23,10 @@ namespace SB_backend.Models
         [Required]
         public Guid CaracterId { get; set; }
         public Caracter CaracterSerie { get; set; }
+        public Guid WinerId { get; set; }
+        public Team Winer { get; set; }
+        public Guid LoserId { get; set; }
+        public Team Loser { get; set; }
         public int NumberOfGames { get; set; }
     }
 }

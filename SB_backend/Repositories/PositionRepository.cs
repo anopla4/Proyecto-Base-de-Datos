@@ -33,7 +33,7 @@ namespace SB_backend.Repositories
 
         public bool RemovePosition(Position position)
         {
-            Position current_position = _context.Positions.Find(position.Position_Name);
+            Position current_position = _context.Positions.Find(position.PositionName);
             if(current_position != null)
             {
                 _context.Positions.Remove(position);
@@ -49,7 +49,7 @@ namespace SB_backend.Repositories
             var current_position = _context.Positions.Find(position.Id);
             if (current_position != null)
             {
-                current_position.Position_Name = position.Position_Name;
+                current_position.PositionName = position.PositionName;
                 _context.Positions.Update(current_position);
                 _context.SaveChanges();
             }

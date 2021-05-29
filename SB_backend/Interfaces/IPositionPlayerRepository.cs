@@ -9,7 +9,7 @@ namespace SB_backend.Interfaces
     public interface IPositionPlayerRepository
     {
         List<PositionPlayer> GetPositionPlayers();
-        PositionPlayer GetPositionPlayer(Guid id);
+        PositionPlayer GetPositionPlayer(Guid Playerid, Guid PositionId);
 
         PositionPlayer AddPositionPlayer(PositionPlayer player);
 

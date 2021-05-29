@@ -23,7 +23,7 @@ namespace SB_backend.Controllers
         {
             return Ok(_tspRep.GetTeamsSeriesPlayers());
         }
-        [HttpGet("{PlayerId}{SerieId}")]
+        [HttpGet("{PlayerId}/{SerieId}")]
         public IActionResult GetTeamSeriePlayer(Guid PlayerId, Guid SerieId)
         {
             var tsp = _tspRep.GetTeamSeriePlayer(SerieId, PlayerId);
@@ -31,7 +31,7 @@ namespace SB_backend.Controllers
                 return Ok(tsp);
             return NotFound($"Not Player {PlayerId} in Serie {SerieId}");
         }
-        [HttpGet("Players{SerieId}{TeamId}")]
+        [HttpGet("Players/{SerieId}/{TeamId}")]
         public IActionResult GetPlayersOfTeamInSerie(Guid SerieId,Guid TeamId)
         {
             var players = _tspRep.GetPlayersOfTeamInSerie(TeamId, SerieId);
@@ -57,7 +57,7 @@ namespace SB_backend.Controllers
             }
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + tsp.PlayerId + tsp.SerieId, tsp);
         }
-        [HttpDelete("{PlayerId}{SerieId}")]
+        [HttpDelete("{PlayerId}/{SerieId}")]
         public IActionResult RemoveTeamSeriePlayer(Guid PlayerId,Guid SerieId,TeamSeriePlayer tsp)
         {
             var tspR = _tspRep.RemoveTeamSeriePlayer(tsp);
@@ -67,7 +67,7 @@ namespace SB_backend.Controllers
             }
             return NotFound($"Not Player {PlayerId} in Serie {SerieId}");
         }
-        [HttpPatch("{PlayerId}{SerieId}")]
+        [HttpPatch("{PlayerId}/{SerieId}")]
         public IActionResult UpdateTeamSeriePlayer(Guid PlayerId, Guid SerieId, TeamSeriePlayer tsp)
         {
             var tspUpd = _tspRep.UpdateTeamSeriePlayer(tsp);
