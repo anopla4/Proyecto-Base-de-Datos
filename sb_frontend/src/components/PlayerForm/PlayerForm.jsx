@@ -1,16 +1,14 @@
 import React, { Component } from "react";
 import { Form, Button, Row, Col, Container, Image } from "react-bootstrap";
 import "./PlayerForm.css";
-// import MultiSelect from "react-multi-select-component";
-// import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
-// import CheckBoxMultipleSelect from "../../components/CheckBoxMultiple/CheckBoxMultiple";
 
 class PlayerForm extends Component {
   state = {
+    changed: false,
     selectedPositions: [],
-    hands: ["Zurda", "Derecha"],
+    hands: ["Izquierda", "Derecha"],
     positions: [
-      { id: 1, positionName: "Primera Base" },
+      { id: 1, positionName: "Primera base" },
       { id: 2, positionName: "Lanzador" },
       { id: 3, positionName: "Segunda base" },
     ],
@@ -30,6 +28,7 @@ class PlayerForm extends Component {
   onChange = (e) => {
     e.preventDefault();
     this.setState((prevState) => ({
+      changed: true,
       selectedPositions: [...prevState.selectedPositions, e.target.value],
     }));
   };
@@ -49,8 +48,6 @@ class PlayerForm extends Component {
     } = {
       ...this.props.location.state.player,
     };
-    console.log("AAAAAA");
-    console.log(this.props.location.state.player);
     return (
       <Container alignSelf="center" className="mt-4">
         <Col className="center">
@@ -111,42 +108,14 @@ class PlayerForm extends Component {
               <Col>
                 <Form.Group controlId="position">
                   <Form.Label>Posición:</Form.Label>
-                  {/* <CheckBoxMultipleSelect
-                    values={this.state.positions.map((pos) => pos.positionName)}
-                    currentValues={position.map((pos) => pos.positionName)}
-                  /> */}
-                  {/* <MultiSelect
-                    options={this.state.positions.map((pos) => ({
-                      label: pos.positionName,
-                      value: pos.positionName,
-                    }))}
-                    value={position.map((pos) => ({
-                      label: pos.positionName,
-                      value: pos.positionName,
-                    }))}
-                    onChange={this.onChange}
-                    labelledBy="Select"
-                  /> */}
-                  {/* <DropdownMultiselect
-                    // options={this.state.positions.map((pos) => ({
-                    //   key: pos.id,
-                    //   label: pos.positionName,
-                    // }))}
-                    options={this.state.positions.map(
-                      (pos) => pos.positionName
-                    )}
-                    // selected={position.map((pos) => ({
-                    //   key: pos.id,
-                    //   label: pos.positionName,
-                    // }))}
-                    selected={position.map((pos) => pos.positionName)}
-                    name="posiciones"
-                  /> */}
                   <Form.Control
                     value={
-                      position ? position.map((pos) => pos.positionName) : ""
+                      position && !this.state.changed
+                        ? position.map((pos) => pos.positionName)
+                        : undefined
                     }
                     as="select"
+                    onChange={this.onChange}
                     custom
                     multiple
                   >
