@@ -89,8 +89,11 @@ class Games extends Component {
     ],
   };
 
-  handleOnClick = (idG) => {
-    this.props.history.push({ pathname: "/game", state: { idGame: idG } });
+  handleOnClick = (idG, idS) => {
+    this.props.history.push({
+      pathname: "/game",
+      state: { idGame: idG, idSerie: idS },
+    });
   };
 
   handleOnClickAdd = (game) => {
@@ -145,7 +148,7 @@ class Games extends Component {
                   <Container className="my-link">
                     <Card.Link
                       href="/game"
-                      onClick={() => this.handleOnClick(game.id)}
+                      onClick={() => this.handleOnClick(game.id, game.serie.id)}
                     >
                       Saber más
                     </Card.Link>
