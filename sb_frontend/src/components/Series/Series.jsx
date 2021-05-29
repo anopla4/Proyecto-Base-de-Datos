@@ -10,56 +10,66 @@ import filterFactory, {
   numberFilter,
   Comparator,
 } from "react-bootstrap-table2-filter";
+import { conditionalExpression } from "@babel/types";
 // import { BootstrapTable } from "react-bootstrap-table-next";
 // import ReactDataTable from "react-datatable-with-bootstrap";
 
 class Series extends Component {
   state = {
     redirect: null,
-    // series: [],
-    series: [
-      {
-        id: 1,
-        name: "Serie Nacional de Béisbol",
-        reach: "Nacional",
-        seasonStart: "1994",
-        seasonEnd: "1995",
-        ng: "50",
-        nt: "15",
-        winner: "Industriales",
-        loser: "Isla de la Juventud",
-      },
-      {
-        id: 2,
-        name: "Serie Nacional de Béisbol",
-        reach: "Nacional",
-        seasonStart: "1996",
-        seasonEnd: "1997",
-        ng: "40",
-        nt: "15",
-        winner: "Matanzas",
-        loser: "Las Tunas",
-      },
-      {
-        id: 3,
-        name: "Serie Nacional de Béisbol",
-        reach: "Nacional",
-        seasonStart: "1997",
-        seasonEnd: "1998",
-        ng: "30",
-        nt: "15",
-        winner: "Industriales",
-        loser: "Guantánamo",
-      },
-    ],
+    series: [],
+    // series: [
+    //   {
+    //     id: 1,
+    //     name: "Serie Nacional de Béisbol",
+    //     caracter: "Nacional",
+    //     initDate: "1994",
+    //     endDate: "1995",
+    //     numberOfGames: "50",
+    //     nt: "15",
+    //     winner: "Industriales",
+    //     loser: "Isla de la Juventud",
+    //   },
+    //   {
+    //     id: 2,
+    //     name: "Serie Nacional de Béisbol",
+    //     caracter: "Nacional",
+    //     initDate: "1996",
+    //     endDate: "1997",
+    //     numberOfGames: "40",
+    //     nt: "15",
+    //     winner: "Matanzas",
+    //     loser: "Las Tunas",
+    //   },
+    //   {
+    //     id: 3,
+    //     name: "Serie Nacional de Béisbol",
+    //     caracter: "Nacional",
+    //     initDate: "1997",
+    //     endDate: "1998",
+    //     numberOfGames: "30",
+    //     nt: "15",
+    //     winner: "Industriales",
+    //     loser: "Guantánamo",
+    //   },
+    // ],
   };
 
-  // componentDidMount() {
-  //   let data = fetch("localhost:44334/api/serie").then((response) =>
-  //     response.json()
-  //   );
-  //   this.setState({ series: data });
-  // }
+  componentDidMount() {
+    fetch("https://localhost:44334/api/Serie", { mode: "cors" })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ series: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+  }
 
   handleOnClick = (id, name) => {
     // this.setState({ redirect: "/serie" });
@@ -138,9 +148,9 @@ class Series extends Component {
     const columns = [
       { dataField: "name", text: "Nombre", filter: textFilter() },
       { dataField: "season", text: "Temporada", filter: textFilter() },
-      { dataField: "reach", text: "Carácter", filter: textFilter() },
+      { dataField: "caracter", text: "Carácter", filter: textFilter() },
       {
-        dataField: "ng",
+        dataField: "numberOfGames",
         text: "Cantidad de juegos",
         filter: numberFilter({
           delay: 1000,
@@ -194,25 +204,25 @@ class Series extends Component {
                   {serie.name}
                 </td>
                 <td onClick={() => this.handleOnClick(serie.id, serie.name)}>
-                  {serie.seasonStart}
+                  {new Date(serie.initDate).toLocaleString().split(",")[0]}
                 </td>
                 <td onClick={() => this.handleOnClick(serie.id, serie.name)}>
-                  {serie.seasonEnd}
+                  {new Date(serie.endDate).toLocaleString().split(",")[0]}
                 </td>
                 <td onClick={() => this.handleOnClick(serie.id, serie.name)}>
-                  {serie.reach}
+                  {serie.caracter.caracter_Name}
                 </td>
                 <td onClick={() => this.handleOnClick(serie.id, serie.name)}>
-                  {serie.ng}
+                  {serie.numberOfGames}
                 </td>
                 <td onClick={() => this.handleOnClick(serie.id, serie.name)}>
                   {serie.nt}
                 </td>
                 <td onClick={() => this.handleOnClick(serie.id, serie.name)}>
-                  {serie.winner}
+                  {serie.winner.name}
                 </td>
                 <td onClick={() => this.handleOnClick(serie.id, serie.name)}>
-                  {serie.loser}
+                  {serie.loser.name}
                 </td>
                 <DeleteEdit
                   delete={true}
