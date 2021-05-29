@@ -42,7 +42,7 @@ class SerieForm extends Component {
             </Row>
             <Row>
               <Col>
-                <Form.Group controlId="date-begin">
+                {/* <Form.Group controlId="date-begin">
                   <Form.Label>Fecha de incio:</Form.Label>
                   <Form.Control
                     value={seasonStart ? seasonStart : { year }}
@@ -53,14 +53,14 @@ class SerieForm extends Component {
                       <option>{year}</option>
                     ))}
                   </Form.Control>
-                </Form.Group>
-                {/* <Form.Group controlId="date-begin" bsSize="large">
+                </Form.Group> */}
+                <Form.Group controlId="date-begin" bsSize="large">
                   <Form.Label>Fecha de incio:</Form.Label>
                   <Form.Control type="date" />
-                </Form.Group> */}
+                </Form.Group>
               </Col>
               <Col>
-                <Form.Group controlId="date-end">
+                {/* <Form.Group controlId="date-end">
                   <Form.Label>Fecha de culminación:</Form.Label>
                   <Form.Control
                     value={seasonEnd ? seasonEnd : { year }}
@@ -71,11 +71,11 @@ class SerieForm extends Component {
                       <option>{year}</option>
                     ))}
                   </Form.Control>
-                </Form.Group>
-                {/* <Form.Group controlId="date-end" bsSize="large">
+                </Form.Group> */}
+                <Form.Group controlId="date-end" bsSize="large">
                   <Form.Label>Fecha de culminación:</Form.Label>
                   <Form.Control type="date" />
-                </Form.Group> */}
+                </Form.Group>
               </Col>
             </Row>
 
