@@ -95,7 +95,7 @@ class PlayerForm extends Component {
               </Col>
               <Col>
                 <Form.Group controlId="hand">
-                  <Form.Label>Mano:</Form.Label>
+                  <Form.Label>Años de experiencia:</Form.Label>
                   <Form.Control
                     value={year_Experience ? year_Experience : ""}
                     type="numeric"
@@ -167,7 +167,7 @@ class PlayerForm extends Component {
               variant="secondary"
               type="reset"
             >
-              Reset
+              Reiniciar
             </Button>
             <Button
               style={{ float: "right" }}

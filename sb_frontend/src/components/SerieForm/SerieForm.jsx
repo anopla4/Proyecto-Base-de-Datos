@@ -16,17 +16,7 @@ class SerieForm extends Component {
     let newDate = new Date();
     let date = newDate.getDate();
     // let years = Array.from(Array(year).keys()).reverse();
-    const {
-      id,
-      name,
-      caracter,
-      initDate,
-      endDate,
-      numberOfGames,
-      // numberOfTeams,
-      // winner,
-      // loser,
-    } = {
+    const { id, name, caracter, initDate, endDate, numberOfGames } = {
       ...this.props.location.state.serie,
     };
     return (
@@ -151,7 +141,7 @@ class SerieForm extends Component {
               variant="secondary"
               type="reset"
             >
-              Reset
+              Reiniciar
             </Button>
             <Button
               style={{ float: "right" }}

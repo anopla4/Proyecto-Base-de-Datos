@@ -17,6 +17,7 @@ import Serie from "../../components/Serie/Serie";
 import TeamInSerie from "../../components/TeamInSerie/TeamInSerie";
 import SerieForm from "../../components/SerieForm/SerieForm";
 import PlayerForm from "../../components/PlayerForm/PlayerForm";
+import GameForm from "../../components/GameForm/GameForm";
 import Login from "../../components/Login/Login";
 
 class App extends Component {
@@ -39,6 +40,7 @@ class App extends Component {
             <Route path="/player" component={Player} />
             <Route path="/serieForm" component={SerieForm} />
             <Route path="/playerForm" component={PlayerForm} />
+            <Route path="/gameForm" component={GameForm} />
             <Route path="/login" component={Login} />
           </Switch>
         </Layout>
