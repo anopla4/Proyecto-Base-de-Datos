@@ -93,6 +93,10 @@ class Games extends Component {
     this.props.history.push({ pathname: "/game", state: { idGame: idG } });
   };
 
+  handleOnClickAdd = (game) => {
+    this.props.history.push({ pathname: "/gameForm", state: { game } });
+  };
+
   render() {
     return (
       <Container>
@@ -105,7 +109,11 @@ class Games extends Component {
                 <Card.Header>
                   <Row className="mb-3">
                     <Col md={4}>
-                      <DeleteEdit delete={true} edit={true} />
+                      <DeleteEdit
+                        delete={true}
+                        edit={true}
+                        onEdit={() => this.handleOnClickAdd(game)}
+                      />
                     </Col>
                     <Col className="my-series-name">{game.serie.name}</Col>
                   </Row>
@@ -147,7 +155,7 @@ class Games extends Component {
             </Col>
           ))}
         </CardDeck>
-        <Add text="Agregar juego" />
+        <Add text="Agregar juego" onClick={() => this.handleOnClickAdd()} />
       </Container>
     );
   }

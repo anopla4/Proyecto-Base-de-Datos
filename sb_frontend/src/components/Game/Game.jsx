@@ -30,7 +30,7 @@ class Game extends Component {
       {
         id: 1,
         name: "Alexander Malleta",
-        positions: ["Primera base"],
+        position: ["Primera base"],
         img: "http://localhost:8000/src/logos/malleta.jpg",
         age: 44,
         teams: ["Industriales", "Metropolitano"],
@@ -41,7 +41,7 @@ class Game extends Component {
       {
         id: 2,
         name: "Frank Camilo Morejón",
-        positions: ["Catcher"],
+        position: ["Catcher"],
         img: "http://localhost:8000/src/logos/frank-camilo.jpg",
         age: 44,
         teams: ["Industriales"],
@@ -54,7 +54,7 @@ class Game extends Component {
       {
         id: 1,
         name: "Alexander Malleta",
-        positions: ["Primera base"],
+        position: ["Primera base"],
         img: "http://localhost:8000/src/logos/malleta.jpg",
         age: 44,
         teams: ["Industriales", "Metropolitano"],
@@ -65,7 +65,7 @@ class Game extends Component {
       {
         id: 2,
         name: "Frank Camilo Morejón",
-        positions: ["Catcher"],
+        position: ["Catcher"],
         img: "http://localhost:8000/src/logos/frank-camilo.jpg",
         age: 44,
         teams: ["Industriales"],
