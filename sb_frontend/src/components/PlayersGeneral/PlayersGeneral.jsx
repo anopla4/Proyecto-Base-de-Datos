@@ -10,23 +10,23 @@ class PlayersGeneral extends Component {
       {
         id: 1,
         name: "Alexander Malleta",
-        positions: ["Primera base"],
+        position: [{ id: 1, positionName: "Primera base" }],
         img: "http://localhost:8000/src/logos/malleta.jpg",
         age: 44,
         teams: ["Industriales", "Metropolitano"],
-        current_team: "Retirado",
-        years_of_experience: 20,
-        ave: 301,
+        current_Team: "Retirado",
+        year_Experience: 20,
+        position_Average: 301,
       },
       {
         id: 2,
         name: "Pedro Luis Lazo",
-        positions: ["Lanzador"],
+        position: [{ id: 2, positionName: "Lanzador" }],
         img: "http://localhost:8000/src/logos/pedro_luis_lazo.jpg",
         age: 49,
         teams: ["Pinar del Río"],
-        current_team: "Retirado",
-        years_of_experience: 20,
+        current_Team: "Retirado",
+        year_Experience: 20,
         era: 3.22,
         hand: "Derecha",
       },
@@ -37,6 +37,16 @@ class PlayersGeneral extends Component {
     this.props.history.push({ pathname: "/player", state: { idPlayer: id } });
   };
 
+  handleOnClickAdd = () => {
+    this.props.history.push({ pathname: "/playerForm", state: {} });
+  };
+
+  handleOnClickEdit = (player) => {
+    console.log("AAAAAA");
+    console.log(player);
+    this.props.history.push({ pathname: "/playerForm", state: { player } });
+  };
+
   render() {
     return (
       <Container>
@@ -45,9 +55,10 @@ class PlayersGeneral extends Component {
           delete={true}
           edit={true}
           players={this.state.players}
-          onClick={this.handleOnClick}
+          onDelete={this.handleOnClick}
+          onEdit={this.handleOnClickEdit}
         />
-        <Add text="Agregar jugador" />
+        <Add text="Agregar jugador" onClick={this.handleOnClickAdd} />
       </Container>
     );
   }

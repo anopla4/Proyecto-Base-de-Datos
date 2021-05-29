@@ -1,14 +1,6 @@
 import React, { Component } from "react";
-import {
-  Form,
-  Button,
-  NumericInput,
-  Row,
-  Col,
-  Container,
-} from "react-bootstrap";
+import { Form, Button, Row, Col, Container } from "react-bootstrap";
 import "./SerieForm.css";
-import InputNumber from "rc-input-number";
 
 class SerieForm extends Component {
   state = {
@@ -22,12 +14,21 @@ class SerieForm extends Component {
   };
   render() {
     let newDate = new Date();
-    let year = newDate.getFullYear();
-    let years = Array.from(Array(year).keys()).reverse();
-    const { id, name, reach, seasonStart, seasonEnd, ng, nt, winner, loser } = {
+    let date = newDate.getDate();
+    // let years = Array.from(Array(year).keys()).reverse();
+    const {
+      id,
+      name,
+      caracter,
+      initDate,
+      endDate,
+      numberOfGames,
+      // numberOfTeams,
+      // winner,
+      // loser,
+    } = {
       ...this.props.location.state.serie,
     };
-    console.log(this.props);
     return (
       <Container alignSelf="center" className="mt-4">
         <Col className="center">
@@ -56,7 +57,14 @@ class SerieForm extends Component {
                 </Form.Group> */}
                 <Form.Group controlId="date-begin" bsSize="large">
                   <Form.Label>Fecha de incio:</Form.Label>
-                  <Form.Control type="date" />
+                  <Form.Control
+                    value={
+                      initDate
+                        ? new Date(initDate).toISOString().substr(0, 10)
+                        : ""
+                    }
+                    type="date"
+                  />
                 </Form.Group>
               </Col>
               <Col>
@@ -74,7 +82,14 @@ class SerieForm extends Component {
                 </Form.Group> */}
                 <Form.Group controlId="date-end" bsSize="large">
                   <Form.Label>Fecha de culminación:</Form.Label>
-                  <Form.Control type="date" />
+                  <Form.Control
+                    value={
+                      endDate
+                        ? new Date(endDate).toISOString().substr(0, 10)
+                        : ""
+                    }
+                    type="date"
+                  />
                 </Form.Group>
               </Col>
             </Row>
@@ -83,7 +98,11 @@ class SerieForm extends Component {
               <Col>
                 <Form.Group controlId="reach">
                   <Form.Label>Carácter:</Form.Label>
-                  <Form.Control value={reach ? reach : ""} as="select" custom>
+                  <Form.Control
+                    value={caracter ? caracter.caracter_Name : ""}
+                    as="select"
+                    custom
+                  >
                     <option>{""}</option>
                     {this.state.reaches.map((reach) => (
                       <option>{reach}</option>
@@ -95,7 +114,7 @@ class SerieForm extends Component {
                 <Form.Group controlId="number-of-games">
                   <Form.Label>Número de juegos:</Form.Label>
                   <Form.Control
-                    value={ng ? ng : ""}
+                    value={numberOfGames ? numberOfGames : ""}
                     type="numeric"
                     name="number-of-games"
                   />

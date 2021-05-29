@@ -31,7 +31,7 @@ class Players extends Component {
                   </h6>
                   <p style={{ display: "inline" }}>
                     <h className="header-posiciones">Posiciones: </h>
-                    {player.positions.join(", ")}.
+                    {player.position.map((pos) => pos.positionName).join(", ")}.
                   </p>
                 </Col>
 
@@ -49,6 +49,8 @@ class Players extends Component {
                   <DeleteEdit
                     delete={this.props.delete}
                     edit={this.props.edit}
+                    onEdit={() => this.props.onEdit(player)}
+                    onDelete={this.props.onDelete}
                     space="2"
                     size="sm"
                     top="3"
@@ -63,30 +65,32 @@ class Players extends Component {
                   <Col>Equipo actual</Col>
                   <Col>Equipos</Col>
                   <Col>Años de experiencia</Col>
-                  {player.positions.includes("Lanzador") && <Col>Mano</Col>}
-                  {player.positions.includes("Lanzador") && (
-                    <Col md={2}>ERA</Col>
-                  )}
-                  {player.positions.length === 1 &&
-                    !player.positions.includes("Lanzador") && (
-                      <Col md={2}>AVE</Col>
-                    )}
+                  {player.position
+                    .map((pos) => pos.positionName)
+                    .includes("Lanzador") && <Col>Mano</Col>}
+                  {player.position
+                    .map((pos) => pos.positionName)
+                    .includes("Lanzador") && <Col md={2}>ERA</Col>}
+                  {player.position.length === 1 &&
+                    !player.position
+                      .map((pos) => pos.positionName)
+                      .includes("Lanzador") && <Col md={2}>AVE</Col>}
                 </Row>
                 <Row className="set-size">
                   <Col md={2}>{player.age}</Col>
                   <Col>{player.current_team}</Col>
                   <Col>{player.teams.join(", ")}.</Col>
                   <Col>{player.years_of_experience}</Col>
-                  {player.positions.includes("Lanzador") && (
-                    <Col>{player.hand}</Col>
-                  )}
-                  {player.positions.includes("Lanzador") && (
-                    <Col md={2}>{player.era}</Col>
-                  )}
-                  {player.positions.length === 1 &&
-                    !player.positions.includes("Lanzador") && (
-                      <Col md={2}>{player.ave}</Col>
-                    )}
+                  {player.position
+                    .map((pos) => pos.positionName)
+                    .includes("Lanzador") && <Col>{player.hand}</Col>}
+                  {player.position
+                    .map((pos) => pos.positionName)
+                    .includes("Lanzador") && <Col md={2}>{player.era}</Col>}
+                  {player.position.length === 1 &&
+                    !player.position
+                      .map((pos) => pos.positionName)
+                      .includes("Lanzador") && <Col md={2}>{player.ave}</Col>}
                 </Row>
               </Card.Body>
             </Accordion.Collapse>
