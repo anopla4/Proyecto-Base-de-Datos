@@ -50,6 +50,8 @@ class PlayerForm extends Component {
     };
     return (
       <Container alignSelf="center" className="mt-4">
+        <h1 className="mb-5 my-style-header">Juego</h1>
+
         <Col className="center">
           <Form style={{ width: "70%", alignItems: "center" }}>
             <Row>
