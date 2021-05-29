@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace SB_backend.Interfaces
 {
-    public interface IStartPositionPlayerSerie
+    public interface IStartPositionPlayerSerieRepository
     {
         List<StartPositionPlayerSerie> GetStartPositionPlayersSeries();
         List<PositionPlayer> GetAllStartsTeam(Guid SerieId);
         StartPositionPlayerSerie GetStartPositionPlayerSerie(Guid SerieId, Guid PositionId);
-        StartPositionPlayerSerie AddStartPositionPlayerSerie(Guid SerieId, Guid PlayerId, Guid PositionId, StartPositionPlayerSerie startPositionPlayerSerie);
-        StartPositionPlayerSerie UpdateStartPositionPlayerSerie(Guid SerieId, Guid PlayerId, Guid PositionId, StartPositionPlayerSerie startPositionPlayerSerie);
-
+        StartPositionPlayerSerie AddStartPositionPlayerSerie(StartPositionPlayerSerie startPositionPlayerSerie);
+        StartPositionPlayerSerie UpdateStartPositionPlayerSerie(StartPositionPlayerSerie startPositionPlayerSerie);
+        bool RemoveStartPositionPlayer(StartPositionPlayerSerie startPositionPlayerSerie);
 
 
 
