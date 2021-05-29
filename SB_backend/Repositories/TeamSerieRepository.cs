@@ -74,8 +74,8 @@ namespace SB_backend.Repositories
             if (current_teamSerie != null)
             {
                 current_teamSerie.FinalPosition = teamSerie.FinalPosition;
-                current_teamSerie.WinnerGames = teamSerie.WinnerGames;
-                current_teamSerie.LosserGames = teamSerie.LosserGames;
+                current_teamSerie.WonGames = teamSerie.WonGames;
+                current_teamSerie.LostGames = teamSerie.LostGames;
                 _context.TeamsSeries.Update(current_teamSerie);
                 _context.SaveChanges();
                 return teamSerie;

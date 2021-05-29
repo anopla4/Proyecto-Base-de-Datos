@@ -21,8 +21,8 @@ namespace SB_backend.Models
         public DateTime SerieEndDate { get; set; }
         [ForeignKey("SerieId,SerieInitDate,SerieEndDate")]
         public Serie Serie { get; set; }
-        public int WinnerGames { get; set; }
-        public int LosserGames { get; set; }
+        public int WonGames { get; set; }
+        public int LostGames { get; set; }
         public int FinalPosition { get; set; }
     }
 }

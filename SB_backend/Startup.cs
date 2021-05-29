@@ -28,7 +28,7 @@ namespace SB_backend
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            //services.AddSingleton < IPlayerRepository, PlayerRepository > ();
+
             services.AddScoped<IPlayerRepository, PlayerRepository>();
             services.AddScoped<ITeamRepository, TeamRepository>();
             services.AddScoped<ICaracterRepository, CaracterRepository>();
@@ -40,6 +40,9 @@ namespace SB_backend
             services.AddScoped<ITeamSeriePlayerRepository, TeamSeriePlayerRepository>();
             services.AddScoped<ITeamSerieDirectorRepository, TeamSerieDirectorRepository>();
             services.AddScoped<IPitcherRepository, PitcherRepository>();
+            services.AddScoped<IStartPositionPlayerSerieRepository, StartPositionPlayerSerieRepository>();
+            services.AddScoped<IGameRepository, GameRepository>();
+            services.AddScoped<IPlayerGameRepository, PlayerGameRepository>();
             services.AddDbContext<AppDBContext>(options =>
                 options.UseSqlServer(Configuration["Data:Baseball:ConnectionString"]));
         }
