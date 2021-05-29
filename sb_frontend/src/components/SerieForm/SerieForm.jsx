@@ -29,7 +29,11 @@ class SerieForm extends Component {
               <Col>
                 <Form.Group style={{ width: "100%" }} controlId="name">
                   <Form.Label>Nombre:</Form.Label>
-                  <Form.Control type="text" value={name ? name : ""} />
+                  <Form.Control
+                    defaultValue={name}
+                    type="text"
+                    // value={"" || name}
+                  />
                 </Form.Group>
               </Col>
             </Row>

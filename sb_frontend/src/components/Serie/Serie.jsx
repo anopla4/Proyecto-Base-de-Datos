@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ReactDOM from "react-dom";
 import {
   Card,
   Nav,
@@ -23,6 +24,7 @@ import {
   SidebarHeader,
 } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
+import MyForm from "./MyForm";
 
 class Serie extends Component {
   state = {
@@ -62,7 +64,11 @@ class Serie extends Component {
   };
 
   handleEditTeam = (item) => {
-    this.setState({ addTeam: false, editTeam: true, itemEdit: item });
+    this.setState({
+      addTeam: false,
+      editTeam: true,
+      itemEdit: item,
+    });
   };
 
   handleOnAddTeam = () => {
@@ -214,7 +220,7 @@ class Serie extends Component {
             <Col md={3}>
               <Navbar fixed="right">
                 <Nav.Item>
-                  <Form>
+                  <Form key={this.state.itemEdit.team.id}>
                     {this.state.addTeam && (
                       <Form.Group controlId="name">
                         <Form.Label>Equipo:</Form.Label>
@@ -234,7 +240,7 @@ class Serie extends Component {
                     <Form.Group controlId="won_games">
                       <Form.Label>Juegos ganados:</Form.Label>
                       <Form.Control
-                        value={
+                        defaultValue={
                           this.state.editTeam
                             ? this.state.itemEdit.won_games
                             : ""
