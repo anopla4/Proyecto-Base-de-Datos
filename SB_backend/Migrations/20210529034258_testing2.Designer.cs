@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SB_backend.Models;
 
 namespace SB_backend.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210529034258_testing2")]
+    partial class testing2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,47 +104,6 @@ namespace SB_backend.Migrations
                     b.ToTable("Games");
                 });
 
-            modelBuilder.Entity("SB_backend.Models.PitcherChangeGame", b =>
-                {
-                    b.Property<TimeSpan>("GameTime")
-                        .HasColumnType("time");
-
-                    b.Property<DateTime>("GameDate")
-                        .HasColumnType("date");
-
-                    b.Property<Guid>("SerieId");
-
-                    b.Property<DateTime>("SerieInitDate");
-
-                    b.Property<DateTime>("SerieEndDate");
-
-                    b.Property<Guid>("PitcherInPlayerId");
-
-                    b.Property<Guid>("PitcherInPositionId");
-
-                    b.Property<Guid>("LoserTeamId");
-
-                    b.Property<Guid>("PitcherOutPlayerId");
-
-                    b.Property<Guid>("PitcherOutPositionId");
-
-                    b.Property<Guid>("WinerTeamId");
-
-                    b.HasKey("GameTime", "GameDate", "SerieId", "SerieInitDate", "SerieEndDate", "PitcherInPlayerId", "PitcherInPositionId");
-
-                    b.HasIndex("LoserTeamId");
-
-                    b.HasIndex("WinerTeamId");
-
-                    b.HasIndex("PitcherInPlayerId", "PitcherInPositionId");
-
-                    b.HasIndex("PitcherOutPlayerId", "PitcherOutPositionId");
-
-                    b.HasIndex("SerieId", "SerieInitDate", "SerieEndDate");
-
-                    b.ToTable("PitcherChangesGames");
-                });
-
             modelBuilder.Entity("SB_backend.Models.Player", b =>
                 {
                     b.Property<Guid>("Id")
@@ -197,7 +158,7 @@ namespace SB_backend.Migrations
 
                     b.HasIndex("SerieId", "SerieInitDate", "SerieEndDate");
 
-                    b.ToTable("PlayersGames");
+                    b.ToTable("PlayerGame");
                 });
 
             modelBuilder.Entity("SB_backend.Models.Position", b =>
@@ -213,16 +174,16 @@ namespace SB_backend.Migrations
                     b.ToTable("Positions");
 
                     b.HasData(
-                        new { Id = new Guid("37fe09f2-0880-48d1-873c-cd42b4897997"), PositionName = "C" },
-                        new { Id = new Guid("6a299da8-243e-4272-b003-229e96d0a9f4"), PositionName = "1B" },
-                        new { Id = new Guid("a02e93d4-fe9a-4c53-a4ae-9cbc43ec3744"), PositionName = "2B" },
-                        new { Id = new Guid("0cdc03f7-c99f-498f-a683-daa9d71f348e"), PositionName = "3B" },
-                        new { Id = new Guid("9fe1a730-b66c-4b14-8703-a1baa12019de"), PositionName = "SS" },
-                        new { Id = new Guid("cce30ae7-5973-4837-8425-659dbe049aba"), PositionName = "P" },
-                        new { Id = new Guid("eadfd007-4fde-4f77-a5f7-93c13a1e4bb2"), PositionName = "LF" },
-                        new { Id = new Guid("6ae6a5fb-ebd5-49d7-a8a0-b6332f5a8593"), PositionName = "RF" },
-                        new { Id = new Guid("4339707a-0829-4eb1-b3aa-3a6a413bf127"), PositionName = "CF" },
-                        new { Id = new Guid("54afb3e1-b4fb-406c-8c96-2e115f02e366"), PositionName = "BD" }
+                        new { Id = new Guid("3b8ec332-aa21-403e-81ad-35af967e9523"), PositionName = "C" },
+                        new { Id = new Guid("fe5fa58f-7e72-4b6e-af4d-c5658df96ac9"), PositionName = "1B" },
+                        new { Id = new Guid("bb2318e8-299e-4ed1-bba1-8e6670ffc043"), PositionName = "2B" },
+                        new { Id = new Guid("b6110781-ca5e-4b58-a6da-d12fe019fcaa"), PositionName = "3B" },
+                        new { Id = new Guid("34756ca9-ae74-46a2-81fb-a6d8df952825"), PositionName = "SS" },
+                        new { Id = new Guid("f90ef5d9-0913-4495-93f1-5a2ba541ca77"), PositionName = "P" },
+                        new { Id = new Guid("ed882a9f-4ce4-4144-a63c-b3bdd329c6e8"), PositionName = "LF" },
+                        new { Id = new Guid("e19b5d6d-da7b-416f-ae5f-67c18d64ac69"), PositionName = "RF" },
+                        new { Id = new Guid("e870403a-6bdd-45c5-af7b-a5284150299f"), PositionName = "CF" },
+                        new { Id = new Guid("2b592bfd-aacb-4ac8-b34b-40049c5b525c"), PositionName = "BD" }
                     );
                 });
 
@@ -284,7 +245,7 @@ namespace SB_backend.Migrations
 
                     b.HasIndex("SerieId", "SerieInitDate", "SerieEndDate");
 
-                    b.ToTable("PositionPlayerChagesGames");
+                    b.ToTable("PositionPlayerChangeGame");
                 });
 
             modelBuilder.Entity("SB_backend.Models.Serie", b =>
@@ -457,34 +418,6 @@ namespace SB_backend.Migrations
                     b.HasOne("SB_backend.Models.Pitcher", "PitcherWiner")
                         .WithMany()
                         .HasForeignKey("PitcherWinerPlayerId", "PitcherWinerPositionId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("SB_backend.Models.Serie", "Serie")
-                        .WithMany()
-                        .HasForeignKey("SerieId", "SerieInitDate", "SerieEndDate")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("SB_backend.Models.PitcherChangeGame", b =>
-                {
-                    b.HasOne("SB_backend.Models.Team", "LoserTeam")
-                        .WithMany()
-                        .HasForeignKey("LoserTeamId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("SB_backend.Models.Team", "WinerTeam")
-                        .WithMany()
-                        .HasForeignKey("WinerTeamId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("SB_backend.Models.Pitcher", "PitcherIn")
-                        .WithMany()
-                        .HasForeignKey("PitcherInPlayerId", "PitcherInPositionId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("SB_backend.Models.Pitcher", "PitcherOut")
-                        .WithMany()
-                        .HasForeignKey("PitcherOutPlayerId", "PitcherOutPositionId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SB_backend.Models.Serie", "Serie")
