@@ -1,11 +1,22 @@
 import React, { Component } from "react";
-import { Container } from "react-bootstrap";
+import {
+  Container,
+  Button,
+  Form,
+  Navbar,
+  Nav,
+  Row,
+  Col,
+} from "react-bootstrap";
 import "../../containers/App/App.css";
 import Directors from "../../components/Directors/Directors";
 import Add from "../../components/Add/Add";
 
 class DirectorsGeneral extends Component {
   state = {
+    addDirector: false,
+    editDirector: false,
+    itemEdit: {},
     directors: [
       {
         id: 1,
@@ -21,12 +32,73 @@ class DirectorsGeneral extends Component {
       },
     ],
   };
+
+  handleAddClick = () => {
+    this.setState({ addDirector: true, editDirector: false, itemEdit: {} });
+  };
+
+  handleEditClick = (director) => {
+    this.setState({
+      addDirector: false,
+      editDirector: true,
+      itemEdit: director,
+    });
+  };
+
+  handleCloseAdd = () => {
+    this.setState({ editDirector: false, addDirector: false, itemEdit: {} });
+  };
+
   render() {
     return (
       <Container className="list-unstyled">
         <h1 className="mb-5 my-style-header">Directores de béisbol</h1>
-        <Directors delete={true} edit={true} directors={this.state.directors} />
-        <Add text="Agregar director" />
+        <Row>
+          <Col>
+            <Directors
+              delete={true}
+              edit={true}
+              onEdit={this.handleEditClick}
+              directors={this.state.directors}
+            />
+            <Add text="Agregar director" onClick={this.handleAddClick} />
+          </Col>
+          {(this.state.addDirector || this.state.editDirector) && (
+            <Col md={3}>
+              <Navbar fixed="right">
+                <Nav.Item>
+                  <Form>
+                    <Form.Group controlId="name">
+                      <Form.Label>Nombre:</Form.Label>
+                      <Form.Control
+                        type="text"
+                        value={
+                          this.state.editDirector
+                            ? this.state.itemEdit.name
+                            : ""
+                        }
+                      />
+                    </Form.Group>
+                    <Button
+                      className="mr-2"
+                      style={{ float: "left" }}
+                      variant="primary"
+                    >
+                      Aceptar
+                    </Button>
+                    <Button
+                      style={{ float: "right" }}
+                      onClick={this.handleCloseAdd}
+                      variant="secondary"
+                    >
+                      Cancelar
+                    </Button>
+                  </Form>
+                </Nav.Item>
+              </Navbar>
+            </Col>
+          )}
+        </Row>
       </Container>
     );
   }

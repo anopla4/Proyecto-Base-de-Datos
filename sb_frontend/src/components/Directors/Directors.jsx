@@ -35,6 +35,7 @@ class Directors extends Component {
                   <DeleteEdit
                     delete={this.props.delete}
                     edit={this.props.edit}
+                    onEdit={() => this.props.onEdit(dir)}
                   />
                 </Col>
               </Row>
