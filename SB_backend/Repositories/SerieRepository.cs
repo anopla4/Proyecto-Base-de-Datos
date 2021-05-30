@@ -34,9 +34,9 @@ namespace SB_backend.Repositories
             return _context.Series.Include(c => c.CaracterSerie).ToList();
         }
 
-        public bool RemoveSerie(Serie serie)
+        public bool RemoveSerie(Guid Id, DateTime initDate, DateTime endDate)
         {
-            var curr_serie = _context.Series.Find(serie.Id);
+            var curr_serie = _context.Series.Find(Id, initDate, endDate);
 
             if (curr_serie != null)
             {

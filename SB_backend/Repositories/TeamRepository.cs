@@ -39,6 +39,10 @@ namespace SB_backend.Repositories
 
             if (curr_team != null)
             {
+                foreach (var teamSerie in _teamContext.TeamsSeries.Where(x => x.TeamId == curr_team.Id))
+                    _teamContext.TeamsSeries.Remove(teamSerie);
+                foreach (var serie in _teamContext.Series.Where(x => x.Winer.Id == curr_team.Id || x.Loser.Id == curr_team.Id))
+                    _teamContext.Series.Remove(serie);
                 _teamContext.Teams.Remove(curr_team);
                 _teamContext.SaveChanges();
                 return true;

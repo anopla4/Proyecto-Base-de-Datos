@@ -13,7 +13,7 @@ namespace SB_backend.Interfaces
 
         Serie AddSerie(Serie serie);
 
-        bool RemoveSerie(Serie serie);
+        bool RemoveSerie(Guid Id, DateTime InitDate, DateTime EndDate);
 
         Serie UpdateSerie(Serie serie);
     }

@@ -55,13 +55,13 @@ namespace SB_backend.Controllers
             return NotFound($"Not Serie with id = {Id}");
         }
 
-        [HttpDelete("{Id}")]
-        public IActionResult RemoveSerie(Guid Id,Serie serie)
+        [HttpDelete("{Id}/{initDate}/{endDate}")]
+        public IActionResult RemoveSerie(Guid Id, DateTime initDate, DateTime endDate)
         {
-            var flag = _serRep.RemoveSerie(serie);
+            var flag = _serRep.RemoveSerie(Id, initDate, endDate);
             if (flag)
             {
-               return Ok();
+                return Ok();
             }
 
             return NotFound($"Not Serie with id = {Id}");
