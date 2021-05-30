@@ -26,6 +26,7 @@ import "react-pro-sidebar/dist/css/styles.css";
 
 class Serie extends Component {
   state = {
+    idSerie: "",
     teams: [{ name: "Industriales" }, { name: "Matanzas" }],
     players: [
       { name: "Alexander Malleta", team: "Industriales" },
@@ -81,6 +82,74 @@ class Serie extends Component {
   handleCloseAddPlayer = () => {
     this.setState({ addPlayer: false });
   };
+
+  onFormSubmit = (e) => {
+    let formElements = e.target.elements;
+    const name = formElements.name.value;
+    const initDate = this.state.edit
+      ? this.props.location.state.serie.initDate
+      : this.formatDate(new Date(formElements.initDate.value));
+    const endDate = this.state.edit
+      ? this.props.location.state.serie.endDate
+      : this.formatDate(new Date(formElements.endDate.value));
+    const serie = formElements.serie;
+    const serieId = serie.children[serie.selectedIndex].id;
+    const winner = formElements.winner;
+    const winnerId = winner.children[winner.selectedIndex].id;
+    const loser = formElements.loser;
+    const winner_pitcher = winner.children[winner_pitcher.selectedIndex].id;
+    const winner_pitcherId = formElements.winner_pitcher;
+    const loserId = loser.children[loser.selectedIndex].id;
+    const runs_against = formElements.runs_against.value;
+    const runs_in_favor = formElements.runs_in_favor.value;
+
+    let item = {
+      name,
+      initDate,
+      endDate,
+    };
+    let postUrl =
+      "https://localhost:44334/api/Game" +
+      (this.state.edit
+        ? `/${this.props.location.state.serie.id}/${serie.initDate}/${serie.endDate}`
+        : "");
+    fetch(postUrl, {
+      mode: "cors",
+      headers: { "Content-Type": "application/json" },
+      method: this.state.edit ? "PATCH" : "POST",
+      body: JSON.stringify(serie),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+    this.props.history.push({ pathname: "/series", state: { edited: true } });
+  };
+
+  componentWillMount() {
+    this.setState({ idSerie: this.props.location.state.id });
+  }
+
+  componentDidMount() {
+    fetch("https://localhost:44334/api/Serie", { mode: "cors" })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ series: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+  }
 
   render() {
     const { id, name, standings, allstarteams } =
@@ -219,6 +288,7 @@ class Serie extends Component {
               <Navbar fixed="right">
                 <Nav.Item>
                   <Form
+                    onSubmit={this.onFormSubmit}
                     key={
                       this.state.itemEdit.team ? this.state.itemEdit.team.id : 0
                     }

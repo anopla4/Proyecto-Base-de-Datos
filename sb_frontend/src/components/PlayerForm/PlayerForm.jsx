@@ -4,25 +4,11 @@ import "./PlayerForm.css";
 
 class PlayerForm extends Component {
   state = {
+    edit: false,
     selectedPositions: [],
     hands: ["Izquierda", "Derecha"],
-    positions: [
-      { id: 1, positionName: "Primera base" },
-      { id: 2, positionName: "Lanzador" },
-      { id: 3, positionName: "Segunda base" },
-    ],
-    players: [
-      { name: "Alexander Malleta" },
-      { name: "Frank Camilo" },
-      { name: "Pedro Luis Lazo" },
-      { name: "César Prieto" },
-    ],
-    teams: [
-      { name: "Industriales" },
-      { name: "Matanzas" },
-      { name: "Cienfuegos" },
-      { name: "Pinar del Río" },
-    ],
+    positions: [],
+    teams: [],
   };
   onChange = (e) => {
     e.preventDefault();
@@ -39,6 +25,84 @@ class PlayerForm extends Component {
         selectedPositions: [...prevState.selectedPositions, e.target.value],
       }));
     }
+  };
+
+  componentWillMount() {
+    fetch("https://localhost:44334/api/Position", { mode: "cors" })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ positions: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+    fetch("https://localhost:44334/api/Team", { mode: "cors" })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ teams: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+  }
+
+  componentDidMount() {
+    if (this.props.location.state.serie) {
+      this.setState({ edit: true });
+    }
+  }
+
+  onFormSubmit = (e) => {
+    let formElements = e.target.elements;
+    const name = formElements.name.value;
+    const positions = formElements.position;
+    const positionsId = positions.children[positions.selectedIndex].id;
+    const current_Team = formElements.current_Team.value;
+    const age = formElements.age.value;
+    const year_Experience = formElements.year_Experience.value;
+    const ave = formElements.ave.value;
+    const era = formElements.era.value;
+    const hand = formElements.hand.value;
+
+    let player = {
+      name,
+      positionsId,
+      current_Team,
+      age,
+      year_Experience,
+      ave,
+      era,
+      hand,
+    };
+    let postUrl =
+      "https://localhost:44334/api/PositionPlayer" +
+      (this.state.edit ? `/${this.props.location.state.serie.id}` : "");
+    fetch(postUrl, {
+      mode: "cors",
+      headers: { "Content-Type": "application/json" },
+      method: this.state.edit ? "PATCH" : "POST",
+      body: JSON.stringify(player),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+    this.props.history.push({ pathname: "/players", state: { edited: true } });
   };
 
   render() {
@@ -59,10 +123,13 @@ class PlayerForm extends Component {
     console.log(this.state.selectedPositions);
     return (
       <Container alignSelf="center" className="mt-4">
-        <h1 className="mb-5 my-style-header">Juego</h1>
+        <h1 className="mb-5 my-style-header">Jugador</h1>
 
         <Col className="center">
-          <Form style={{ width: "70%", alignItems: "center" }}>
+          <Form
+            onSubmit={this.onFormSubmit}
+            style={{ width: "70%", alignItems: "center" }}
+          >
             <Row>
               <Col>
                 <Form.Group style={{ width: "100%" }} controlId="name">
@@ -145,9 +212,7 @@ class PlayerForm extends Component {
                     as="select"
                     custom
                     disabled={
-                      !this.state.selectedPositions.includes("Lanzador")
-                        ? true
-                        : false
+                      !this.state.selectedPositions.includes("P") ? true : false
                     }
                   >
                     <option>{""}</option>
@@ -168,9 +233,7 @@ class PlayerForm extends Component {
                     type="numeric"
                     name="era"
                     disabled={
-                      !this.state.selectedPositions.includes("Lanzador")
-                        ? true
-                        : false
+                      !this.state.selectedPositions.includes("P") ? true : false
                     }
                   />
                 </Form.Group>
@@ -183,7 +246,8 @@ class PlayerForm extends Component {
                     type="numeric"
                     name="position_Average"
                     disabled={
-                      this.state.selectedPositions.includes("Lanzador")
+                      this.state.selectedPositions.includes("P") &&
+                      this.state.selectedPositions.length === 1
                         ? true
                         : false
                     }

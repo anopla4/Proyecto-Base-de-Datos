@@ -18,6 +18,7 @@ class Series extends Component {
   state = {
     redirect: null,
     deleteRecord: false,
+    edited: false,
     series: [],
   };
 
@@ -61,65 +62,65 @@ class Series extends Component {
     this.setState({ series: n_series });
   };
 
-  handleOnClick = (id, name) => {
+  handleOnClick = (id, initDate, endDate) => {
     this.props.history.push({
       pathname: "/serie",
       state: {
         serie: {
           id: id,
-          name: name,
-          standings: [
-            {
-              place: 1,
-              team: {
-                id: 1,
-                img: "http://localhost:8000/src/logos/industriales.png",
-                name: "Industriales",
-              },
-              won_games: 30,
-              lost_games: 10,
-            },
-            {
-              place: 2,
-              team: {
-                id: 2,
-                img: "http://localhost:8000/src/logos/cienfuegos.png",
-                name: "Cienfuegos",
-              },
-              won_games: 27,
-              lost_games: 8,
-            },
-            {
-              place: 3,
-              team: {
-                id: 3,
-                img: "http://localhost:8000/src/logos/ciego.png",
-                name: "Ciego de Ávila",
-              },
-              won_games: 24,
-              lost_games: 10,
-            },
-          ],
-          allstarteams: [
-            {
-              id: 1,
-              name: "Alexander Malleta",
-              img: "http://localhost:8000/src/logos/malleta.jpg",
-              position: "Primera Base",
-            },
-            {
-              id: 2,
-              name: "Pedro Luis Lazo",
-              img: "http://localhost:8000/src/logos/pedro_luis_lazo.jpg",
-              position: "Pitcher",
-            },
-            {
-              id: 3,
-              name: "Frank Camilo Morejón",
-              img: "http://localhost:8000/src/logos/frank-camilo.jpg",
-              position: "Catcher",
-            },
-          ],
+          // name: name,
+          // standings: [
+          //   {
+          //     place: 1,
+          //     team: {
+          //       id: 1,
+          //       img: "http://localhost:8000/src/logos/industriales.png",
+          //       name: "Industriales",
+          //     },
+          //     won_games: 30,
+          //     lost_games: 10,
+          //   },
+          //   {
+          //     place: 2,
+          //     team: {
+          //       id: 2,
+          //       img: "http://localhost:8000/src/logos/cienfuegos.png",
+          //       name: "Cienfuegos",
+          //     },
+          //     won_games: 27,
+          //     lost_games: 8,
+          //   },
+          //   {
+          //     place: 3,
+          //     team: {
+          //       id: 3,
+          //       img: "http://localhost:8000/src/logos/ciego.png",
+          //       name: "Ciego de Ávila",
+          //     },
+          //     won_games: 24,
+          //     lost_games: 10,
+          //   },
+          // ],
+          // allstarteams: [
+          //   {
+          //     id: 1,
+          //     name: "Alexander Malleta",
+          //     img: "http://localhost:8000/src/logos/malleta.jpg",
+          //     position: "Primera Base",
+          //   },
+          //   {
+          //     id: 2,
+          //     name: "Pedro Luis Lazo",
+          //     img: "http://localhost:8000/src/logos/pedro_luis_lazo.jpg",
+          //     position: "Pitcher",
+          //   },
+          //   {
+          //     id: 3,
+          //     name: "Frank Camilo Morejón",
+          //     img: "http://localhost:8000/src/logos/frank-camilo.jpg",
+          //     position: "Catcher",
+          //   },
+          // ],
         },
       },
     });
@@ -195,7 +196,7 @@ class Series extends Component {
                   {new Date(serie.endDate).toLocaleString().split(",")[0]}
                 </td>
                 <td onClick={() => this.handleOnClick(serie.id, serie.name)}>
-                  {serie.caracter.caracter_Name}
+                  {serie.caracterSerie.caracter_Name}
                 </td>
                 <td onClick={() => this.handleOnClick(serie.id, serie.name)}>
                   {serie.numberOfGames}
@@ -204,10 +205,10 @@ class Series extends Component {
                   {serie.nt}
                 </td>
                 <td onClick={() => this.handleOnClick(serie.id, serie.name)}>
-                  {serie.winner.name}
+                  {serie.winner && serie.winner.name}
                 </td>
                 <td onClick={() => this.handleOnClick(serie.id, serie.name)}>
-                  {serie.loser.name}
+                  {serie.loser && serie.loser.name}
                 </td>
                 <DeleteEdit
                   delete={true}

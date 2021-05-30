@@ -6,31 +6,32 @@ import Add from "../../components/Add/Add";
 
 class PlayersGeneral extends Component {
   state = {
-    players: [
-      {
-        id: 1,
-        name: "Alexander Malleta",
-        position: [{ id: 1, positionName: "Primera base" }],
-        img: "http://localhost:8000/src/logos/malleta.jpg",
-        age: 44,
-        teams: ["Industriales", "Metropolitano"],
-        current_Team: "Retirado",
-        year_Experience: 20,
-        position_Average: 301,
-      },
-      {
-        id: 2,
-        name: "Pedro Luis Lazo",
-        position: [{ id: 2, positionName: "Lanzador" }],
-        img: "http://localhost:8000/src/logos/pedro_luis_lazo.jpg",
-        age: 49,
-        teams: ["Pinar del Río"],
-        current_Team: "Retirado",
-        year_Experience: 20,
-        era: 3.22,
-        hand: "Derecha",
-      },
-    ],
+    players: [],
+    // players: [
+    //   {
+    //     id: 1,
+    //     name: "Alexander Malleta",
+    //     position: [{ id: 1, positionName: "Primera base" }],
+    //     img: "http://localhost:8000/src/logos/malleta.jpg",
+    //     age: 44,
+    //     teams: ["Industriales", "Metropolitano"],
+    //     current_Team: "Retirado",
+    //     year_Experience: 20,
+    //     position_Average: 301,
+    //   },
+    //   {
+    //     id: 2,
+    //     name: "Pedro Luis Lazo",
+    //     position: [{ id: 2, positionName: "Lanzador" }],
+    //     img: "http://localhost:8000/src/logos/pedro_luis_lazo.jpg",
+    //     age: 49,
+    //     teams: ["Pinar del Río"],
+    //     current_Team: "Retirado",
+    //     year_Experience: 20,
+    //     era: 3.22,
+    //     hand: "Derecha",
+    //   },
+    // ],
   };
 
   handleOnClick = (id) => {
@@ -43,6 +44,76 @@ class PlayersGeneral extends Component {
 
   handleOnClickEdit = (player) => {
     this.props.history.push({ pathname: "/playerForm", state: { player } });
+  };
+
+  componentDidMount() {
+    fetch("https://localhost:44334/api/Player", { mode: "cors" })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ players: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+  }
+
+  handleOnDelete = (id, index) => {
+    fetch(`https://localhost:44334/api/Player/${id}`, {
+      mode: "cors",
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+
+    let n_players = [...this.state.players];
+    n_players.splice(index, 1);
+
+    this.setState({ players: n_players });
+  };
+
+  onFormSubmit = (e) => {
+    let formElements = e.target.elements;
+    const name = formElements.name.value;
+    const initials = formElements.initials.value;
+    const color = formElements.color.value;
+
+    let team = {
+      name,
+      initials,
+      color,
+    };
+
+    let postUrl =
+      "https://localhost:44334/api/Team" +
+      (this.state.editTeam ? `/${this.state.teamEdit.id}` : "");
+    fetch(postUrl, {
+      mode: "cors",
+      headers: { "Content-Type": "application/json" },
+      method: this.state.editTeam ? "PATCH" : "POST",
+      body: JSON.stringify(team),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+    this.setState({ addTeam: false, editTeam: false });
   };
 
   render() {

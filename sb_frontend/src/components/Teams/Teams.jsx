@@ -89,15 +89,69 @@ class Teams extends Component {
   };
 
   handleAddClick = () => {
-    this.setState({ addTeam: true, editTeam: false, itemEdit: {} });
+    this.setState({ addTeam: true, editTeam: false, teamEdit: {} });
   };
 
   handleEditClick = (team) => {
-    this.setState({ addTeam: false, editTeam: true, itemEdit: team });
+    this.setState({ addTeam: false, editTeam: true, teamEdit: team });
   };
 
   handleCloseAdd = () => {
-    this.setState({ editTeam: false, addTeam: false, itemEdit: {} });
+    this.setState({ editTeam: false, addTeam: false, teamEdit: {} });
+  };
+
+  handleOnDelete = (id, index) => {
+    fetch(`https://localhost:44334/api/Team/${id}`, {
+      mode: "cors",
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+
+    let n_teams = [...this.state.teams];
+    n_teams.splice(index, 1);
+
+    this.setState({ series: n_teams });
+  };
+
+  onFormSubmit = (e) => {
+    let formElements = e.target.elements;
+    const name = formElements.name.value;
+    const initials = formElements.initials.value;
+    const color = formElements.color.value;
+
+    let team = {
+      name,
+      initials,
+      color,
+    };
+
+    let postUrl =
+      "https://localhost:44334/api/Team" +
+      (this.state.editTeam ? `/${this.state.teamEdit.id}` : "");
+    fetch(postUrl, {
+      mode: "cors",
+      headers: { "Content-Type": "application/json" },
+      method: this.state.editTeam ? "PATCH" : "POST",
+      body: JSON.stringify(team),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+    this.setState({ addTeam: false, editTeam: false });
   };
 
   render() {
@@ -112,7 +166,7 @@ class Teams extends Component {
         <Row>
           <Col>
             <CardDeck>
-              {this.state.teams.map((team) => (
+              {this.state.teams.map((team, index) => (
                 <Col>
                   <Card
                     className="mb-3"
@@ -122,7 +176,7 @@ class Teams extends Component {
                   >
                     <Card.Img height="250vw" variant="top" src={team.img} />
                     <Card.Body>
-                      <Card.Title>{team.iniciales}</Card.Title>
+                      <Card.Title>{team.initials}</Card.Title>
                       <Card.Subtitle>{team.name}</Card.Subtitle>
                     </Card.Body>
                     <ListGroup className="list-group-flush">
@@ -137,6 +191,7 @@ class Teams extends Component {
                       </Card.Link>
                       <DeleteEdit
                         delete={true}
+                        onDelete={() => this.handleOnDelete(team.id, index)}
                         edit={true}
                         onEdit={() => this.handleEditClick(team)}
                       />
@@ -151,37 +206,40 @@ class Teams extends Component {
             <Col md={3}>
               <Navbar fixed="right">
                 <Nav.Item>
-                  <Form key={this.state.itemEdit.id}>
+                  <Form
+                    key={this.state.teamEdit.id}
+                    onSubmit={this.onFormSubmit}
+                  >
                     <Form.Group controlId="name">
                       <Form.Label>Nombre:</Form.Label>
                       <Form.Control
                         type="text"
-                        value={
-                          this.state.editTeam ? this.state.itemEdit.name : ""
+                        defaultValue={
+                          this.state.editTeam ? this.state.teamEdit.name : ""
                         }
                       />
                     </Form.Group>
                     <Form.Group>
-                      <Image src={this.state.itemEdit.img} />
+                      <Image src={this.state.teamEdit.img} />
                       <Form.File id="img" label="Logo del equipo" />
                     </Form.Group>
-                    <Form.Group>
+                    <Form.Group controlId="initials">
                       <Form.Label>Iniciales:</Form.Label>
                       <Form.Control
                         type="text"
-                        value={
+                        defaultValue={
                           this.state.editTeam
-                            ? this.state.itemEdit.initials
+                            ? this.state.teamEdit.initials
                             : ""
                         }
                       />
                     </Form.Group>
-                    <Form.Group controlId="name">
+                    <Form.Group controlId="color">
                       <Form.Label>Color:</Form.Label>
                       <Form.Control
                         as="select"
-                        value={
-                          this.state.editTeam ? this.state.itemEdit.color : ""
+                        defaultValue={
+                          this.state.editTeam ? this.state.teamEdit.color : ""
                         }
                         custom
                       >
@@ -195,6 +253,7 @@ class Teams extends Component {
                       className="mr-2"
                       style={{ float: "left" }}
                       variant="primary"
+                      type="submit"
                     >
                       Aceptar
                     </Button>

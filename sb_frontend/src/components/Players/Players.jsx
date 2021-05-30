@@ -7,10 +7,9 @@ import DeleteEdit from "../../components/DeleteEdit/DeleteEdit";
 
 class Players extends Component {
   render() {
-    console.log("Ana");
     return (
       <Accordion className="mb-3">
-        {this.props.players.map((player) => (
+        {this.props.players.map((player, index) => (
           <Card key={player.id}>
             <Card.Header style={{ padding: "0.5%" }}>
               <Row className="row">
@@ -50,8 +49,8 @@ class Players extends Component {
                   <DeleteEdit
                     delete={this.props.delete}
                     edit={this.props.edit}
-                    onEdit={() => this.props.onEdit(player)}
-                    onDelete={this.props.onDelete}
+                    onEdit={() => this.props.onEdit(player.id)}
+                    onDelete={() => this.props.onDelete(player.id, index)}
                     space="2"
                     size="sm"
                     top="3"

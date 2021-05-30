@@ -7,87 +7,87 @@ import Add from "../../components/Add/Add";
 
 class Games extends Component {
   state = {
-    // games: [],
-    games: [
-      {
-        id: 1,
-        winner: {
-          id: 2,
-          name: "Industriales",
-          color: "Azul",
-          iniciales: "IND",
-          img: "http://localhost:8000/src/logos/industriales.png",
-        },
-        loser: {
-          id: 1,
-          name: "Pinar del Río",
-          color: "Verde, Blanco",
-          iniciales: "PR",
-          img: "http://localhost:8000/src/logos/pinar-del-rio.jpg",
-        },
-        serie: {
-          id: 1,
-          name: "Serie Nacional de Béisbol",
-        },
-        runs_in_favor: 4,
-        runs_against: 3,
-        date: "5 de febrero de 2009",
-        time: "2 pm",
-        winner_pitcher: { name: "Rivero" },
-      },
-      {
-        id: 2,
-        winner: {
-          id: 2,
-          name: "Matanzas",
-          color: "MTN",
-          iniciales: "IND",
-          img: "http://localhost:8000/src/logos/matanzas.png",
-        },
-        loser: {
-          id: 1,
-          name: "Cienfuegos",
-          color: "Verde, Blanco",
-          iniciales: "CNF",
-          img: "http://localhost:8000/src/logos/cienfuegos.png",
-        },
-        serie: {
-          id: 1,
-          name: "Serie Nacional de Béisbol",
-        },
-        runs_in_favor: 5,
-        runs_against: 1,
-        date: "5 de febrero de 2009",
-        time: "2 pm",
-        winner_pitcher: { name: "Rivero" },
-      },
-      {
-        id: 3,
-        winner: {
-          id: 9,
-          name: "Sancti Spíritus",
-          color: "Azul, Rojo",
-          iniciales: "SNC",
-          img: "http://localhost:8000/src/logos/sancti_spiritus.png",
-        },
-        loser: {
-          id: 2,
-          name: "Camagüey",
-          color: "Verde, Blanco",
-          iniciales: "CMY",
-          img: "http://localhost:8000/src/logos/camagüey.png",
-        },
-        serie: {
-          id: 1,
-          name: "Serie Nacional de Béisbol",
-        },
-        runs_in_favor: 4,
-        runs_against: 3,
-        date: "5 de febrero de 2009",
-        time: "2 pm",
-        winner_pitcher: { name: "Rivero" },
-      },
-    ],
+    games: [],
+    // games: [
+    //   {
+    //     id: 1,
+    //     winner: {
+    //       id: 2,
+    //       name: "Industriales",
+    //       color: "Azul",
+    //       iniciales: "IND",
+    //       img: "http://localhost:8000/src/logos/industriales.png",
+    //     },
+    //     loser: {
+    //       id: 1,
+    //       name: "Pinar del Río",
+    //       color: "Verde, Blanco",
+    //       iniciales: "PR",
+    //       img: "http://localhost:8000/src/logos/pinar-del-rio.jpg",
+    //     },
+    //     serie: {
+    //       id: 1,
+    //       name: "Serie Nacional de Béisbol",
+    //     },
+    //     runs_in_favor: 4,
+    //     runs_against: 3,
+    //     date: "5 de febrero de 2009",
+    //     time: "2 pm",
+    //     winner_pitcher: { name: "Rivero" },
+    //   },
+    //   {
+    //     id: 2,
+    //     winner: {
+    //       id: 2,
+    //       name: "Matanzas",
+    //       color: "MTN",
+    //       iniciales: "IND",
+    //       img: "http://localhost:8000/src/logos/matanzas.png",
+    //     },
+    //     loser: {
+    //       id: 1,
+    //       name: "Cienfuegos",
+    //       color: "Verde, Blanco",
+    //       iniciales: "CNF",
+    //       img: "http://localhost:8000/src/logos/cienfuegos.png",
+    //     },
+    //     serie: {
+    //       id: 1,
+    //       name: "Serie Nacional de Béisbol",
+    //     },
+    //     runs_in_favor: 5,
+    //     runs_against: 1,
+    //     date: "5 de febrero de 2009",
+    //     time: "2 pm",
+    //     winner_pitcher: { name: "Rivero" },
+    //   },
+    //   {
+    //     id: 3,
+    //     winner: {
+    //       id: 9,
+    //       name: "Sancti Spíritus",
+    //       color: "Azul, Rojo",
+    //       iniciales: "SNC",
+    //       img: "http://localhost:8000/src/logos/sancti_spiritus.png",
+    //     },
+    //     loser: {
+    //       id: 2,
+    //       name: "Camagüey",
+    //       color: "Verde, Blanco",
+    //       iniciales: "CMY",
+    //       img: "http://localhost:8000/src/logos/camagüey.png",
+    //     },
+    //     serie: {
+    //       id: 1,
+    //       name: "Serie Nacional de Béisbol",
+    //     },
+    //     runs_in_favor: 4,
+    //     runs_against: 3,
+    //     date: "5 de febrero de 2009",
+    //     time: "2 pm",
+    //     winner_pitcher: { name: "Rivero" },
+    //   },
+    // ],
   };
 
   handleOnClick = (idG, idS) => {
@@ -101,21 +101,21 @@ class Games extends Component {
     this.props.history.push({ pathname: "/gameForm", state: { game } });
   };
 
-  // componentDidMount() {
-  //   fetch("https://localhost:44334/api/Game", { mode: "cors" })
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         throw Error(response.statusText);
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((response) => {
-  //       this.setState({ games: response });
-  //     })
-  //     .catch(function (error) {
-  //       console.log("Hubo un problema con la petición Fetch:" + error.message);
-  //     });
-  // }
+  componentDidMount() {
+    fetch("https://localhost:44334/api/Game", { mode: "cors" })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ games: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+  }
 
   render() {
     return (

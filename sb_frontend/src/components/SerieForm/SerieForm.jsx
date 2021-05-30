@@ -28,14 +28,18 @@ class SerieForm extends Component {
   }
 
   formatDate = (date) => {
-    return `${date.getFullYear()}/${date.getMonth()}/${date.getDate()}`;
+    return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
   };
 
   onFormSubmit = (e) => {
     let formElements = e.target.elements;
     const name = formElements.name.value;
-    const initDate = this.formatDate(new Date(formElements.initDate.value));
-    const endDate = this.formatDate(new Date(formElements.endDate.value));
+    const initDate = this.state.edit
+      ? this.props.location.state.serie.initDate
+      : this.formatDate(new Date(formElements.initDate.value));
+    const endDate = this.state.edit
+      ? this.props.location.state.serie.endDate
+      : this.formatDate(new Date(formElements.endDate.value));
     const caracter = formElements.caracter;
     const caracterId = caracter.children[caracter.selectedIndex].id;
     const numberOfGames = formElements.numberOfGames.value;
@@ -47,10 +51,15 @@ class SerieForm extends Component {
       caracterId,
       numberOfGames,
     };
-    fetch("https://localhost:44334/api/Serie", {
+    let postUrl =
+      "https://localhost:44334/api/Serie" +
+      (this.state.edit
+        ? `/${this.props.location.state.serie.id}/${serie.initDate}/${serie.endDate}`
+        : "");
+    fetch(postUrl, {
       mode: "cors",
       headers: { "Content-Type": "application/json" },
-      method: this.state.edit ? "PUT" : "POST",
+      method: this.state.edit ? "PATCH" : "POST",
       body: JSON.stringify(serie),
     })
       .then((response) => {
@@ -62,7 +71,7 @@ class SerieForm extends Component {
       .catch(function (error) {
         console.log("Hubo un problema con la petición Fetch:" + error.message);
       });
-    this.props.history.push("/series");
+    this.props.history.push({ pathname: "/series", state: { edited: true } });
   };
 
   render() {
@@ -101,6 +110,7 @@ class SerieForm extends Component {
                         ? new Date(initDate).toISOString().substr(0, 10)
                         : ""
                     }
+                    disabled={this.state.edit ? true : false}
                     type="date"
                   />
                 </Form.Group>
@@ -114,6 +124,7 @@ class SerieForm extends Component {
                         ? new Date(endDate).toISOString().substr(0, 10)
                         : ""
                     }
+                    disabled={this.state.edit ? true : false}
                     type="date"
                   />
                 </Form.Group>

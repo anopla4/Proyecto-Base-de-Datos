@@ -8,7 +8,7 @@ class Directors extends Component {
   render() {
     return (
       <Container className="list-unstyled">
-        {this.props.directors.map((dir) => (
+        {this.props.directors.map((dir, index) => (
           <Card key={dir.id} className="mb-2">
             <Card.Header style={{ padding: "0.5%" }}>
               <Row className="row align-items-center">
@@ -25,16 +25,17 @@ class Directors extends Component {
                 <Col>
                   <h5>{dir.name}</h5>
                   {dir.directed_teams && (
-                    <p style={{ display: "inline" }}>
-                      <h className="bold">Equipos dirigidos: </h>
+                    <Container style={{ display: "inline" }}>
+                      <p className="bold">Equipos dirigidos: </p>
                       {dir.directed_teams.join(", ")}.
-                    </p>
+                    </Container>
                   )}
                 </Col>
                 <Col>
                   <DeleteEdit
                     delete={this.props.delete}
                     edit={this.props.edit}
+                    onDelete={() => this.props.onDelete(dir.id, index)}
                     onEdit={() => this.props.onEdit(dir)}
                   />
                 </Col>
