@@ -12,7 +12,8 @@ namespace SB_backend.Interfaces
         Player GetPlayer(Guid id);
 
         Player AddPlayer(Player player);
-
+        List<Position> GetPlayerPositions(Guid playerId);
+        List<Player> GetPitchers();
         bool RemovePlayer(Player player);
 
         Player UpdatePlayer(Player player);

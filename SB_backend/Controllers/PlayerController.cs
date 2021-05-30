@@ -20,7 +20,20 @@ namespace SB_backend.Controllers
         {
             return Ok(_plrep.GetPlayers());
         }
-
+        [HttpGet("{playerId}/Positions")]
+        public IActionResult GetPlayerPositions(Guid playerId)
+        {
+            var positions = _plrep.GetPlayerPositions(playerId);
+            if (positions == null)
+                return NotFound($"Not Player with Id = {playerId}");
+            return Ok(positions);
+        }
+        [HttpGet("Pitchers")]
+        public IActionResult GetPitchers()
+        {
+            var pitchers = _plrep.GetPitchers();
+            return Ok(pitchers);
+        }
         [HttpGet("{id}")]
         public IActionResult GetPlayer(Guid Id)
         {

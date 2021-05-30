@@ -13,8 +13,18 @@ namespace SB_backend.Models
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {   //DateBuilder
-            modelBuilder.Entity<Date>()
-                .HasKey(c => new { c.Day, c.Hour });
+            //modelBuilder.Entity<Date>()
+            //    .HasKey(c => new { c.Day, c.Hour });
+            //PlayerBuilder
+            modelBuilder.Entity<Player>()
+                .HasMany(c => c.Positions)
+                .WithOne()
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+           modelBuilder.Entity<Player>()
+                .HasOne(c => c.Current_Team)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
             //SerieBuilder
             modelBuilder.Entity<Serie>()
                 .HasKey(c => new { c.Id, c.InitDate, c.EndDate });
@@ -27,8 +37,8 @@ namespace SB_backend.Models
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
             //PositionPlayerBuilder
-            modelBuilder.Entity<PositionPlayer>()
-                .HasKey(c => new { c.PlayerId, c.PositionId });
+            //modelBuilder.Entity<PositionPlayer>()
+            //    .HasKey(c => new { c.PlayerId, c.PositionId });
             //TeamSerieBuilder
             modelBuilder.Entity<TeamSerie>()
                 .HasKey(c => new { c.TeamId, c.SerieId, c.SerieInitDate, c.SerieEndDate });
@@ -39,15 +49,15 @@ namespace SB_backend.Models
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
             //StartPositionPlayerBuilder
-            modelBuilder.Entity<StartPositionPlayerSerie>().HasKey(c => new { c.PositionId, c.SerieId, c.SerieInitDate, c.SerieEndDate });
-            modelBuilder.Entity<StartPositionPlayerSerie>()
-                .HasOne(c => c.PositionPlayer)
-                .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<StartPositionPlayerSerie>()
-                .HasOne(c => c.Serie)
-                .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<StartPositionPlayerSerie>().HasKey(c => new { c.PositionId, c.SerieId, c.SerieInitDate, c.SerieEndDate });
+            //modelBuilder.Entity<StartPositionPlayerSerie>()
+            //    .HasOne(c => c.PositionPlayer)
+            //    .WithMany()
+            //    .OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<StartPositionPlayerSerie>()
+            //    .HasOne(c => c.Serie)
+            //    .WithMany()
+            //    .OnDelete(DeleteBehavior.Restrict);
             //TeamSerieDirectorBuilder
             modelBuilder.Entity<TeamSerieDirector>().HasKey(c => new { c.DirectorId, c.SerieId, c.SerieInitDate, c.SerieEndDate });
             //PositionBuilder
@@ -125,15 +135,15 @@ namespace SB_backend.Models
         public DbSet<Player> Players { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<Caracter> Caracters { get; set; }
-        public DbSet<Date> Dates { get; set; }
+        //public DbSet<Date> Dates { get; set; }
         public DbSet<Serie> Series { get; set; }
         public DbSet<Director> Directors { get; set; }
         public DbSet<Position> Positions { get; set; }
-        public DbSet<PositionPlayer> PositionPlayers { get; set; }
+        //public DbSet<PositionPlayer> PositionPlayers { get; set; }
         public DbSet<TeamSerie> TeamsSeries { get; set; }
         public DbSet<TeamSeriePlayer> TeamsSeriesPlayers { get; set; }
         public DbSet<TeamSerieDirector> TeamsSeriesDirectors { get; set; }
-        public DbSet<Pitcher> Pitchers { get; set; }
+        //public DbSet<Pitcher> Pitchers { get; set; }
         public DbSet<StartPositionPlayerSerie> StartPositionPlayersSeries { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<PlayerGame> PlayersGames { get; set; }

@@ -16,11 +16,14 @@ namespace SB_backend.Models
         public string Name { get; set; }
 
         public Team Current_Team { get; set; }
-        public Guid Current_TeamId { get; set; }
+        public Guid? Current_TeamId { get; set; }
         [Required]
         public int Age { get; set; }
         [Required]
         public int Year_Experience { get; set; }
+        public List<Position> Positions { get; set; }
+        public int DeffAverage { get; set; }
+        public int? ERA { get; set; }
         public int Average { get; set; }
     }
 }

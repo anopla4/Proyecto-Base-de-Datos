@@ -35,11 +35,11 @@ namespace SB_backend
             services.AddScoped<ISerieRepository, SerieRepository>();
             services.AddScoped<IDirectorRepository, DirectorRepository>();
             services.AddScoped<IPositionRepository, PositionRepository>();
-            services.AddScoped<IPositionPlayerRepository, PositionPlayerRepository>();
+            //services.AddScoped<IPositionPlayerRepository, PositionPlayerRepository>();
             services.AddScoped<ITeamSerieRepository, TeamSerieRepository>();
             services.AddScoped<ITeamSeriePlayerRepository, TeamSeriePlayerRepository>();
             services.AddScoped<ITeamSerieDirectorRepository, TeamSerieDirectorRepository>();
-            services.AddScoped<IPitcherRepository, PitcherRepository>();
+            //services.AddScoped<IPitcherRepository, PitcherRepository>();
             services.AddScoped<IStartPositionPlayerSerieRepository, StartPositionPlayerSerieRepository>();
             services.AddScoped<IGameRepository, GameRepository>();
             services.AddScoped<IPlayerGameRepository, PlayerGameRepository>();
