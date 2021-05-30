@@ -20,10 +20,18 @@ namespace SB_backend.Repositories
             Team team = _context.Teams.Find(teamSerie.TeamId);
             if (team == null)
                 return null;
-            Serie serie = _context.Series.Find(teamSerie.SerieId);
+            Serie serie = _context.Series.Find(teamSerie.SerieId,teamSerie.SerieInitDate,teamSerie.SerieEndDate);
             if (serie == null)
                 return null;
-            serie.NumberOfGames += 1;
+            serie.NumberOfTeams += 1;
+            if (teamSerie.FinalPosition > serie.NumberOfTeams)
+                return null;
+            if (_context.TeamsSeries.Any(c => c.FinalPosition == teamSerie.FinalPosition && c.SerieId == teamSerie.SerieId && c.SerieInitDate == teamSerie.SerieInitDate && c.SerieEndDate == teamSerie.SerieEndDate))
+                return null;
+            if (teamSerie.FinalPosition == 1)
+                serie.WinerId = teamSerie.TeamId;
+            if (teamSerie.FinalPosition == serie.NumberOfTeams)
+                serie.LoserId = teamSerie.TeamId;
             _context.Series.Update(serie);
             _context.TeamsSeries.Add(teamSerie);
             _context.SaveChanges();

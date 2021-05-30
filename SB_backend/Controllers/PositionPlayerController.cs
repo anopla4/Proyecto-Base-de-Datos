@@ -43,7 +43,14 @@ namespace SB_backend.Controllers
             _ppRep.AddPositionPlayer(player);
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + player.PlayerId + player.PositionId, player);
         }
-
+        [HttpGet("{PlayerId}")]
+        public IActionResult GetPlayerPositions(Guid PlayerId)
+        {
+            var positions = _ppRep.GetPlayerPositions(PlayerId);
+            if (positions == null)
+                return NotFound($"Not Player with Id {PlayerId}");
+            return Ok(positions);
+        }
         [HttpDelete("{PlayerId}/{PositionId}")]
         public IActionResult RemovePositionPlayer(Guid PlayerId,Guid PositionId)
         {

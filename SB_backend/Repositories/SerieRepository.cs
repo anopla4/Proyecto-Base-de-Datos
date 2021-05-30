@@ -55,7 +55,8 @@ namespace SB_backend.Repositories
             {
                 curr_serie.Name = serie.Name;
                 curr_serie.CaracterId = serie.CaracterId;
-                curr_serie.CaracterSerie = curr_serie.CaracterSerie;
+                curr_serie.WinerId = serie.WinerId;
+                curr_serie.LoserId = serie.LoserId;
                 _context.Series.Update(curr_serie);
                 _context.SaveChanges();
                 return curr_serie;

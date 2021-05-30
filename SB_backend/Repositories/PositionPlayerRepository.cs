@@ -21,6 +21,15 @@ namespace SB_backend.Repositories
             return player;
         }
 
+        public List<Position> GetPlayerPositions(Guid PlayerId)
+        {
+            bool flag = _context.Players.Any(c => c.Id == PlayerId);
+            if (!flag)
+                return null;
+            var positions = _context.PositionPlayers.Include(c => c.Position).Where(c => c.PlayerId == PlayerId).Select(c => c.Position).ToList();
+            return positions;
+        }
+
         public PositionPlayer GetPositionPlayer(Guid PlayerId,Guid PositionId)
         {
             return _context.PositionPlayers.Include(c => c.Player).Include(c => c.Position).SingleOrDefault(c => c.PlayerId == PlayerId && c.PositionId == PositionId);

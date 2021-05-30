@@ -10,6 +10,7 @@ namespace SB_backend.Interfaces
     {
         List<PositionPlayer> GetPositionPlayers();
         PositionPlayer GetPositionPlayer(Guid Playerid, Guid PositionId);
+        List<Position> GetPlayerPositions(Guid PlayerId);
 
         PositionPlayer AddPositionPlayer(PositionPlayer player);
 

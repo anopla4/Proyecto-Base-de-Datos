@@ -11,6 +11,7 @@ namespace SB_backend.Models
     {
         public Serie()
         {
+            this.NumberOfTeams = 0;
             this.NumberOfGames = 0;
         }
         public Guid Id { get; set; }
@@ -28,5 +29,6 @@ namespace SB_backend.Models
         public Guid LoserId { get; set; }
         public Team Loser { get; set; }
         public int NumberOfGames { get; set; }
+        public int NumberOfTeams { get; set; }
     }
 }

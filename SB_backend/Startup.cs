@@ -43,6 +43,7 @@ namespace SB_backend
             services.AddScoped<IStartPositionPlayerSerieRepository, StartPositionPlayerSerieRepository>();
             services.AddScoped<IGameRepository, GameRepository>();
             services.AddScoped<IPlayerGameRepository, PlayerGameRepository>();
+            services.AddScoped<IPlayerChangeGameRepository, PlayerChangeGameRepository>();
             services.AddDbContext<AppDBContext>(options =>
                options.UseSqlServer(Configuration["Data:Baseball:ConnectionString"]));
             services.AddCors(options =>
