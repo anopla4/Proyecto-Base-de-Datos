@@ -50,10 +50,11 @@ class PlayersGeneral extends Component {
       <Container>
         <h1 className="mb-5 my-style-header">Jugadores de pelota</h1>
         <Players
+          playerGeneral={true}
           delete={true}
           edit={true}
           players={this.state.players}
-          onDelete={this.handleOnClick}
+          onClick={this.handleOnClick}
           onEdit={this.handleOnClickEdit}
         />
         <Add text="Agregar jugador" onClick={this.handleOnClickAdd} />

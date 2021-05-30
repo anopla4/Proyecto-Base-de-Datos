@@ -33,7 +33,7 @@ class TeamInSerie extends Component {
       {
         id: 1,
         name: "Alexander Malleta",
-        positions: ["Primera base"],
+        position: ["Primera base"],
         img: "http://localhost:8000/src/logos/malleta.jpg",
         age: 44,
         teams: ["Industriales", "Metropolitano"],
@@ -44,7 +44,7 @@ class TeamInSerie extends Component {
       {
         id: 2,
         name: "Frank Camilo Morejón",
-        positions: ["Catcher"],
+        position: ["Catcher"],
         img: "http://localhost:8000/src/logos/frank-camilo.jpg",
         age: 44,
         teams: ["Industriales"],
@@ -57,7 +57,7 @@ class TeamInSerie extends Component {
       {
         id: 1,
         name: "Alexander Malleta",
-        positions: ["Primera base"],
+        position: ["Primera base"],
         img: "http://localhost:8000/src/logos/malleta.jpg",
         age: 44,
         teams: ["Industriales", "Metropolitano"],
@@ -68,7 +68,7 @@ class TeamInSerie extends Component {
       {
         id: 2,
         name: "Frank Camilo Morejón",
-        positions: ["Catcher"],
+        position: ["Catcher"],
         img: "http://localhost:8000/src/logos/frank-camilo.jpg",
         age: 44,
         teams: ["Industriales"],
@@ -149,7 +149,11 @@ class TeamInSerie extends Component {
               </Col>
             </Row>
 
-            <Players delete={true} players={this.state.players} />
+            <Players
+              playerGeneral={false}
+              delete={true}
+              players={this.state.players}
+            />
             {/* {this.state.players.map((player) => (
             <Card key={player.id} className="player-hover">
               <Card.Header style={{ padding: "0.5%" }}>

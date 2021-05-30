@@ -4,7 +4,6 @@ import "./PlayerForm.css";
 
 class PlayerForm extends Component {
   state = {
-    changed: false,
     selectedPositions: [],
     hands: ["Izquierda", "Derecha"],
     positions: [
@@ -27,10 +26,19 @@ class PlayerForm extends Component {
   };
   onChange = (e) => {
     e.preventDefault();
-    this.setState((prevState) => ({
-      changed: true,
-      selectedPositions: [...prevState.selectedPositions, e.target.value],
-    }));
+    if (this.state.selectedPositions.includes(e.target.value)) {
+      this.setState((prevState) => ({
+        selectedPositions: [
+          ...prevState.selectedPositions.filter(
+            (item) => item !== e.target.value
+          ),
+        ],
+      }));
+    } else {
+      this.setState((prevState) => ({
+        selectedPositions: [...prevState.selectedPositions, e.target.value],
+      }));
+    }
   };
 
   render() {
@@ -48,6 +56,7 @@ class PlayerForm extends Component {
     } = {
       ...this.props.location.state.player,
     };
+    console.log(this.state.selectedPositions);
     return (
       <Container alignSelf="center" className="mt-4">
         <h1 className="mb-5 my-style-header">Juego</h1>
@@ -58,7 +67,7 @@ class PlayerForm extends Component {
               <Col>
                 <Form.Group style={{ width: "100%" }} controlId="name">
                   <Form.Label>Nombre:</Form.Label>
-                  <Form.Control type="text" value={name ? name : ""} />
+                  <Form.Control type="text" defaultValue={name ? name : ""} />
                 </Form.Group>
               </Col>
               <Col>
@@ -73,7 +82,7 @@ class PlayerForm extends Component {
                 <Form.Group style={{ width: "100%" }} controlId="currentTeam">
                   <Form.Label>Equipo actual:</Form.Label>
                   <Form.Control
-                    value={current_Team ? current_Team : ""}
+                    defaultValue={current_Team ? current_Team : ""}
                     as="select"
                     custom
                   >
@@ -89,7 +98,7 @@ class PlayerForm extends Component {
                 <Form.Group controlId="age">
                   <Form.Label>Edad:</Form.Label>
                   <Form.Control
-                    value={age ? age : ""}
+                    defaultValue={age ? age : ""}
                     type="numeric"
                     name="age"
                   />
@@ -99,7 +108,7 @@ class PlayerForm extends Component {
                 <Form.Group controlId="hand">
                   <Form.Label>Años de experiencia:</Form.Label>
                   <Form.Control
-                    value={year_Experience ? year_Experience : ""}
+                    defaultValue={year_Experience ? year_Experience : ""}
                     type="numeric"
                     name="year_Experience"
                   />
@@ -111,8 +120,8 @@ class PlayerForm extends Component {
                 <Form.Group controlId="position">
                   <Form.Label>Posición:</Form.Label>
                   <Form.Control
-                    value={
-                      position && !this.state.changed
+                    defaultValue={
+                      position
                         ? position.map((pos) => pos.positionName)
                         : undefined
                     }
@@ -131,7 +140,16 @@ class PlayerForm extends Component {
               <Col>
                 <Form.Group controlId="hand">
                   <Form.Label>Mano:</Form.Label>
-                  <Form.Control value={hand ? hand : ""} as="select" custom>
+                  <Form.Control
+                    defaultValue={hand ? hand : ""}
+                    as="select"
+                    custom
+                    disabled={
+                      !this.state.selectedPositions.includes("Lanzador")
+                        ? true
+                        : false
+                    }
+                  >
                     <option>{""}</option>
                     {this.state.hands.map((hand) => (
                       <option>{hand}</option>
@@ -146,9 +164,14 @@ class PlayerForm extends Component {
                 <Form.Group controlId="era">
                   <Form.Label>Promedio de carreras limpias:</Form.Label>
                   <Form.Control
-                    value={era ? era : ""}
+                    defaultValue={era ? era : ""}
                     type="numeric"
                     name="era"
+                    disabled={
+                      !this.state.selectedPositions.includes("Lanzador")
+                        ? true
+                        : false
+                    }
                   />
                 </Form.Group>
               </Col>
@@ -156,9 +179,14 @@ class PlayerForm extends Component {
                 <Form.Group controlId="position_Average">
                   <Form.Label>Average:</Form.Label>
                   <Form.Control
-                    value={position_Average ? position_Average : ""}
+                    defaultValue={position_Average ? position_Average : ""}
                     type="numeric"
                     name="position_Average"
+                    disabled={
+                      this.state.selectedPositions.includes("Lanzador")
+                        ? true
+                        : false
+                    }
                   />
                 </Form.Group>
               </Col>

@@ -49,6 +49,22 @@ class DirectorsGeneral extends Component {
     this.setState({ editDirector: false, addDirector: false, itemEdit: {} });
   };
 
+  componentDidMount() {
+    fetch("https://localhost:44334/api/Director", { mode: "cors" })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ directors: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+  }
+
   render() {
     return (
       <Container className="list-unstyled">

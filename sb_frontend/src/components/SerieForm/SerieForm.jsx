@@ -3,19 +3,69 @@ import { Form, Button, Row, Col, Container } from "react-bootstrap";
 import "./SerieForm.css";
 
 class SerieForm extends Component {
-  state = {
-    reaches: ["Nacional", "Provincial"],
-    teams: [
-      { name: "Industriales" },
-      { name: "Matanzas" },
-      { name: "Cienfuegos" },
-      { name: "Ciego de Ávila" },
-    ],
+  state = { edit: false, reaches: [] };
+
+  componentWillMount() {
+    fetch("https://localhost:44334/api/Caracter", { mode: "cors" })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ reaches: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+  }
+
+  componentDidMount() {
+    if (this.props.location.state.serie) {
+      this.setState({ edit: true });
+    }
+  }
+
+  formatDate = (date) => {
+    return `${date.getFullYear()}/${date.getMonth()}/${date.getDate()}`;
   };
+
+  onFormSubmit = (e) => {
+    let formElements = e.target.elements;
+    const name = formElements.name.value;
+    const initDate = this.formatDate(new Date(formElements.initDate.value));
+    const endDate = this.formatDate(new Date(formElements.endDate.value));
+    const caracter = formElements.caracter;
+    const caracterId = caracter.children[caracter.selectedIndex].id;
+    const numberOfGames = formElements.numberOfGames.value;
+
+    let serie = {
+      name,
+      initDate,
+      endDate,
+      caracterId,
+      numberOfGames,
+    };
+    fetch("https://localhost:44334/api/Serie", {
+      mode: "cors",
+      headers: { "Content-Type": "application/json" },
+      method: this.state.edit ? "PUT" : "POST",
+      body: JSON.stringify(serie),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+    this.props.history.push("/series");
+  };
+
   render() {
-    let newDate = new Date();
-    let date = newDate.getDate();
-    // let years = Array.from(Array(year).keys()).reverse();
     const { id, name, caracter, initDate, endDate, numberOfGames } = {
       ...this.props.location.state.serie,
     };
@@ -24,37 +74,29 @@ class SerieForm extends Component {
         <h1 className="mb-5 my-style-header">Serie</h1>
 
         <Col className="center">
-          <Form style={{ width: "70%", alignItems: "center" }}>
+          <Form
+            key={
+              this.props.location.state.serie
+                ? this.props.location.state.serie.id
+                : 0
+            }
+            style={{ width: "70%", alignItems: "center" }}
+            onSubmit={this.onFormSubmit}
+          >
             <Row>
               <Col>
                 <Form.Group style={{ width: "100%" }} controlId="name">
                   <Form.Label>Nombre:</Form.Label>
-                  <Form.Control
-                    defaultValue={name}
-                    type="text"
-                    // value={"" || name}
-                  />
+                  <Form.Control defaultValue={name} type="text" />
                 </Form.Group>
               </Col>
             </Row>
             <Row>
               <Col>
-                {/* <Form.Group controlId="date-begin">
+                <Form.Group controlId="initDate" bsSize="large">
                   <Form.Label>Fecha de incio:</Form.Label>
                   <Form.Control
-                    value={seasonStart ? seasonStart : { year }}
-                    as="select"
-                    custom
-                  >
-                    {years.map((year) => (
-                      <option>{year}</option>
-                    ))}
-                  </Form.Control>
-                </Form.Group> */}
-                <Form.Group controlId="date-begin" bsSize="large">
-                  <Form.Label>Fecha de incio:</Form.Label>
-                  <Form.Control
-                    value={
+                    defaultValue={
                       initDate
                         ? new Date(initDate).toISOString().substr(0, 10)
                         : ""
@@ -64,22 +106,10 @@ class SerieForm extends Component {
                 </Form.Group>
               </Col>
               <Col>
-                {/* <Form.Group controlId="date-end">
+                <Form.Group controlId="endDate" bsSize="large">
                   <Form.Label>Fecha de culminación:</Form.Label>
                   <Form.Control
-                    value={seasonEnd ? seasonEnd : { year }}
-                    as="select"
-                    custom
-                  >
-                    {years.map((year) => (
-                      <option>{year}</option>
-                    ))}
-                  </Form.Control>
-                </Form.Group> */}
-                <Form.Group controlId="date-end" bsSize="large">
-                  <Form.Label>Fecha de culminación:</Form.Label>
-                  <Form.Control
-                    value={
+                    defaultValue={
                       endDate
                         ? new Date(endDate).toISOString().substr(0, 10)
                         : ""
@@ -92,55 +122,34 @@ class SerieForm extends Component {
 
             <Row>
               <Col>
-                <Form.Group controlId="reach">
+                <Form.Group controlId="caracter">
                   <Form.Label>Carácter:</Form.Label>
                   <Form.Control
-                    value={caracter ? caracter.caracter_Name : ""}
+                    defaultValue={caracter ? caracter.caracter_Name : ""}
                     as="select"
                     custom
                   >
                     <option>{""}</option>
                     {this.state.reaches.map((reach) => (
-                      <option>{reach}</option>
+                      <option id={reach.id} key={reach.id}>
+                        {reach.caracter_Name}
+                      </option>
                     ))}
                   </Form.Control>
                 </Form.Group>
               </Col>
               <Col>
-                <Form.Group controlId="number-of-games">
+                <Form.Group controlId="numberOfGames">
                   <Form.Label>Número de juegos:</Form.Label>
                   <Form.Control
-                    value={numberOfGames ? numberOfGames : ""}
+                    defaultValue={numberOfGames ? numberOfGames : ""}
                     type="numeric"
-                    name="number-of-games"
+                    name="numberOfGames"
                   />
                 </Form.Group>
               </Col>
             </Row>
 
-            {/* <Form.Group controlId="winner-team">
-          <Form.Label>Primer lugar</Form.Label>
-          <Form.Control as="select" custom>
-            <option>Elija un equipo...</option>
-            {this.state.teams
-              .map((team) => team.name)
-              .map((team) => (
-                <option>{team}</option>
-              ))}
-          </Form.Control>
-        </Form.Group>
-
-        <Form.Group controlId="loser-team">
-          <Form.Label>Último lugar</Form.Label>
-          <Form.Control as="select" custom>
-            <option>Elija un equipo...</option>
-            {this.state.teams
-              .map((team) => team.name)
-              .map((team) => (
-                <option>{team}</option>
-              ))}
-          </Form.Control>
-        </Form.Group> */}
             <Button
               style={{ float: "right" }}
               className="mt-3 ml-3"
@@ -151,6 +160,7 @@ class SerieForm extends Component {
             </Button>
             <Button
               style={{ float: "right" }}
+              // onClick={this.handleOnClickAccept}
               className="mt-3 ml-3"
               variant="primary"
               type="submit"

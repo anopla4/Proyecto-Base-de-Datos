@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import {
   Card,
   Nav,
@@ -24,7 +23,6 @@ import {
   SidebarHeader,
 } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
-import MyForm from "./MyForm";
 
 class Serie extends Component {
   state = {
@@ -220,7 +218,11 @@ class Serie extends Component {
             <Col md={3}>
               <Navbar fixed="right">
                 <Nav.Item>
-                  <Form key={this.state.itemEdit.team.id}>
+                  <Form
+                    key={
+                      this.state.itemEdit.team ? this.state.itemEdit.team.id : 0
+                    }
+                  >
                     {this.state.addTeam && (
                       <Form.Group controlId="name">
                         <Form.Label>Equipo:</Form.Label>

@@ -7,6 +7,7 @@ import Add from "../../components/Add/Add";
 
 class Games extends Component {
   state = {
+    // games: [],
     games: [
       {
         id: 1,
@@ -99,6 +100,22 @@ class Games extends Component {
   handleOnClickAdd = (game) => {
     this.props.history.push({ pathname: "/gameForm", state: { game } });
   };
+
+  // componentDidMount() {
+  //   fetch("https://localhost:44334/api/Game", { mode: "cors" })
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw Error(response.statusText);
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((response) => {
+  //       this.setState({ games: response });
+  //     })
+  //     .catch(function (error) {
+  //       console.log("Hubo un problema con la petición Fetch:" + error.message);
+  //     });
+  // }
 
   render() {
     return (

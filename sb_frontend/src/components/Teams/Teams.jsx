@@ -35,53 +35,54 @@ class Teams extends Component {
       "Blanco",
       "Amarillo",
     ],
-    teams: [
-      {
-        id: 1,
-        name: "Matanzas",
-        color: "Rojo",
-        initials: "MTN",
-        img: "http://localhost:8000/src/logos/matanzas.png",
-      },
-      {
-        id: 2,
-        name: "Pinar del Río",
-        color: "Verde",
-        initials: "PR",
-        img: "http://localhost:8000/src/logos/pinar-del-rio.jpg",
-      },
-      {
-        id: 3,
-        name: "Industriales",
-        color: "Azul",
-        initials: "IND",
-        img: "http://localhost:8000/src/logos/industriales.png",
-      },
-      {
-        id: 4,
-        name: "Cienfuegos",
-        color: "Verde",
-        initials: "CFG",
-        img: "http://localhost:8000/src/logos/cienfuegos.png",
-      },
-    ],
+    teams: [],
+    // teams: [
+    //   {
+    //     id: 1,
+    //     name: "Matanzas",
+    //     color: "Rojo",
+    //     initials: "MTN",
+    //     img: "http://localhost:8000/src/logos/matanzas.png",
+    //   },
+    //   {
+    //     id: 2,
+    //     name: "Pinar del Río",
+    //     color: "Verde",
+    //     initials: "PR",
+    //     img: "http://localhost:8000/src/logos/pinar-del-rio.jpg",
+    //   },
+    //   {
+    //     id: 3,
+    //     name: "Industriales",
+    //     color: "Azul",
+    //     initials: "IND",
+    //     img: "http://localhost:8000/src/logos/industriales.png",
+    //   },
+    //   {
+    //     id: 4,
+    //     name: "Cienfuegos",
+    //     color: "Verde",
+    //     initials: "CFG",
+    //     img: "http://localhost:8000/src/logos/cienfuegos.png",
+    //   },
+    // ],
   };
 
-  // componentDidMount() {
-  //   fetch("https://localhost:44334/api/Team", { mode: "cors" })
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         throw Error(response.statusText);
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((response) => {
-  //       this.setState({ teams: response });
-  //     })
-  //     .catch(function (error) {
-  //       console.log("Hubo un problema con la petición Fetch:" + error.message);
-  //     });
-  // }
+  componentDidMount() {
+    fetch("https://localhost:44334/api/Team", { mode: "cors" })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ teams: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+  }
 
   handleOnClick = (idT) => {
     this.props.history.push({ pathname: "/team", state: { idTeam: idT } });
@@ -103,6 +104,11 @@ class Teams extends Component {
     return (
       <Container>
         <h1 className="mb-5 my-style-header">Equipos de béisbol</h1>
+        <Row className="mb-4">
+          <Col>
+            <Add text="Agregar equipo" onClick={this.handleAddClick} />
+          </Col>
+        </Row>
         <Row>
           <Col>
             <CardDeck>
@@ -139,18 +145,13 @@ class Teams extends Component {
                 </Col>
               ))}
             </CardDeck>
-            <Row className="mb-4">
-              <Col>
-                <Add text="Agregar equipo" onClick={this.handleAddClick} />
-              </Col>
-            </Row>
           </Col>
 
           {(this.state.addTeam || this.state.editTeam) && (
             <Col md={3}>
               <Navbar fixed="right">
                 <Nav.Item>
-                  <Form>
+                  <Form key={this.state.itemEdit.id}>
                     <Form.Group controlId="name">
                       <Form.Label>Nombre:</Form.Label>
                       <Form.Control
@@ -161,7 +162,7 @@ class Teams extends Component {
                       />
                     </Form.Group>
                     <Form.Group>
-                      {/* <Image src={img} /> */}
+                      <Image src={this.state.itemEdit.img} />
                       <Form.File id="img" label="Logo del equipo" />
                     </Form.Group>
                     <Form.Group>

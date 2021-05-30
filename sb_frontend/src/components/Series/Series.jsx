@@ -17,42 +17,8 @@ import { conditionalExpression } from "@babel/types";
 class Series extends Component {
   state = {
     redirect: null,
+    deleteRecord: false,
     series: [],
-    // series: [
-    //   {
-    //     id: 1,
-    //     name: "Serie Nacional de Béisbol",
-    //     caracter: "Nacional",
-    //     initDate: "1994",
-    //     endDate: "1995",
-    //     numberOfGames: "50",
-    //     nt: "15",
-    //     winner: "Industriales",
-    //     loser: "Isla de la Juventud",
-    //   },
-    //   {
-    //     id: 2,
-    //     name: "Serie Nacional de Béisbol",
-    //     caracter: "Nacional",
-    //     initDate: "1996",
-    //     endDate: "1997",
-    //     numberOfGames: "40",
-    //     nt: "15",
-    //     winner: "Matanzas",
-    //     loser: "Las Tunas",
-    //   },
-    //   {
-    //     id: 3,
-    //     name: "Serie Nacional de Béisbol",
-    //     caracter: "Nacional",
-    //     initDate: "1997",
-    //     endDate: "1998",
-    //     numberOfGames: "30",
-    //     nt: "15",
-    //     winner: "Industriales",
-    //     loser: "Guantánamo",
-    //   },
-    // ],
   };
 
   componentDidMount() {
@@ -71,9 +37,31 @@ class Series extends Component {
       });
   }
 
+  handleOnDelete = (serie, index) => {
+    fetch(
+      `https://localhost:44334/api/Serie/${serie.id}/${serie.initDate}/${serie.endDate}`,
+      {
+        mode: "cors",
+        method: "DELETE",
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+
+    let n_series = [...this.state.series];
+    n_series.splice(index, 1);
+
+    this.setState({ series: n_series });
+  };
+
   handleOnClick = (id, name) => {
-    // this.setState({ redirect: "/serie" });
-    // fetch serie data from data base
     this.props.history.push({
       pathname: "/serie",
       state: {
@@ -142,9 +130,6 @@ class Series extends Component {
   };
 
   render() {
-    // if (this.state.redirect) {
-    //   return <Redirect to={this.state.redirect}></Redirect>;
-    // }
     const columns = [
       { dataField: "name", text: "Nombre", filter: textFilter() },
       { dataField: "season", text: "Temporada", filter: textFilter() },
@@ -198,7 +183,7 @@ class Series extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.series.map((serie) => (
+            {this.state.series.map((serie, index) => (
               <tr key={serie.id}>
                 <td onClick={() => this.handleOnClick(serie.id, serie.name)}>
                   {serie.name}
@@ -227,6 +212,7 @@ class Series extends Component {
                 <DeleteEdit
                   delete={true}
                   onEdit={() => this.handleOnClickAdd("/serieForm", serie)}
+                  onDelete={() => this.handleOnDelete(serie, index)}
                   edit={true}
                   size="sm"
                   space={1}

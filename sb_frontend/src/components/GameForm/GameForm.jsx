@@ -68,7 +68,7 @@ class GameForm extends Component {
                 <Form.Group style={{ width: "100%" }} controlId="serie">
                   <Form.Label>Serie:</Form.Label>
                   <Form.Control
-                    value={
+                    defaultValue={
                       serie
                         ? serie.name +
                           " (" +
@@ -97,7 +97,7 @@ class GameForm extends Component {
                 >
                   <Form.Label>Lanzador ganador:</Form.Label>
                   <Form.Control
-                    value={winner_pitcher ? winner_pitcher.name : ""}
+                    defaultValue={winner_pitcher ? winner_pitcher.name : ""}
                     as="select"
                     custom
                   >
@@ -114,7 +114,7 @@ class GameForm extends Component {
                 <Form.Group controlId="runs_in_favor">
                   <Form.Label>Carreras a favor:</Form.Label>
                   <Form.Control
-                    value={runs_in_favor ? runs_in_favor : ""}
+                    defaultValue={runs_in_favor ? runs_in_favor : ""}
                     type="numeric"
                     name="runs_in_favor"
                   />
@@ -124,7 +124,7 @@ class GameForm extends Component {
                 <Form.Group controlId="runs_against">
                   <Form.Label>Carreras en contra:</Form.Label>
                   <Form.Control
-                    value={runs_against ? runs_against : ""}
+                    defaultValue={runs_against ? runs_against : ""}
                     type="numeric"
                     name="runs_against"
                   />
@@ -136,7 +136,7 @@ class GameForm extends Component {
                 <Form.Group style={{ width: "100%" }} controlId="winner">
                   <Form.Label>Ganador:</Form.Label>
                   <Form.Control
-                    value={winner ? winner.name : ""}
+                    defaultValue={winner ? winner.name : ""}
                     as="select"
                     custom
                   >
@@ -151,7 +151,7 @@ class GameForm extends Component {
                 <Form.Group style={{ width: "100%" }} controlId="loser">
                   <Form.Label>Perdedor:</Form.Label>
                   <Form.Control
-                    value={loser ? loser.name : ""}
+                    defaultValue={loser ? loser.name : ""}
                     as="select"
                     custom
                   >

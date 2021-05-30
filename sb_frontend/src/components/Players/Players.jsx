@@ -7,7 +7,7 @@ import DeleteEdit from "../../components/DeleteEdit/DeleteEdit";
 
 class Players extends Component {
   render() {
-    console.log(this.props.players);
+    console.log("Ana");
     return (
       <Accordion className="mb-3">
         {this.props.players.map((player) => (
@@ -63,8 +63,8 @@ class Players extends Component {
               <Card.Body>
                 <Row className="bold set-size">
                   <Col md={2}>Edad</Col>
-                  <Col>Equipo actual</Col>
-                  <Col>Equipos</Col>
+                  {this.props.playerGeneral && <Col>Equipo actual</Col>}
+                  {this.props.playerGeneral && <Col>Equipos</Col>}
                   <Col>Años de experiencia</Col>
                   {player.position
                     .map((pos) => pos.positionName)
@@ -79,9 +79,11 @@ class Players extends Component {
                 </Row>
                 <Row className="set-size">
                   <Col md={2}>{player.age}</Col>
-                  <Col>{player.current_team}</Col>
-                  <Col>{player.teams.join(", ")}.</Col>
-                  <Col>{player.years_of_experience}</Col>
+                  {this.props.playerGeneral && <Col>{player.current_Team}</Col>}
+                  {this.props.playerGeneral && (
+                    <Col>{player.teams.join(", ")}.</Col>
+                  )}
+                  <Col>{player.year_Experience}</Col>
                   {player.position
                     .map((pos) => pos.positionName)
                     .includes("Lanzador") && <Col>{player.hand}</Col>}
@@ -91,7 +93,9 @@ class Players extends Component {
                   {player.position.length === 1 &&
                     !player.position
                       .map((pos) => pos.positionName)
-                      .includes("Lanzador") && <Col md={2}>{player.ave}</Col>}
+                      .includes("Lanzador") && (
+                      <Col md={2}>{player.position_Average}</Col>
+                    )}
                 </Row>
               </Card.Body>
             </Accordion.Collapse>

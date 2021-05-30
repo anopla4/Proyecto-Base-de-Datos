@@ -72,7 +72,9 @@ class Team extends Component {
             </Nav>
           </Card.Header>
           <Card.Body>
-            {this.state.page === 1 && <Players players={this.state.players} />}
+            {this.state.page === 1 && (
+              <Players playerGeneral={false} players={this.state.players} />
+            )}
             {this.state.page === 2 && (
               <Directors directors={this.state.directors} />
             )}
