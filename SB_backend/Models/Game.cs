@@ -30,14 +30,14 @@ namespace SB_backend.Models
         public DateTime SerieEndDate { get; set; }
         [ForeignKey("SerieId,SerieInitDate,SerieEndDate")]
         public Serie Serie { get; set; }
-        public Guid PitcherWinerPlayerId { get; set; }
-        public Guid PitcherWinerPositionId { get; set; }
-        [ForeignKey("PitcherWinerPlayerId,PitcherWinerPositionId")]
-        public Pitcher PitcherWiner { get; set; }
-        public Guid PitcherLoserPlayerId { get; set; }
-        public Guid PitcherLoserPositionId { get; set; }
-        [ForeignKey("PitcherLoserPlayerId,PitcherLoserPositionId")]
-        public Pitcher PitcherLoser { get; set; }
+        public Guid PitcherWinerId { get; set; }
+        //public Guid PitcherWinerPositionId { get; set; }
+        //[ForeignKey("PitcherWinerPlayerId,PitcherWinerPositionId")]
+        public Player PitcherWiner { get; set; }
+        public Guid PitcherLoserId { get; set; }
+        //public Guid PitcherLoserPositionId { get; set; }
+        //[ForeignKey("PitcherLoserPlayerId,PitcherLoserPositionId")]
+        public Player PitcherLoser { get; set; }
         public int InFavorCarrers { get; set; }
         public int AgaintsCarrers { get; set; }
 

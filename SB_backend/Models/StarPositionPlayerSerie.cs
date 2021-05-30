@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 
 namespace SB_backend.Models
 {
-    public class StartPositionPlayerSerie
+    public class StarPositionPlayerSerie
     {
         [Required]
         public Guid PlayerId { get; set; }
+        public Player Player { get; set; }
         [Required]
         public Guid PositionId { get; set; }
-        [ForeignKey("PlayerId,PositionId")]
-        public PositionPlayer PositionPlayer { get; set; }
+        //[ForeignKey("PlayerId,PositionId")]
+        public Position Position { get; set; }
         [Required]
         public Guid SerieId { get; set; }
         [Required]
