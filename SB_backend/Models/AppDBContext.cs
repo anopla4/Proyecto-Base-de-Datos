@@ -48,6 +48,14 @@ namespace SB_backend.Models
                 .HasOne(c => c.TeamSerie)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<TeamSeriePlayer>()
+                .HasOne(c => c.Player)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<TeamSeriePlayer>()
+                .HasOne(c => c.Serie)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
             //StartPositionPlayerBuilder
             //modelBuilder.Entity<StartPositionPlayerSerie>().HasKey(c => new { c.PositionId, c.SerieId, c.SerieInitDate, c.SerieEndDate });
             //modelBuilder.Entity<StartPositionPlayerSerie>()

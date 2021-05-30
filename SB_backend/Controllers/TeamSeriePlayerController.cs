@@ -23,10 +23,10 @@ namespace SB_backend.Controllers
         {
             return Ok(_tspRep.GetTeamsSeriesPlayers());
         }
-        [HttpGet("{PlayerId}/{SerieId}")]
-        public IActionResult GetTeamSeriePlayer(Guid PlayerId, Guid SerieId)
+        [HttpGet("{PlayerId}/{SerieId}/{InitDate}/{EndDate}")]
+        public IActionResult GetTeamSeriePlayer(Guid PlayerId, Guid SerieId, DateTime InitDate, DateTime EndDate)
         {
-            var tsp = _tspRep.GetTeamSeriePlayer(SerieId, PlayerId);
+            var tsp = _tspRep.GetTeamSeriePlayer(SerieId, InitDate, EndDate, PlayerId);
             if (tsp != null)
                 return Ok(tsp);
             return NotFound($"Not Player {PlayerId} in Serie {SerieId}");
@@ -39,18 +39,18 @@ namespace SB_backend.Controllers
                 return NotFound($"Not player with Id = {PlayerId}");
             return Ok(teams);
         }
-        [HttpGet("Players/{SerieId}/{TeamId}")]
-        public IActionResult GetPlayersOfTeamInSerie(Guid SerieId,Guid TeamId)
+        [HttpGet("Players/{TeamId}/{SerieId}/{InitDate}/{EndDate}")]
+        public IActionResult GetPlayersOfTeamInSerie(Guid SerieId, DateTime InitDate, DateTime EndDate, Guid TeamId)
         {
-            var players = _tspRep.GetPlayersOfTeamInSerie(TeamId, SerieId);
+            var players = _tspRep.GetPlayersOfTeamInSerie(TeamId, SerieId, InitDate, EndDate);
             if (players != null)
                 return Ok(players);
             return NotFound("Not team {TeamId} in serie {SerieId}");
         }
-        [HttpGet("{SerieId}")]
-        public IActionResult GetPlayersInSerie(Guid SerieId)
+        [HttpGet("{SerieId}/{InitDate}/{EndDate}")]
+        public IActionResult GetPlayersInSerie(Guid SerieId, DateTime InitDate, DateTime EndDate)
         {
-            var players = _tspRep.GetPlayersInSerie(SerieId);
+            var players = _tspRep.GetPlayersInSerie(SerieId, InitDate, EndDate);
             if (players == null)
                 return NotFound($"Not Players in Serie with ID = {SerieId}");
             return Ok(players);
@@ -63,6 +63,14 @@ namespace SB_backend.Controllers
                 return NotFound($"Not team with Id {TeamId}");
             return Ok(players);
         }
+        [HttpGet("{TeamId}/{SerieId}/{InitDate}/{EndDate}/Pitchers")]
+        public IActionResult GetPitchersOfTeamInSerie(Guid TeamId, Guid SerieId, DateTime InitDate, DateTime EndDate)
+        {
+            var pitchers = _tspRep.GetPitchersTeamInSerie(TeamId, SerieId, InitDate, EndDate);
+            if (pitchers == null)
+                return NotFound("Not Pitchers Found");
+            return Ok(pitchers);
+        }
         [HttpPost]
         public IActionResult AddTeamSeriePlayer(TeamSeriePlayer tsp)
         {
@@ -71,10 +79,10 @@ namespace SB_backend.Controllers
             {
                 return NotFound($"PlayerId or SerieId are not valid");
             }
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + tsp.PlayerId + tsp.SerieId, tsp);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + tsp.PlayerId + "/" + tsp.SerieId + "/" + tsp.SerieInitDate + "/" + tsp.SerieEndDate, tsp);
         }
-        [HttpDelete("{PlayerId}/{SerieId}")]
-        public IActionResult RemoveTeamSeriePlayer(Guid PlayerId,Guid SerieId,TeamSeriePlayer tsp)
+        [HttpDelete("{PlayerId}/{SerieId}/{InitDate}/{EndDate}")]
+        public IActionResult RemoveTeamSeriePlayer(Guid PlayerId,Guid SerieId, DateTime InitDate, DateTime EndDate, TeamSeriePlayer tsp)
         {
             var tspR = _tspRep.RemoveTeamSeriePlayer(tsp);
             if(tspR)
@@ -83,8 +91,8 @@ namespace SB_backend.Controllers
             }
             return NotFound($"Not Player {PlayerId} in Serie {SerieId}");
         }
-        [HttpPatch("{PlayerId}/{SerieId}")]
-        public IActionResult UpdateTeamSeriePlayer(Guid PlayerId, Guid SerieId, TeamSeriePlayer tsp)
+        [HttpPatch("{PlayerId}/{SerieId}/{InitDate}/{EndDate}")]
+        public IActionResult UpdateTeamSeriePlayer(Guid PlayerId, Guid SerieId, DateTime InitDate, DateTime EndDate, TeamSeriePlayer tsp)
         {
             var tspUpd = _tspRep.UpdateTeamSeriePlayer(tsp);
             if (tspUpd != null)

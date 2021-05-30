@@ -20,7 +20,7 @@ namespace SB_backend.Repositories
             Team team = _context.Teams.Find(teamSeriePlayer.TeamSerieId);
             if (team == null)
                 return null;
-            Serie serie = _context.Series.Find(teamSeriePlayer.SerieId);
+            Serie serie = _context.Series.Find(teamSeriePlayer.SerieId, teamSeriePlayer.SerieInitDate, teamSeriePlayer.SerieEndDate);
             if (serie == null)
                 return null;
             Player player = _context.Players.Find(teamSeriePlayer.PlayerId);
@@ -31,13 +31,13 @@ namespace SB_backend.Repositories
             return teamSeriePlayer;
         }
 
-        public List<Player> GetPlayersInSerie(Guid SerieId)
+        public List<Player> GetPlayersInSerie(Guid SerieId, DateTime SerieInitDate, DateTime SerieEndDate)
         {
-            bool flag = _context.TeamsSeriesPlayers.Any(c => c.SerieId == SerieId);
+            bool flag = _context.TeamsSeriesPlayers.Any(c => c.SerieId == SerieId && c.SerieInitDate == SerieInitDate && c.SerieEndDate ==SerieEndDate);
             if (!flag)
                 return null;
 
-            return _context.TeamsSeriesPlayers.Include(c => c.Player).Where(c => c.SerieId == SerieId).Select(c => c.Player).ToList();
+            return _context.TeamsSeriesPlayers.Include(c => c.Player).Include(c => c.Player.Positions).Where(c => c.SerieId == SerieId && c.SerieInitDate == SerieInitDate && c.SerieEndDate == SerieEndDate).Select(c => c.Player).ToList();
         }
 
         public List<Team> GetPlayerTeams(Guid PlayerId)
@@ -48,12 +48,12 @@ namespace SB_backend.Repositories
             List<Team> teams = _context.TeamsSeriesPlayers.Include(c => c.TeamSerie).Where(c => c.PlayerId == PlayerId).Select(c => c.TeamSerie).ToList();
             return teams;
         }
-        public List<Player> GetPlayersOfTeamInSerie(Guid TeamId, Guid SerieId)
+        public List<Player> GetPlayersOfTeamInSerie(Guid TeamId, Guid SerieId, DateTime SerieInitDate, DateTime SerieEndDate)
         {
-            bool teamSP = _context.TeamsSeriesPlayers.Any(c => c.TeamSerieId == TeamId && c.SerieId == SerieId);
+            bool teamSP = _context.TeamsSeriesPlayers.Any(c => c.TeamSerieId == TeamId && c.SerieId == SerieId && c.SerieInitDate == SerieInitDate && c.SerieEndDate == SerieEndDate);
             if (!teamSP)
                 return null;
-            return _context.TeamsSeriesPlayers.Include(c => c.Player).Where(c => c.SerieId == SerieId && c.TeamSerieId == TeamId).Select(c => c.Player).ToList();
+            return _context.TeamsSeriesPlayers.Include(c => c.Player).Include(c => c.Player.Positions).Where(c => c.SerieId == SerieId && c.SerieInitDate == SerieInitDate && c.SerieEndDate == SerieEndDate && c.TeamSerieId == TeamId).Select(c => c.Player).ToList();
         }
 
         public List<Player> GetTeamPlayers(Guid TeamId)
@@ -61,13 +61,13 @@ namespace SB_backend.Repositories
             var aux = _context.TeamsSeriesPlayers.Any(c => c.TeamSerieId == TeamId);
             if (!aux)
                 return null;
-            List<Player> players = _context.TeamsSeriesPlayers.Include(c => c.Player).Where(c => c.TeamSerieId == TeamId).Select(c => c.Player).ToList();
+            List<Player> players = _context.TeamsSeriesPlayers.Include(c => c.Player).Include(c => c.Player.Positions).Where(c => c.TeamSerieId == TeamId).Select(c => c.Player).ToList();
             return players; 
         }
 
-        public TeamSeriePlayer GetTeamSeriePlayer(Guid SerieId, Guid PlayerId)
+        public TeamSeriePlayer GetTeamSeriePlayer(Guid SerieId, DateTime SerieInitDate, DateTime SerieEndDate, Guid PlayerId)
         {
-            return _context.TeamsSeriesPlayers.Include(c => c.Serie).Include(c => c.Player).Include(c => c.TeamSerie).SingleOrDefault(c => c.PlayerId == PlayerId && c.SerieId == SerieId);
+            return _context.TeamsSeriesPlayers.Include(c => c.Serie).Include(c => c.Player).Include(c => c.TeamSerie).SingleOrDefault(c => c.PlayerId == PlayerId && c.SerieId == SerieId && c.SerieInitDate == SerieInitDate && c.SerieEndDate == SerieEndDate);
         }
 
 
@@ -78,7 +78,7 @@ namespace SB_backend.Repositories
 
         public bool RemoveTeamSeriePlayer(TeamSeriePlayer teamSeriePlayer)
         {
-            var currTeamSeriePlayer = _context.TeamsSeriesPlayers.SingleOrDefault(c => c.PlayerId == teamSeriePlayer.PlayerId && c.SerieId == teamSeriePlayer.SerieId);
+            var currTeamSeriePlayer = _context.TeamsSeriesPlayers.SingleOrDefault(c => c.PlayerId == teamSeriePlayer.PlayerId && c.SerieId == teamSeriePlayer.SerieId && c.SerieInitDate == teamSeriePlayer.SerieInitDate && c.SerieEndDate == teamSeriePlayer.SerieEndDate);
             if(currTeamSeriePlayer == null)
             {
                 return false;
@@ -90,7 +90,7 @@ namespace SB_backend.Repositories
 
         public TeamSeriePlayer UpdateTeamSeriePlayer(TeamSeriePlayer teamSeriePlayer)
         {
-            var currTeamSeriePlayer = _context.TeamsSeriesPlayers.SingleOrDefault(c => c.PlayerId == teamSeriePlayer.PlayerId && c.SerieId == teamSeriePlayer.SerieId);
+            var currTeamSeriePlayer = _context.TeamsSeriesPlayers.SingleOrDefault(c => c.PlayerId == teamSeriePlayer.PlayerId && c.SerieId == teamSeriePlayer.SerieId && c.SerieInitDate == teamSeriePlayer.SerieInitDate && c.SerieEndDate == teamSeriePlayer.SerieEndDate);
             if (currTeamSeriePlayer == null)
             {
                 return null;
@@ -99,6 +99,16 @@ namespace SB_backend.Repositories
             _context.TeamsSeriesPlayers.Update(currTeamSeriePlayer);
             _context.SaveChanges();
             return currTeamSeriePlayer;
+        }
+
+        public List<Player> GetPitchersTeamInSerie(Guid teamId, Guid SerieId, DateTime InitDate, DateTime EndDate)
+        {
+            var flag = _context.TeamsSeriesPlayers.Any(c => c.TeamSerieId == teamId && c.SerieId == SerieId && c.SerieInitDate == InitDate && c.SerieEndDate == EndDate);
+            if (!flag)
+                return null;
+            Position pitcher = _context.Positions.SingleOrDefault(c => c.PositionName == "P");
+
+            return _context.TeamsSeriesPlayers.Include(c => c.Player).Include(c => c.Player.Positions).Where(c => c.TeamSerieId == teamId && c.SerieId == SerieId && c.SerieInitDate == InitDate && c.SerieEndDate == EndDate && c.Player.Positions.Contains(pitcher)).Select(c => c.Player).ToList();
         }
     }
 }
