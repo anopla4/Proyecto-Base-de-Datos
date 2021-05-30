@@ -53,7 +53,7 @@ namespace SB_backend.Models
             //PositionBuilder
             modelBuilder.Entity<Position>().HasData(new Position { Id = Guid.NewGuid(), PositionName = "C" }, new Position { Id = Guid.NewGuid(), PositionName = "1B" }, new Position { Id = Guid.NewGuid(), PositionName = "2B" }, new Position { Id = Guid.NewGuid(), PositionName = "3B" }, new Position { Id = Guid.NewGuid(), PositionName = "SS" }, new Position { Id = Guid.NewGuid(), PositionName = "P" }, new Position { Id = Guid.NewGuid(), PositionName = "LF" }, new Position { Id = Guid.NewGuid(), PositionName = "RF" }, new Position { Id = Guid.NewGuid(), PositionName = "CF" }, new Position { Id = Guid.NewGuid(), PositionName = "BD" });
             //GameBuilder
-            modelBuilder.Entity<Game>().HasKey(c => new { c.GameId,c.GameTime,c.GameDate,c.SerieId, c.SerieInitDate, c.SerieEndDate });
+            modelBuilder.Entity<Game>().HasKey(c => new { c.GameId,c.WinerTeamId,c.LoserTeamId, c.GameDate, c.GameTime,c.SerieId, c.SerieInitDate, c.SerieEndDate });
             modelBuilder.Entity<Game>()
                 .HasOne(c => c.Serie)
                 .WithMany()
@@ -75,9 +75,9 @@ namespace SB_backend.Models
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
             //PlayerGameBuilder
-            modelBuilder.Entity<PlayerGame>().HasKey(c => new { c.GameId,c.PositionPlayerPlayerId,c.PositionPlayerPositionId });
+            modelBuilder.Entity<PlayerGame>().HasKey(c => new { c.gameGameId,c.PositionPlayerPlayerId,c.PositionPlayerPositionId });
             modelBuilder.Entity<PlayerGame>()
-                .HasOne(c => c.Game)
+                .HasOne(c => c.game)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<PlayerGame>()
@@ -85,24 +85,16 @@ namespace SB_backend.Models
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
             //PositionPlayerChangeGameBuilder
-            modelBuilder.Entity<PositionPlayerChangeGame>().HasKey(c => new { c.GameTime, c.GameDate, c.SerieId, c.SerieInitDate, c.SerieEndDate, c.PlayerInPlayerId, c.PlayerInPositionId });
-            modelBuilder.Entity<PositionPlayerChangeGame>()
-                .HasOne(c => c.Serie)
+            modelBuilder.Entity<PlayerChangeGame>().HasKey(c => new { c.GameGameId, c.PlayerInPlayerId, c.PlayerInPositionId });
+            modelBuilder.Entity<PlayerChangeGame>()
+                .HasOne(c => c.Game)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<PositionPlayerChangeGame>()
-                .HasOne(c => c.WinerTeam)
-                .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<PositionPlayerChangeGame>()
-                .HasOne(c => c.LoserTeam)
-                .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<PositionPlayerChangeGame>()
-                .HasOne(c => c.PlayerIn)
-                .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<PositionPlayerChangeGame>()
+            modelBuilder.Entity<PlayerChangeGame>()
+               .HasOne(c => c.PlayerIn)
+               .WithMany()
+               .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<PlayerChangeGame>()
                 .HasOne(c => c.PlayerOut)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
@@ -145,7 +137,7 @@ namespace SB_backend.Models
         public DbSet<StartPositionPlayerSerie> StartPositionPlayersSeries { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<PlayerGame> PlayersGames { get; set; }
-        public DbSet<PositionPlayerChangeGame> PositionPlayerChagesGames { get; set; }
+        public DbSet<PlayerChangeGame> PlayersChangesGames { get; set; }
         public DbSet<PitcherChangeGame> PitcherChangesGames { get; set; } 
     }
 }

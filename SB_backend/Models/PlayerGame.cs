@@ -10,25 +10,25 @@ namespace SB_backend.Models
     public class PlayerGame
     {
         [Required]
-        public Guid GameId { get; set; }
+        public Guid gameGameId { get; set; }
         [Required]
-        public Guid WinerTeamId { get; set; }
+        public Guid gameWinerTeamId { get; set; }
         [Required]
-        public Guid LoserTeamId { get; set; }
+        public Guid gameLoserTeamId { get; set; }
         [Column(TypeName = "date")]
         [Required]
-        public DateTime GameDate { get; set; }
+        public DateTime gameGameDate { get; set; }
         [Column(TypeName = "time")]
         [Required]
-        public TimeSpan GameTime { get; set; }
+        public TimeSpan gameGameTime { get; set; }
         [Required]
-        public Guid SerieId { get; set; }
+        public Guid gameSerieId { get; set; }
         [Required]
-        public DateTime SerieInitDate { get; set; }
+        public DateTime gameSerieInitDate { get; set; }
         [Required]
-        public DateTime SerieEndDate { get; set; }
-        [ForeignKey("GameId,WinerTeamId,LoserTeamId,GameDate,GameTime,SereieId,SerieInitDate,SerieEndDate")]
-        public Game Game;
+        public DateTime gameSerieEndDate { get; set; }
+        [ForeignKey("gameGameId,gameWinerTeamId,gameLoserTeamId,gameGameDate,gameGameTime,gameSerieId,gameSerieInitDate,gameSerieEndDate")]
+        public Game game {get; set;}
         [Required]
         public Guid PositionPlayerPlayerId { get; set; }
         [Required]

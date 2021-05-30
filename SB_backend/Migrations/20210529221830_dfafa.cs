@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SB_backend.Migrations
 {
-    public partial class testing : Migration
+    public partial class dfafa : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -162,8 +162,8 @@ namespace SB_backend.Migrations
                     SerieId = table.Column<Guid>(nullable: false),
                     SerieInitDate = table.Column<DateTime>(nullable: false),
                     SerieEndDate = table.Column<DateTime>(nullable: false),
-                    WinnerGames = table.Column<int>(nullable: false),
-                    LosserGames = table.Column<int>(nullable: false),
+                    WonGames = table.Column<int>(nullable: false),
+                    LostGames = table.Column<int>(nullable: false),
                     FinalPosition = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -253,6 +253,7 @@ namespace SB_backend.Migrations
                 name: "Games",
                 columns: table => new
                 {
+                    GameId = table.Column<Guid>(nullable: false),
                     WinerTeamId = table.Column<Guid>(nullable: false),
                     LoserTeamId = table.Column<Guid>(nullable: false),
                     GameDate = table.Column<DateTime>(type: "date", nullable: false),
@@ -269,7 +270,7 @@ namespace SB_backend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Games", x => new { x.GameTime, x.GameDate, x.SerieId, x.SerieInitDate, x.SerieEndDate });
+                    table.PrimaryKey("PK_Games", x => new { x.GameId, x.WinerTeamId, x.LoserTeamId, x.GameDate, x.GameTime, x.SerieId, x.SerieInitDate, x.SerieEndDate });
                     table.ForeignKey(
                         name: "FK_Games_Teams_LoserTeamId",
                         column: x => x.LoserTeamId,
@@ -303,7 +304,7 @@ namespace SB_backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PlayersGames",
+                name: "PitcherChangesGames",
                 columns: table => new
                 {
                     WinerTeamId = table.Column<Guid>(nullable: false),
@@ -313,32 +314,40 @@ namespace SB_backend.Migrations
                     SerieId = table.Column<Guid>(nullable: false),
                     SerieInitDate = table.Column<DateTime>(nullable: false),
                     SerieEndDate = table.Column<DateTime>(nullable: false),
-                    PositionPlayerPlayerId = table.Column<Guid>(nullable: false),
-                    PositionPlayerPositionId = table.Column<Guid>(nullable: false)
+                    PitcherInPlayerId = table.Column<Guid>(nullable: false),
+                    PitcherInPositionId = table.Column<Guid>(nullable: false),
+                    PitcherOutPlayerId = table.Column<Guid>(nullable: false),
+                    PitcherOutPositionId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlayersGames", x => new { x.GameTime, x.GameDate, x.SerieId, x.SerieInitDate, x.SerieEndDate, x.PositionPlayerPlayerId, x.PositionPlayerPositionId });
+                    table.PrimaryKey("PK_PitcherChangesGames", x => new { x.GameTime, x.GameDate, x.SerieId, x.SerieInitDate, x.SerieEndDate, x.PitcherInPlayerId, x.PitcherInPositionId });
                     table.ForeignKey(
-                        name: "FK_PlayersGames_Teams_LoserTeamId",
+                        name: "FK_PitcherChangesGames_Teams_LoserTeamId",
                         column: x => x.LoserTeamId,
                         principalTable: "Teams",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PlayersGames_Teams_WinerTeamId",
+                        name: "FK_PitcherChangesGames_Teams_WinerTeamId",
                         column: x => x.WinerTeamId,
                         principalTable: "Teams",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PlayersGames_PositionPlayers_PositionPlayerPlayerId_PositionPlayerPositionId",
-                        columns: x => new { x.PositionPlayerPlayerId, x.PositionPlayerPositionId },
+                        name: "FK_PitcherChangesGames_PositionPlayers_PitcherInPlayerId_PitcherInPositionId",
+                        columns: x => new { x.PitcherInPlayerId, x.PitcherInPositionId },
                         principalTable: "PositionPlayers",
                         principalColumns: new[] { "PlayerId", "PositionId" },
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PlayersGames_Series_SerieId_SerieInitDate_SerieEndDate",
+                        name: "FK_PitcherChangesGames_PositionPlayers_PitcherOutPlayerId_PitcherOutPositionId",
+                        columns: x => new { x.PitcherOutPlayerId, x.PitcherOutPositionId },
+                        principalTable: "PositionPlayers",
+                        principalColumns: new[] { "PlayerId", "PositionId" },
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PitcherChangesGames_Series_SerieId_SerieInitDate_SerieEndDate",
                         columns: x => new { x.SerieId, x.SerieInitDate, x.SerieEndDate },
                         principalTable: "Series",
                         principalColumns: new[] { "Id", "InitDate", "EndDate" },
@@ -372,21 +381,53 @@ namespace SB_backend.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "PlayersGames",
+                columns: table => new
+                {
+                    gameGameId = table.Column<Guid>(nullable: false),
+                    gameWinerTeamId = table.Column<Guid>(nullable: false),
+                    gameLoserTeamId = table.Column<Guid>(nullable: false),
+                    gameGameDate = table.Column<DateTime>(type: "date", nullable: false),
+                    gameGameTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    gameSerieId = table.Column<Guid>(nullable: false),
+                    gameSerieInitDate = table.Column<DateTime>(nullable: false),
+                    gameSerieEndDate = table.Column<DateTime>(nullable: false),
+                    PositionPlayerPlayerId = table.Column<Guid>(nullable: false),
+                    PositionPlayerPositionId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlayersGames", x => new { x.gameGameId, x.PositionPlayerPlayerId, x.PositionPlayerPositionId });
+                    table.ForeignKey(
+                        name: "FK_PlayersGames_PositionPlayers_PositionPlayerPlayerId_PositionPlayerPositionId",
+                        columns: x => new { x.PositionPlayerPlayerId, x.PositionPlayerPositionId },
+                        principalTable: "PositionPlayers",
+                        principalColumns: new[] { "PlayerId", "PositionId" },
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PlayersGames_Games_gameGameId_gameWinerTeamId_gameLoserTeamId_gameGameDate_gameGameTime_gameSerieId_gameSerieInitDate_gameSe~",
+                        columns: x => new { x.gameGameId, x.gameWinerTeamId, x.gameLoserTeamId, x.gameGameDate, x.gameGameTime, x.gameSerieId, x.gameSerieInitDate, x.gameSerieEndDate },
+                        principalTable: "Games",
+                        principalColumns: new[] { "GameId", "WinerTeamId", "LoserTeamId", "GameDate", "GameTime", "SerieId", "SerieInitDate", "SerieEndDate" },
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.InsertData(
                 table: "Positions",
                 columns: new[] { "Id", "PositionName" },
                 values: new object[,]
                 {
-                    { new Guid("5212e411-7cd7-494f-9c18-1af659dbcc78"), "C" },
-                    { new Guid("1c323e07-77d8-4043-bfbe-bbb92437dd03"), "1B" },
-                    { new Guid("d89c2e9c-3b71-4633-ad9f-ee7f7514a4d8"), "2B" },
-                    { new Guid("3a7e4c3b-a2a6-44ba-ac92-eef8cfc8d392"), "3B" },
-                    { new Guid("69627233-8b2a-42a2-b7d2-50591f4da2aa"), "SS" },
-                    { new Guid("b28992f5-b3ce-4d08-9507-4daa84f2335c"), "P" },
-                    { new Guid("def6c1b2-0bc0-4481-8578-70736cbe45b9"), "LF" },
-                    { new Guid("99c3259d-e432-484e-b5df-4f6663b5ec3f"), "RF" },
-                    { new Guid("5d8ec263-bab7-43ba-b75c-78d050236347"), "CF" },
-                    { new Guid("be46fca2-9d4a-4e77-865e-e4e3c732714f"), "BD" }
+                    { new Guid("6cfa519e-dc6a-42c5-96a0-8b48aa58b84e"), "C" },
+                    { new Guid("3b05a7c8-f0b5-4006-a447-ec080eeee51d"), "1B" },
+                    { new Guid("27ff8b46-e00b-47a4-bd1e-989c7896fb9e"), "2B" },
+                    { new Guid("1c1ed8c3-d023-4bca-9ae4-b5d3efda30d9"), "3B" },
+                    { new Guid("bdbcc356-36e3-4b57-9a5f-405cec9c475a"), "SS" },
+                    { new Guid("9d3c268e-d2c6-41a3-839d-bfc0e7ebb6b7"), "P" },
+                    { new Guid("fddc8276-76ad-4dd2-89cc-dfe20a2dcdf7"), "LF" },
+                    { new Guid("f6c693ca-9af3-4464-9549-61452dc5cb66"), "RF" },
+                    { new Guid("597fe1a4-236f-4c8a-b1d2-3f6d0bb21be9"), "CF" },
+                    { new Guid("7209556c-1887-465a-a7e4-5ec6d8eddf50"), "BD" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -415,19 +456,34 @@ namespace SB_backend.Migrations
                 columns: new[] { "SerieId", "SerieInitDate", "SerieEndDate" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Players_Current_TeamId",
-                table: "Players",
-                column: "Current_TeamId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PlayersGames_LoserTeamId",
-                table: "PlayersGames",
+                name: "IX_PitcherChangesGames_LoserTeamId",
+                table: "PitcherChangesGames",
                 column: "LoserTeamId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PlayersGames_WinerTeamId",
-                table: "PlayersGames",
+                name: "IX_PitcherChangesGames_WinerTeamId",
+                table: "PitcherChangesGames",
                 column: "WinerTeamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PitcherChangesGames_PitcherInPlayerId_PitcherInPositionId",
+                table: "PitcherChangesGames",
+                columns: new[] { "PitcherInPlayerId", "PitcherInPositionId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PitcherChangesGames_PitcherOutPlayerId_PitcherOutPositionId",
+                table: "PitcherChangesGames",
+                columns: new[] { "PitcherOutPlayerId", "PitcherOutPositionId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PitcherChangesGames_SerieId_SerieInitDate_SerieEndDate",
+                table: "PitcherChangesGames",
+                columns: new[] { "SerieId", "SerieInitDate", "SerieEndDate" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Players_Current_TeamId",
+                table: "Players",
+                column: "Current_TeamId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PlayersGames_PositionPlayerPlayerId_PositionPlayerPositionId",
@@ -435,9 +491,9 @@ namespace SB_backend.Migrations
                 columns: new[] { "PositionPlayerPlayerId", "PositionPlayerPositionId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PlayersGames_SerieId_SerieInitDate_SerieEndDate",
+                name: "IX_PlayersGames_gameGameId_gameWinerTeamId_gameLoserTeamId_gameGameDate_gameGameTime_gameSerieId_gameSerieInitDate_gameSerieEnd~",
                 table: "PlayersGames",
-                columns: new[] { "SerieId", "SerieInitDate", "SerieEndDate" });
+                columns: new[] { "gameGameId", "gameWinerTeamId", "gameLoserTeamId", "gameGameDate", "gameGameTime", "gameSerieId", "gameSerieInitDate", "gameSerieEndDate" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_PositionPlayers_PositionId",
@@ -501,7 +557,7 @@ namespace SB_backend.Migrations
                 name: "Dates");
 
             migrationBuilder.DropTable(
-                name: "Games");
+                name: "PitcherChangesGames");
 
             migrationBuilder.DropTable(
                 name: "PlayersGames");
@@ -519,10 +575,13 @@ namespace SB_backend.Migrations
                 name: "TeamsSeriesPlayers");
 
             migrationBuilder.DropTable(
-                name: "PositionPlayers");
+                name: "Games");
 
             migrationBuilder.DropTable(
                 name: "Directors");
+
+            migrationBuilder.DropTable(
+                name: "PositionPlayers");
 
             migrationBuilder.DropTable(
                 name: "Series");
