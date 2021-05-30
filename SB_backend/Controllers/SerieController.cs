@@ -24,10 +24,10 @@ namespace SB_backend.Controllers
         {
             return Ok(_serRep.GetSeries());
         }
-        [HttpGet("{Id}")]
-        public IActionResult GetSerie(Guid Id)
+        [HttpGet("{Id}/{initDate}/{endDate}")]
+        public IActionResult GetSerie(Guid Id, DateTime initDate, DateTime endDate)
         {
-            var serie = _serRep.GetSerie(Id);
+            var serie = _serRep.GetSerie(Id,initDate,endDate);
             if(serie != null)
             {
                 return Ok(serie);
@@ -40,10 +40,10 @@ namespace SB_backend.Controllers
             serie = _serRep.AddSerie(serie);
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + serie.Id, serie);
         }
-        [HttpPatch("{Id}")]
-        public IActionResult UpdateSerie(Guid Id,Serie serie)
+        [HttpPatch("{Id}/{initDate}/{endDate}")]
+        public IActionResult UpdateSerie(Guid Id,DateTime initDate,DateTime endDate,Serie serie)
         {
-            var current_serie = _serRep.GetSerie(Id);
+            var current_serie = _serRep.GetSerie(Id,initDate,endDate);
 
             if (current_serie != null)
             {

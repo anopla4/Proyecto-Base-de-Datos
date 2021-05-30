@@ -13,7 +13,7 @@ namespace SB_backend.Interfaces
 
         Director AddDirector(Director director);
 
-        bool RemoveDirector(Director director);
+        bool RemoveDirector(Guid Id);
 
         Director UpdateDirector(Director director);
     }

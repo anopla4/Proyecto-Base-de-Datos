@@ -9,7 +9,7 @@ namespace SB_backend.Interfaces
     public interface ISerieRepository
     {
         List<Serie> GetSeries();
-        Serie GetSerie(Guid id);
+        Serie GetSerie(Guid id, DateTime initDate, DateTime endDate);
 
         Serie AddSerie(Serie serie);
 

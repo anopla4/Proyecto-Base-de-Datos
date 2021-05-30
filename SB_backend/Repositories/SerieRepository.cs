@@ -24,9 +24,10 @@ namespace SB_backend.Repositories
             return serie;
         }
 
-        public Serie GetSerie(Guid id)
+        public Serie GetSerie(Guid id, DateTime initDate, DateTime endDate)
         {
-            return _context.Series.Include(c => c.CaracterSerie).SingleOrDefault(c => c.Id == id);
+            //return _context.Series.Include(c => c.CaracterSerie).SingleOrDefault(c => c.Id == id);
+            return _context.Series.Find(id, initDate, endDate);
         }
 
         public List<Serie> GetSeries()
@@ -49,7 +50,7 @@ namespace SB_backend.Repositories
 
         public Serie UpdateSerie(Serie serie)
         {
-            var curr_serie = _context.Series.Find(serie.Id);
+            var curr_serie = _context.Series.Find(serie.Id, serie.InitDate, serie.EndDate);
 
             if (curr_serie != null)
             {
@@ -57,6 +58,8 @@ namespace SB_backend.Repositories
                 curr_serie.CaracterId = serie.CaracterId;
                 curr_serie.WinerId = serie.WinerId;
                 curr_serie.LoserId = serie.LoserId;
+                curr_serie.NumberOfGames = serie.NumberOfGames;
+
                 _context.Series.Update(curr_serie);
                 _context.SaveChanges();
                 return curr_serie;

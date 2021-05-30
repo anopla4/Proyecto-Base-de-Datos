@@ -56,9 +56,9 @@ namespace SB_backend.Controllers
         }
 
         [HttpDelete("{Id}")]
-        public IActionResult RemoveDirector(Guid Id, Director director)
+        public IActionResult RemoveDirector(Guid Id)
         {
-            var flag = _dirRep.RemoveDirector(director);
+            var flag = _dirRep.RemoveDirector(Id);
 
             if (flag)
             {

@@ -33,9 +33,9 @@ namespace SB_backend.Repositories
             return _context.Directors.ToList();
         }
 
-        public bool RemoveDirector(Director director)
+        public bool RemoveDirector(Guid Id)
         {
-            var current_director = _context.Directors.Find(director.Id);
+            var current_director = _context.Directors.Find(Id);
             if(current_director != null)
             {
                 _context.Directors.Remove(current_director);
