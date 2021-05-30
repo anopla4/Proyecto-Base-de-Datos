@@ -19,6 +19,8 @@ namespace SB_backend.Repositories
         public Player AddPlayer(Player player)
         {
             player.Id = Guid.NewGuid();
+            if (!_playerContext.Teams.Any(c => c.Id == player.Current_TeamId))
+                return null;
             player.Current_Team = _playerContext.Teams.Find(player.Current_TeamId);
             _playerContext.Players.Add(player);
             _playerContext.SaveChanges();

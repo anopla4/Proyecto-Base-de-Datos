@@ -21,5 +21,6 @@ namespace SB_backend.Models
         public int Age { get; set; }
         [Required]
         public int Year_Experience { get; set; }
+        public int Average { get; set; }
     }
 }

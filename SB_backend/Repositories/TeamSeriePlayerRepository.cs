@@ -33,12 +33,21 @@ namespace SB_backend.Repositories
 
         public List<Player> GetPlayersInSerie(Guid SerieId)
         {
-            bool flag = _context.TeamsSeriesDirectors.Any(c => c.TeamSerieId == SerieId);
+            bool flag = _context.TeamsSeriesPlayers.Any(c => c.SerieId == SerieId);
             if (!flag)
                 return null;
-            return null;
+
+            return _context.TeamsSeriesPlayers.Include(c => c.Player).Where(c => c.SerieId == SerieId).Select(c => c.Player).ToList();
         }
 
+        public List<Team> GetPlayerTeams(Guid PlayerId)
+        {
+            var flagPlayer = _context.Players.Any(c => c.Id == PlayerId);
+            if (!flagPlayer)
+                return null;
+            List<Team> teams = _context.TeamsSeriesPlayers.Include(c => c.TeamSerie).Where(c => c.PlayerId == PlayerId).Select(c => c.TeamSerie).ToList();
+            return teams;
+        }
         public List<Player> GetPlayersOfTeamInSerie(Guid TeamId, Guid SerieId)
         {
             bool teamSP = _context.TeamsSeriesPlayers.Any(c => c.TeamSerieId == TeamId && c.SerieId == SerieId);

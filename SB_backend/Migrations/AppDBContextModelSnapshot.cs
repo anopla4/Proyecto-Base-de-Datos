@@ -152,6 +152,8 @@ namespace SB_backend.Migrations
 
                     b.Property<int>("Age");
 
+                    b.Property<int>("Average");
+
                     b.Property<Guid>("Current_TeamId");
 
                     b.Property<string>("Name")
@@ -252,16 +254,16 @@ namespace SB_backend.Migrations
                     b.ToTable("Positions");
 
                     b.HasData(
-                        new { Id = new Guid("a3ebf1ed-141f-4e33-a745-71535b046afb"), PositionName = "C" },
-                        new { Id = new Guid("0b2f472a-f4b5-45fe-8236-82c94e6ac945"), PositionName = "1B" },
-                        new { Id = new Guid("6128334e-197f-41c6-b92d-27dfde1ba609"), PositionName = "2B" },
-                        new { Id = new Guid("2a74e1fd-5300-4429-b514-2a2ff38fe3ee"), PositionName = "3B" },
-                        new { Id = new Guid("c7971b9d-527b-4219-a62c-cb22b7ad5d8b"), PositionName = "SS" },
-                        new { Id = new Guid("5c4d8a08-6f75-4ff9-88a8-b9a1ab3a56c1"), PositionName = "P" },
-                        new { Id = new Guid("e45e52c9-0a2e-4290-bfeb-47cf15af922a"), PositionName = "LF" },
-                        new { Id = new Guid("958d2714-184f-4b56-ad55-05f9fd2da70b"), PositionName = "RF" },
-                        new { Id = new Guid("774493f8-f668-44fc-a348-73b8781ebb9c"), PositionName = "CF" },
-                        new { Id = new Guid("01644839-b2f5-4264-8387-0ff8c84a4b17"), PositionName = "BD" }
+                        new { Id = new Guid("4fc0929e-f2c5-4602-a218-140f36f104e0"), PositionName = "C" },
+                        new { Id = new Guid("f224eeda-4975-4966-ad53-ad58f2bd43aa"), PositionName = "1B" },
+                        new { Id = new Guid("bcb3e963-44e8-4ca0-9034-9572fd7e5b44"), PositionName = "2B" },
+                        new { Id = new Guid("b7fcd5f9-fdcb-45f8-823f-29e7f794e42e"), PositionName = "3B" },
+                        new { Id = new Guid("7b8861f1-c056-49d9-9b06-c6ec2951e25a"), PositionName = "SS" },
+                        new { Id = new Guid("4bafc2a7-831e-46d6-8e7f-9f5c51036d02"), PositionName = "P" },
+                        new { Id = new Guid("f96693d7-e1f0-4df8-87d9-bbf8950d6dd8"), PositionName = "LF" },
+                        new { Id = new Guid("8225f8a0-7b5b-41f9-994c-c26ad3e861d6"), PositionName = "RF" },
+                        new { Id = new Guid("abbece16-557a-4d1a-b57e-8918d2b1330d"), PositionName = "CF" },
+                        new { Id = new Guid("6c4edec6-cf0c-4764-b415-d616ff742e45"), PositionName = "BD" }
                     );
                 });
 
@@ -297,14 +299,16 @@ namespace SB_backend.Migrations
 
                     b.Property<Guid>("CaracterId");
 
-                    b.Property<Guid>("LoserId");
+                    b.Property<Guid?>("LoserId");
 
                     b.Property<string>("Name")
                         .IsRequired();
 
                     b.Property<int>("NumberOfGames");
 
-                    b.Property<Guid>("WinerId");
+                    b.Property<int>("NumberOfTeams");
+
+                    b.Property<Guid?>("WinerId");
 
                     b.HasKey("Id", "InitDate", "EndDate");
 

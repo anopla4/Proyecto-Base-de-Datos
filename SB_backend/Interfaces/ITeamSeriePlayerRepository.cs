@@ -12,6 +12,7 @@ namespace SB_backend.Interfaces
         List<Player> GetPlayersOfTeamInSerie(Guid TeamId, Guid SerieId);
         List<Player> GetPlayersInSerie(Guid SerieId);
         List<Player> GetTeamPlayers(Guid TeamId);
+        List<Team> GetPlayerTeams(Guid PlayerId);
         TeamSeriePlayer GetTeamSeriePlayer(Guid SerieId, Guid PlayerId);
         TeamSeriePlayer AddTeamSeriePlayer(TeamSeriePlayer teamSeriePlayer);
         TeamSeriePlayer UpdateTeamSeriePlayer(TeamSeriePlayer teamSeriePlayer);

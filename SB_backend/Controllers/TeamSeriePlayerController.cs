@@ -31,6 +31,14 @@ namespace SB_backend.Controllers
                 return Ok(tsp);
             return NotFound($"Not Player {PlayerId} in Serie {SerieId}");
         }
+        [HttpGet("{PlayerId}")]
+        public IActionResult GetPlayerTeams(Guid PlayerId)
+        {
+            var teams = _tspRep.GetPlayerTeams(PlayerId);
+            if (teams == null)
+                return NotFound($"Not player with Id = {PlayerId}");
+            return Ok(teams);
+        }
         [HttpGet("Players/{SerieId}/{TeamId}")]
         public IActionResult GetPlayersOfTeamInSerie(Guid SerieId,Guid TeamId)
         {
@@ -38,6 +46,14 @@ namespace SB_backend.Controllers
             if (players != null)
                 return Ok(players);
             return NotFound("Not team {TeamId} in serie {SerieId}");
+        }
+        [HttpGet("{SerieId}")]
+        public IActionResult GetPlayersInSerie(Guid SerieId)
+        {
+            var players = _tspRep.GetPlayersInSerie(SerieId);
+            if (players == null)
+                return NotFound($"Not Players in Serie with ID = {SerieId}");
+            return Ok(players);
         }
         [HttpGet("{TeamId}")]
         public IActionResult GetTeamPlayers(Guid TeamId)

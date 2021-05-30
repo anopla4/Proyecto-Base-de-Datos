@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SB_backend.Migrations
 {
-    public partial class dfafa : Migration
+    public partial class sdf : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -77,7 +77,8 @@ namespace SB_backend.Migrations
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Current_TeamId = table.Column<Guid>(nullable: false),
                     Age = table.Column<int>(nullable: false),
-                    Year_Experience = table.Column<int>(nullable: false)
+                    Year_Experience = table.Column<int>(nullable: false),
+                    Average = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -99,9 +100,10 @@ namespace SB_backend.Migrations
                     EndDate = table.Column<DateTime>(type: "date", nullable: false),
                     Name = table.Column<string>(nullable: false),
                     CaracterId = table.Column<Guid>(nullable: false),
-                    WinerId = table.Column<Guid>(nullable: false),
-                    LoserId = table.Column<Guid>(nullable: false),
-                    NumberOfGames = table.Column<int>(nullable: false)
+                    WinerId = table.Column<Guid>(nullable: true),
+                    LoserId = table.Column<Guid>(nullable: true),
+                    NumberOfGames = table.Column<int>(nullable: false),
+                    NumberOfTeams = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -382,6 +384,46 @@ namespace SB_backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PlayersChangesGames",
+                columns: table => new
+                {
+                    GameGameId = table.Column<Guid>(nullable: false),
+                    GameWinerTeamId = table.Column<Guid>(nullable: false),
+                    GameLoserTeamId = table.Column<Guid>(nullable: false),
+                    GameGameDate = table.Column<DateTime>(type: "date", nullable: false),
+                    GameGameTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    GameSerieId = table.Column<Guid>(nullable: false),
+                    GameSerieInitDate = table.Column<DateTime>(nullable: false),
+                    GameSerieEndDate = table.Column<DateTime>(nullable: false),
+                    PlayerInPlayerId = table.Column<Guid>(nullable: false),
+                    PlayerInPositionId = table.Column<Guid>(nullable: false),
+                    PlayerOutPlayerId = table.Column<Guid>(nullable: false),
+                    PlayerOutPositionId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlayersChangesGames", x => new { x.GameGameId, x.PlayerInPlayerId, x.PlayerInPositionId });
+                    table.ForeignKey(
+                        name: "FK_PlayersChangesGames_PositionPlayers_PlayerInPlayerId_PlayerInPositionId",
+                        columns: x => new { x.PlayerInPlayerId, x.PlayerInPositionId },
+                        principalTable: "PositionPlayers",
+                        principalColumns: new[] { "PlayerId", "PositionId" },
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PlayersChangesGames_PositionPlayers_PlayerOutPlayerId_PlayerOutPositionId",
+                        columns: x => new { x.PlayerOutPlayerId, x.PlayerOutPositionId },
+                        principalTable: "PositionPlayers",
+                        principalColumns: new[] { "PlayerId", "PositionId" },
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PlayersChangesGames_Games_GameGameId_GameWinerTeamId_GameLoserTeamId_GameGameDate_GameGameTime_GameSerieId_GameSerieInitDate~",
+                        columns: x => new { x.GameGameId, x.GameWinerTeamId, x.GameLoserTeamId, x.GameGameDate, x.GameGameTime, x.GameSerieId, x.GameSerieInitDate, x.GameSerieEndDate },
+                        principalTable: "Games",
+                        principalColumns: new[] { "GameId", "WinerTeamId", "LoserTeamId", "GameDate", "GameTime", "SerieId", "SerieInitDate", "SerieEndDate" },
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PlayersGames",
                 columns: table => new
                 {
@@ -418,16 +460,16 @@ namespace SB_backend.Migrations
                 columns: new[] { "Id", "PositionName" },
                 values: new object[,]
                 {
-                    { new Guid("6cfa519e-dc6a-42c5-96a0-8b48aa58b84e"), "C" },
-                    { new Guid("3b05a7c8-f0b5-4006-a447-ec080eeee51d"), "1B" },
-                    { new Guid("27ff8b46-e00b-47a4-bd1e-989c7896fb9e"), "2B" },
-                    { new Guid("1c1ed8c3-d023-4bca-9ae4-b5d3efda30d9"), "3B" },
-                    { new Guid("bdbcc356-36e3-4b57-9a5f-405cec9c475a"), "SS" },
-                    { new Guid("9d3c268e-d2c6-41a3-839d-bfc0e7ebb6b7"), "P" },
-                    { new Guid("fddc8276-76ad-4dd2-89cc-dfe20a2dcdf7"), "LF" },
-                    { new Guid("f6c693ca-9af3-4464-9549-61452dc5cb66"), "RF" },
-                    { new Guid("597fe1a4-236f-4c8a-b1d2-3f6d0bb21be9"), "CF" },
-                    { new Guid("7209556c-1887-465a-a7e4-5ec6d8eddf50"), "BD" }
+                    { new Guid("4fc0929e-f2c5-4602-a218-140f36f104e0"), "C" },
+                    { new Guid("f224eeda-4975-4966-ad53-ad58f2bd43aa"), "1B" },
+                    { new Guid("bcb3e963-44e8-4ca0-9034-9572fd7e5b44"), "2B" },
+                    { new Guid("b7fcd5f9-fdcb-45f8-823f-29e7f794e42e"), "3B" },
+                    { new Guid("7b8861f1-c056-49d9-9b06-c6ec2951e25a"), "SS" },
+                    { new Guid("4bafc2a7-831e-46d6-8e7f-9f5c51036d02"), "P" },
+                    { new Guid("f96693d7-e1f0-4df8-87d9-bbf8950d6dd8"), "LF" },
+                    { new Guid("8225f8a0-7b5b-41f9-994c-c26ad3e861d6"), "RF" },
+                    { new Guid("abbece16-557a-4d1a-b57e-8918d2b1330d"), "CF" },
+                    { new Guid("6c4edec6-cf0c-4764-b415-d616ff742e45"), "BD" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -484,6 +526,21 @@ namespace SB_backend.Migrations
                 name: "IX_Players_Current_TeamId",
                 table: "Players",
                 column: "Current_TeamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayersChangesGames_PlayerInPlayerId_PlayerInPositionId",
+                table: "PlayersChangesGames",
+                columns: new[] { "PlayerInPlayerId", "PlayerInPositionId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayersChangesGames_PlayerOutPlayerId_PlayerOutPositionId",
+                table: "PlayersChangesGames",
+                columns: new[] { "PlayerOutPlayerId", "PlayerOutPositionId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayersChangesGames_GameGameId_GameWinerTeamId_GameLoserTeamId_GameGameDate_GameGameTime_GameSerieId_GameSerieInitDate_GameS~",
+                table: "PlayersChangesGames",
+                columns: new[] { "GameGameId", "GameWinerTeamId", "GameLoserTeamId", "GameGameDate", "GameGameTime", "GameSerieId", "GameSerieInitDate", "GameSerieEndDate" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_PlayersGames_PositionPlayerPlayerId_PositionPlayerPositionId",
@@ -558,6 +615,9 @@ namespace SB_backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "PitcherChangesGames");
+
+            migrationBuilder.DropTable(
+                name: "PlayersChangesGames");
 
             migrationBuilder.DropTable(
                 name: "PlayersGames");

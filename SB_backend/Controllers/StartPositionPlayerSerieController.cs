@@ -40,7 +40,7 @@ namespace SB_backend.Controllers
                 return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + startPPS.SerieId + startPPS.PositionId, startPPS);
             return BadRequest($"Not added StartPositionPlayer");
         }
-        [HttpGet("{SerieId},{PositionId}")]
+        [HttpGet("{SerieId}/{PositionId}")]
         public IActionResult GetStartPlayerOfPositionInSerie(Guid SerieId,Guid PositionId)
         {
             var player = _spRep.GetStartPositionPlayerSerie(SerieId, PositionId);
@@ -48,7 +48,7 @@ namespace SB_backend.Controllers
                 return Ok(player);
             return NotFound($"Not Player in AllStartTeam Of Serie {SerieId} in position {PositionId}");
         }
-        [HttpPatch("{SerieId}{PositionId}")]
+        [HttpPatch("{SerieId}/{PositionId}")]
         public IActionResult UpdateStartTeamSerie(Guid SerieId,Guid PositionId,StartPositionPlayerSerie startPositionPlayerSerie)
         {
             var player = _spRep.UpdateStartPositionPlayerSerie(startPositionPlayerSerie);
@@ -57,7 +57,7 @@ namespace SB_backend.Controllers
             return NotFound($"Not Player in AllStartTeam Of Serie {SerieId} in position {PositionId}");
         }
 
-        [HttpDelete("{SerieId}{PositionId}")]
+        [HttpDelete("{SerieId}/{PositionId}")]
         public IActionResult RemoveStartPositionPlayerSerie(Guid SerieId, Guid PositionId, StartPositionPlayerSerie startPositionPlayerSerie)
         {
             var flag = _spRep.RemoveStartPositionPlayer(startPositionPlayerSerie);
