@@ -10,8 +10,8 @@ using SB_backend.Models;
 namespace SB_backend.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20210530085443_teams in serie nullable")]
-    partial class teamsinserienullable
+    [Migration("20210531140127_2")]
+    partial class _2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,17 +32,6 @@ namespace SB_backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Caracters");
-                });
-
-            modelBuilder.Entity("SB_backend.Models.Date", b =>
-                {
-                    b.Property<string>("Day");
-
-                    b.Property<string>("Hour");
-
-                    b.HasKey("Day", "Hour");
-
-                    b.ToTable("Dates");
                 });
 
             modelBuilder.Entity("SB_backend.Models.Director", b =>
@@ -83,68 +72,23 @@ namespace SB_backend.Migrations
 
                     b.Property<int>("InFavorCarrers");
 
-                    b.Property<Guid>("PitcherLoserPlayerId");
+                    b.Property<Guid>("PitcherLoserId");
 
-                    b.Property<Guid>("PitcherLoserPositionId");
-
-                    b.Property<Guid>("PitcherWinerPlayerId");
-
-                    b.Property<Guid>("PitcherWinerPositionId");
+                    b.Property<Guid>("PitcherWinerId");
 
                     b.HasKey("GameId", "WinerTeamId", "LoserTeamId", "GameDate", "GameTime", "SerieId", "SerieInitDate", "SerieEndDate");
 
                     b.HasIndex("LoserTeamId");
 
+                    b.HasIndex("PitcherLoserId");
+
+                    b.HasIndex("PitcherWinerId");
+
                     b.HasIndex("WinerTeamId");
-
-                    b.HasIndex("PitcherLoserPlayerId", "PitcherLoserPositionId");
-
-                    b.HasIndex("PitcherWinerPlayerId", "PitcherWinerPositionId");
 
                     b.HasIndex("SerieId", "SerieInitDate", "SerieEndDate");
 
                     b.ToTable("Games");
-                });
-
-            modelBuilder.Entity("SB_backend.Models.PitcherChangeGame", b =>
-                {
-                    b.Property<TimeSpan>("GameTime")
-                        .HasColumnType("time");
-
-                    b.Property<DateTime>("GameDate")
-                        .HasColumnType("date");
-
-                    b.Property<Guid>("SerieId");
-
-                    b.Property<DateTime>("SerieInitDate");
-
-                    b.Property<DateTime>("SerieEndDate");
-
-                    b.Property<Guid>("PitcherInPlayerId");
-
-                    b.Property<Guid>("PitcherInPositionId");
-
-                    b.Property<Guid>("LoserTeamId");
-
-                    b.Property<Guid>("PitcherOutPlayerId");
-
-                    b.Property<Guid>("PitcherOutPositionId");
-
-                    b.Property<Guid>("WinerTeamId");
-
-                    b.HasKey("GameTime", "GameDate", "SerieId", "SerieInitDate", "SerieEndDate", "PitcherInPlayerId", "PitcherInPositionId");
-
-                    b.HasIndex("LoserTeamId");
-
-                    b.HasIndex("WinerTeamId");
-
-                    b.HasIndex("PitcherInPlayerId", "PitcherInPositionId");
-
-                    b.HasIndex("PitcherOutPlayerId", "PitcherOutPositionId");
-
-                    b.HasIndex("SerieId", "SerieInitDate", "SerieEndDate");
-
-                    b.ToTable("PitcherChangesGames");
                 });
 
             modelBuilder.Entity("SB_backend.Models.Player", b =>
@@ -154,7 +98,17 @@ namespace SB_backend.Migrations
 
                     b.Property<int>("Age");
 
-                    b.Property<Guid>("Current_TeamId");
+                    b.Property<int?>("Average");
+
+                    b.Property<Guid?>("Current_TeamId");
+
+                    b.Property<int>("DeffAverage");
+
+                    b.Property<int?>("ERA");
+
+                    b.Property<int?>("Hand");
+
+                    b.Property<string>("ImgPath");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -173,9 +127,9 @@ namespace SB_backend.Migrations
                 {
                     b.Property<Guid>("GameGameId");
 
-                    b.Property<Guid>("PlayerInPlayerId");
+                    b.Property<Guid>("PlayerInId");
 
-                    b.Property<Guid>("PlayerInPositionId");
+                    b.Property<Guid>("PositionId");
 
                     b.Property<DateTime>("GameGameDate")
                         .HasColumnType("date");
@@ -193,15 +147,15 @@ namespace SB_backend.Migrations
 
                     b.Property<Guid>("GameWinerTeamId");
 
-                    b.Property<Guid>("PlayerOutPlayerId");
+                    b.Property<Guid>("PlayerOutId");
 
-                    b.Property<Guid>("PlayerOutPositionId");
+                    b.HasKey("GameGameId", "PlayerInId", "PositionId");
 
-                    b.HasKey("GameGameId", "PlayerInPlayerId", "PlayerInPositionId");
+                    b.HasIndex("PlayerInId");
 
-                    b.HasIndex("PlayerInPlayerId", "PlayerInPositionId");
+                    b.HasIndex("PlayerOutId");
 
-                    b.HasIndex("PlayerOutPlayerId", "PlayerOutPositionId");
+                    b.HasIndex("PositionId");
 
                     b.HasIndex("GameGameId", "GameWinerTeamId", "GameLoserTeamId", "GameGameDate", "GameGameTime", "GameSerieId", "GameSerieInitDate", "GameSerieEndDate");
 
@@ -212,9 +166,9 @@ namespace SB_backend.Migrations
                 {
                     b.Property<Guid>("gameGameId");
 
-                    b.Property<Guid>("PositionPlayerPlayerId");
+                    b.Property<Guid>("PlayerId");
 
-                    b.Property<Guid>("PositionPlayerPositionId");
+                    b.Property<Guid>("PositionId");
 
                     b.Property<DateTime>("gameGameDate")
                         .HasColumnType("date");
@@ -232,9 +186,11 @@ namespace SB_backend.Migrations
 
                     b.Property<Guid>("gameWinerTeamId");
 
-                    b.HasKey("gameGameId", "PositionPlayerPlayerId", "PositionPlayerPositionId");
+                    b.HasKey("gameGameId", "PlayerId", "PositionId");
 
-                    b.HasIndex("PositionPlayerPlayerId", "PositionPlayerPositionId");
+                    b.HasIndex("PlayerId");
+
+                    b.HasIndex("PositionId");
 
                     b.HasIndex("gameGameId", "gameWinerTeamId", "gameLoserTeamId", "gameGameDate", "gameGameTime", "gameSerieId", "gameSerieInitDate", "gameSerieEndDate");
 
@@ -246,45 +202,29 @@ namespace SB_backend.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<Guid?>("PlayerId");
+
                     b.Property<string>("PositionName")
                         .IsRequired();
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PlayerId");
+
                     b.ToTable("Positions");
 
                     b.HasData(
-                        new { Id = new Guid("758c0f5b-d4b6-48bf-bb2b-8a9f548229de"), PositionName = "C" },
-                        new { Id = new Guid("861f4663-71ea-4f58-b9b9-6031887e474c"), PositionName = "1B" },
-                        new { Id = new Guid("a693aea7-fc89-47a9-97ef-5f7c4c730426"), PositionName = "2B" },
-                        new { Id = new Guid("2dc6eb15-df6d-4e08-b007-9c34a162c0c3"), PositionName = "3B" },
-                        new { Id = new Guid("8ef14405-1dc9-4ad1-8ee6-2f0df6b6f9e0"), PositionName = "SS" },
-                        new { Id = new Guid("f78a20b5-726a-4380-868d-839e4c222f50"), PositionName = "P" },
-                        new { Id = new Guid("887fe64c-692c-486c-887e-81e10d40d4e8"), PositionName = "LF" },
-                        new { Id = new Guid("3370449e-4832-4f3b-b9b2-312e4ea1375b"), PositionName = "RF" },
-                        new { Id = new Guid("cfa29702-3d36-480d-855c-a4b2e7fc05c6"), PositionName = "CF" },
-                        new { Id = new Guid("fc028a3a-9606-4dc7-bc19-2bd9f07145fd"), PositionName = "BD" }
+                        new { Id = new Guid("6a78cfdf-2ca2-40a9-9e79-daaa6003d7cc"), PositionName = "C" },
+                        new { Id = new Guid("a90ebaaf-2e81-4b3a-87cd-fba3975e3d97"), PositionName = "1B" },
+                        new { Id = new Guid("afda331e-ccfa-4e1e-af39-7482ee888da6"), PositionName = "2B" },
+                        new { Id = new Guid("049e7a51-7bef-43a0-8be4-0a0f6bb27bc4"), PositionName = "3B" },
+                        new { Id = new Guid("780cabd8-77b1-404a-b506-e31814d28354"), PositionName = "SS" },
+                        new { Id = new Guid("9f1b1b92-f947-4a19-a2d8-b18531ac596c"), PositionName = "P" },
+                        new { Id = new Guid("e1230aed-fb46-4c93-bb87-de2bd6178a5b"), PositionName = "LF" },
+                        new { Id = new Guid("0e7afdf7-2ccb-4313-9466-ba0edd061edd"), PositionName = "RF" },
+                        new { Id = new Guid("6700c7c7-f06b-40ef-964a-53003d95d606"), PositionName = "CF" },
+                        new { Id = new Guid("f92a2385-6d3f-4c81-b766-c5d703896c25"), PositionName = "BD" }
                     );
-                });
-
-            modelBuilder.Entity("SB_backend.Models.PositionPlayer", b =>
-                {
-                    b.Property<Guid>("PlayerId");
-
-                    b.Property<Guid>("PositionId");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
-                    b.Property<int>("Position_Average");
-
-                    b.HasKey("PlayerId", "PositionId");
-
-                    b.HasIndex("PositionId");
-
-                    b.ToTable("PositionPlayers");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("PositionPlayer");
                 });
 
             modelBuilder.Entity("SB_backend.Models.Serie", b =>
@@ -321,25 +261,25 @@ namespace SB_backend.Migrations
                     b.ToTable("Series");
                 });
 
-            modelBuilder.Entity("SB_backend.Models.StartPositionPlayerSerie", b =>
+            modelBuilder.Entity("SB_backend.Models.StarPositionPlayerSerie", b =>
                 {
-                    b.Property<Guid>("PositionId");
-
                     b.Property<Guid>("SerieId");
 
                     b.Property<DateTime>("SerieInitDate");
 
                     b.Property<DateTime>("SerieEndDate");
 
+                    b.Property<Guid>("PositionId");
+
                     b.Property<Guid>("PlayerId");
 
-                    b.HasKey("PositionId", "SerieId", "SerieInitDate", "SerieEndDate");
+                    b.HasKey("SerieId", "SerieInitDate", "SerieEndDate", "PositionId");
 
-                    b.HasIndex("PlayerId", "PositionId");
+                    b.HasIndex("PlayerId");
 
-                    b.HasIndex("SerieId", "SerieInitDate", "SerieEndDate");
+                    b.HasIndex("PositionId");
 
-                    b.ToTable("StartPositionPlayersSeries");
+                    b.ToTable("StarPositionPlayersSeries");
                 });
 
             modelBuilder.Entity("SB_backend.Models.Team", b =>
@@ -355,6 +295,8 @@ namespace SB_backend.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired();
+
+                    b.Property<string>("img");
 
                     b.HasKey("Id");
 
@@ -426,19 +368,6 @@ namespace SB_backend.Migrations
                     b.ToTable("TeamsSeriesPlayers");
                 });
 
-            modelBuilder.Entity("SB_backend.Models.Pitcher", b =>
-                {
-                    b.HasBaseType("SB_backend.Models.PositionPlayer");
-
-                    b.Property<double>("ERA");
-
-                    b.Property<string>("Hand");
-
-                    b.ToTable("Pitcher");
-
-                    b.HasDiscriminator().HasValue("Pitcher");
-                });
-
             modelBuilder.Entity("SB_backend.Models.Game", b =>
                 {
                     b.HasOne("SB_backend.Models.Team", "LoserTeam")
@@ -446,47 +375,19 @@ namespace SB_backend.Migrations
                         .HasForeignKey("LoserTeamId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("SB_backend.Models.Team", "WinerTeam")
+                    b.HasOne("SB_backend.Models.Player", "PitcherLoser")
                         .WithMany()
-                        .HasForeignKey("WinerTeamId")
+                        .HasForeignKey("PitcherLoserId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("SB_backend.Models.Pitcher", "PitcherLoser")
+                    b.HasOne("SB_backend.Models.Player", "PitcherWiner")
                         .WithMany()
-                        .HasForeignKey("PitcherLoserPlayerId", "PitcherLoserPositionId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("SB_backend.Models.Pitcher", "PitcherWiner")
-                        .WithMany()
-                        .HasForeignKey("PitcherWinerPlayerId", "PitcherWinerPositionId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("SB_backend.Models.Serie", "Serie")
-                        .WithMany()
-                        .HasForeignKey("SerieId", "SerieInitDate", "SerieEndDate")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("SB_backend.Models.PitcherChangeGame", b =>
-                {
-                    b.HasOne("SB_backend.Models.Team", "LoserTeam")
-                        .WithMany()
-                        .HasForeignKey("LoserTeamId")
+                        .HasForeignKey("PitcherWinerId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SB_backend.Models.Team", "WinerTeam")
                         .WithMany()
                         .HasForeignKey("WinerTeamId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("SB_backend.Models.Pitcher", "PitcherIn")
-                        .WithMany()
-                        .HasForeignKey("PitcherInPlayerId", "PitcherInPositionId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("SB_backend.Models.Pitcher", "PitcherOut")
-                        .WithMany()
-                        .HasForeignKey("PitcherOutPlayerId", "PitcherOutPositionId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SB_backend.Models.Serie", "Serie")
@@ -500,19 +401,24 @@ namespace SB_backend.Migrations
                     b.HasOne("SB_backend.Models.Team", "Current_Team")
                         .WithMany()
                         .HasForeignKey("Current_TeamId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("SB_backend.Models.PlayerChangeGame", b =>
                 {
-                    b.HasOne("SB_backend.Models.PositionPlayer", "PlayerIn")
+                    b.HasOne("SB_backend.Models.Player", "PlayerIn")
                         .WithMany()
-                        .HasForeignKey("PlayerInPlayerId", "PlayerInPositionId")
+                        .HasForeignKey("PlayerInId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("SB_backend.Models.PositionPlayer", "PlayerOut")
+                    b.HasOne("SB_backend.Models.Player", "PlayerOut")
                         .WithMany()
-                        .HasForeignKey("PlayerOutPlayerId", "PlayerOutPositionId")
+                        .HasForeignKey("PlayerOutId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SB_backend.Models.Position", "Position")
+                        .WithMany()
+                        .HasForeignKey("PositionId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SB_backend.Models.Game", "Game")
@@ -523,9 +429,14 @@ namespace SB_backend.Migrations
 
             modelBuilder.Entity("SB_backend.Models.PlayerGame", b =>
                 {
-                    b.HasOne("SB_backend.Models.PositionPlayer", "PositionPlayer")
+                    b.HasOne("SB_backend.Models.Player", "Player")
                         .WithMany()
-                        .HasForeignKey("PositionPlayerPlayerId", "PositionPlayerPositionId")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SB_backend.Models.Position", "Position")
+                        .WithMany()
+                        .HasForeignKey("PositionId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SB_backend.Models.Game", "game")
@@ -534,17 +445,12 @@ namespace SB_backend.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("SB_backend.Models.PositionPlayer", b =>
+            modelBuilder.Entity("SB_backend.Models.Position", b =>
                 {
-                    b.HasOne("SB_backend.Models.Player", "Player")
-                        .WithMany()
+                    b.HasOne("SB_backend.Models.Player")
+                        .WithMany("Positions")
                         .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("SB_backend.Models.Position", "Position")
-                        .WithMany()
-                        .HasForeignKey("PositionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("SB_backend.Models.Serie", b =>
@@ -565,11 +471,16 @@ namespace SB_backend.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("SB_backend.Models.StartPositionPlayerSerie", b =>
+            modelBuilder.Entity("SB_backend.Models.StarPositionPlayerSerie", b =>
                 {
-                    b.HasOne("SB_backend.Models.PositionPlayer", "PositionPlayer")
+                    b.HasOne("SB_backend.Models.Player", "Player")
                         .WithMany()
-                        .HasForeignKey("PlayerId", "PositionId")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SB_backend.Models.Position", "Position")
+                        .WithMany()
+                        .HasForeignKey("PositionId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SB_backend.Models.Serie", "Serie")
@@ -614,7 +525,7 @@ namespace SB_backend.Migrations
                     b.HasOne("SB_backend.Models.Player", "Player")
                         .WithMany()
                         .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SB_backend.Models.Team", "TeamSerie")
                         .WithMany()
@@ -624,7 +535,7 @@ namespace SB_backend.Migrations
                     b.HasOne("SB_backend.Models.Serie", "Serie")
                         .WithMany()
                         .HasForeignKey("SerieId", "SerieInitDate", "SerieEndDate")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }
