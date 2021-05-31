@@ -29,18 +29,20 @@ namespace SB_backend.Models
         public DateTime GameSerieEndDate { get; set; }
         [ForeignKey("GameGameId,GameWinerTeamId,GameLoserTeamId,GameGameDate,GameGameTime,GameSerieId,GameSerieInitDate,GameSerieEndDate")]
         public Game Game { get; set; }
-        [Required]
-        public Guid PositionId { get; set; }
-        public Position Position { get; set; }
+        //[Required]
+        //public Guid PositionId { get; set; }
+        //public Position Position { get; set; }
         [Required]
         public Guid PlayerInId { get; set; }
-        //[ForeignKey("PlayerInPlayerId,PlayerInPositionId")]
+        [Required]
+        public Guid PlayerInPositionId { get; set; }
+        [ForeignKey("PlayerInId,PlayerInPositionId")]
         public Player PlayerIn { get; set; }
         [Required]
         public Guid PlayerOutId { get; set; }
-        //[Required]
-        //public Guid PlayerOutPositionId { get; set; }
-        //[ForeignKey("PlayerOutPlayerId,PlayerOutPositionId")]
+        [Required]
+        public Guid PlayerOutPositionId { get; set; }
+        [ForeignKey("PlayerOutId,PlayerOutPositionId")]
         public Player PlayerOut { get; set; }
     }
 }

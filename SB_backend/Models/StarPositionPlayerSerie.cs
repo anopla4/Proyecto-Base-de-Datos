@@ -11,11 +11,10 @@ namespace SB_backend.Models
     {
         [Required]
         public Guid PlayerId { get; set; }
-        public Player Player { get; set; }
         [Required]
-        public Guid PositionId { get; set; }
-        //[ForeignKey("PlayerId,PositionId")]
-        public Position Position { get; set; }
+        public Guid PlayerPositionId { get; set; }
+        [ForeignKey("PlayerId,PositionId")]
+        public Player Player { get; set; }
         [Required]
         public Guid SerieId { get; set; }
         [Required]

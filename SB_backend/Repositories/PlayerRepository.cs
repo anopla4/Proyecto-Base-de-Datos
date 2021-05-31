@@ -27,10 +27,10 @@ namespace SB_backend.Repositories
             return player;
         }
 
-        public Player GetPlayer(Guid id)
+        public Player GetPlayer(Guid id, Guid PositionId)
         {
             //var player = _playerContext.Players.Find(id);
-            var player = _playerContext.Players.Include(c => c.Current_Team).SingleOrDefault(c => c.Id == id);
+            var player = _playerContext.Players.Include(c => c.Current_Team).SingleOrDefault(c => c.Id == id && c.PositionId == PositionId);
             return player;
         }
 
@@ -38,35 +38,36 @@ namespace SB_backend.Repositories
         {
             if (!_playerContext.Players.Any(c => c.Id == playerId))
                 return null;
-            return _playerContext.Players.Include(c => c.Positions).SingleOrDefault(c => c.Id == playerId).Positions;
+            return _playerContext.Players.Include(c => c.Position).Where(c => c.Id == playerId).Select(c => c.Position).ToList();
         }
 
         public List<Player> GetPlayers()
         {
-            return _playerContext.Players.Include(c => c.Current_Team).Include(c => c.Positions).ToList();
+            return _playerContext.Players.Include(c => c.Current_Team).Include(c => c.Position).ToList();
         }
 
         public List<Player> GetPitchers()
         {
             Position pitcher = _playerContext.Positions.SingleOrDefault(c => c.PositionName == "P");
-            List<Player> pitchers = _playerContext.Players.Include(c => c.Positions).Where(c => c.Positions.Contains(pitcher)).ToList();
+            List<Player> pitchers = _playerContext.Players.Where(c => c.PositionId == pitcher.Id).ToList();
             return pitchers;
         }
 
         public bool RemovePlayer(Player player)
         {
-            var curr_player = _playerContext.Players.Find(player.Id);
+            var curr_player = _playerContext.Players.Find(player.Id, player.PositionId);
 
             if (curr_player != null)
             {
-                foreach (var change in _playerContext.PlayersChangesGames.Where(x => x.PlayerInId == player.Id || x.PlayerOutId == player.Id))
+                foreach (var change in _playerContext.PlayersChangesGames.Where(x => (x.PlayerInId == player.Id && x.PlayerInPositionId == player.PositionId) || x.PlayerInPositionId == player.PositionId))
                     _playerContext.PlayersChangesGames.Remove(change);
-                foreach (var game in _playerContext.Games.Where(x => x.PitcherWinerId == player.Id || x.PitcherLoserId == player.Id))
+                foreach (var game in _playerContext.Games.Where(x => (x.PitcherWinerId == player.Id && x.PitcherWinerPositionId == player.PositionId) || (x.PitcherLoserId == player.Id && x.PitcherLoserPositionId == player.PositionId)))
                     _playerContext.Games.Remove(game);
-                foreach (var tsp in _playerContext.TeamsSeriesPlayers.Where(x => x.PlayerId == player.Id))
-                    _playerContext.TeamsSeriesPlayers.Remove(tsp);
-                foreach (var stp in _playerContext.StarPositionPlayersSeries.Where(x => x.PlayerId == player.Id))
-                    _playerContext.StarPositionPlayersSeries.Remove(stp);
+                if(!_playerContext.Players.Any(c => c.Id == player.Id && c.PositionId != player.PositionId))
+                    foreach (var tsp in _playerContext.TeamsSeriesPlayers.Where(x => x.PlayerId == player.Id))
+                        _playerContext.TeamsSeriesPlayers.Remove(tsp);
+                    foreach (var stp in _playerContext.StarPositionPlayersSeries.Where(x => x.PlayerId == player.Id))
+                        _playerContext.StarPositionPlayersSeries.Remove(stp);
                 _playerContext.Players.Remove(player);
                 _playerContext.SaveChanges();
                 return true;
@@ -76,7 +77,7 @@ namespace SB_backend.Repositories
 
         public Player UpdatePlayer(Player player)
         {
-            var curr_player = _playerContext.Players.Include(c => c.Current_Team).Include(c => c.Positions).SingleOrDefault(c => c.Id == player.Id);
+            var curr_player = _playerContext.Players.Include(c => c.Current_Team).Include(c => c.Position).SingleOrDefault(c => c.Id == player.Id && c.PositionId == player.PositionId);
 
             if (curr_player != null)
             {
@@ -84,12 +85,11 @@ namespace SB_backend.Repositories
                 curr_player.Year_Experience = player.Year_Experience;
                 curr_player.Current_Team = player.Current_Team;
                 curr_player.Current_TeamId = player.Current_TeamId;
-                curr_player.Positions = player.Positions;
                 curr_player.Average = player.Average;
                 curr_player.DeffAverage = player.DeffAverage;
-                curr_player.ERA = player.ERA;
+                //curr_player.ERA = player.ERA;
                 Position pitcher = _playerContext.Positions.SingleOrDefault(c => c.PositionName == "P");
-                if (player.Positions.Contains(pitcher))
+                if (player.PositionId ==  pitcher.Id)
                     curr_player.ERA = player.ERA;
                 else
                     curr_player.ERA = null;

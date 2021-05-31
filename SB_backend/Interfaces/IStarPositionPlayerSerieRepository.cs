@@ -10,7 +10,7 @@ namespace SB_backend.Interfaces
     {
         List<StarPositionPlayerSerie> GetStarPositionPlayersSeries();
         List<StarPositionPlayerSerie> GetAllStarsTeam(Guid SerieId, DateTime SerieInitDate, DateTime SerieEndDate);
-        StarPositionPlayerSerie GetStarPositionPlayerSerie(Guid SerieId, DateTime SerieInitDate, DateTime SerieEndDate, Guid PositionId);
+        StarPositionPlayerSerie GetStarPositionPlayerSerie(Guid SerieId, DateTime SerieInitDate, DateTime SerieEndDate, Guid PlayerPositionId);
         StarPositionPlayerSerie AddStarPositionPlayerSerie(StarPositionPlayerSerie starPositionPlayerSerie);
         StarPositionPlayerSerie UpdateStarPositionPlayerSerie(StarPositionPlayerSerie starPositionPlayerSerie);
         bool RemoveStarPositionPlayer(StarPositionPlayerSerie starPositionPlayerSerie);

@@ -30,17 +30,19 @@ namespace SB_backend.Repositories
                 return null;
             if (game.WinerTeamId == game.LoserTeamId)
                 return null;
-            Player pitcherWiner = _context.Players.Include(c => c.Positions).SingleOrDefault(c => c.Id == game.PitcherWinerId);
             Position pitcher = _context.Positions.SingleOrDefault(c => c.PositionName == "P");
-            if (!pitcherWiner.Positions.Contains(pitcher))
+            //Player pitcherWiner = _context.Players.Find(game.PitcherWinerId, pitcher.Id);
+            if (game.PitcherWinerPositionId !=  pitcher.Id)
                 return null;
+            if (game.PitcherLoserPositionId != pitcher.Id)
+                return null;
+
             if (!_context.TeamsSeriesPlayers.Any(c => c.SerieId == game.SerieId && c.TeamSerieId == game.WinerTeamId && c.PlayerId == game.PitcherWinerId))
                 return null;
-            Player pitcherLoser = _context.Players.Include(c => c.Positions).SingleOrDefault(c => c.Id == game.PitcherLoserId);
-            if (!pitcherLoser.Positions.Contains(pitcher))
-                return null;
+
             if (!_context.TeamsSeriesPlayers.Any(c => c.SerieId == game.SerieId && c.TeamSerieId == game.LoserTeamId && c.PlayerId == game.PitcherLoserId))
                 return null;
+
             bool flagWonGames = (_context.TeamsSeries.SingleOrDefault(c => c.TeamId == game.WinerTeamId && c.SerieId == game.SerieId).WonGames >= _context.Games.Where(c => c.SerieId == game.SerieId && c.WinerTeamId == game.WinerTeamId).ToList().Count);
             if (!flagWonGames)
                 return null;

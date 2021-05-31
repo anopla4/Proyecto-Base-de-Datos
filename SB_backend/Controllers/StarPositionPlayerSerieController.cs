@@ -37,7 +37,7 @@ namespace SB_backend.Controllers
         {
             var startPPS = _spRep.AddStarPositionPlayerSerie(starPositionPlayerSerie);
             if(startPPS != null)
-                return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + startPPS.SerieId + "/" + startPPS.SerieInitDate + "/" + startPPS.SerieEndDate + "/" + startPPS.PositionId, startPPS);
+                return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + startPPS.SerieId + "/" + startPPS.SerieInitDate + "/" + startPPS.SerieEndDate + "/" + startPPS.PlayerPositionId, startPPS);
             return BadRequest($"Not added StartPositionPlayer");
         }
         [HttpGet("{SerieId}/{InitDate}/{EndDate}/{PositionId}")]

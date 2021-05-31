@@ -9,13 +9,11 @@ namespace SB_backend.Interfaces
     public interface IPlayerRepository
     {
         List<Player> GetPlayers();
-        Player GetPlayer(Guid id);
-
+        Player GetPlayer(Guid id, Guid PositionId);
         Player AddPlayer(Player player);
         List<Position> GetPlayerPositions(Guid playerId);
         List<Player> GetPitchers();
         bool RemovePlayer(Player player);
-
         Player UpdatePlayer(Player player);
     }
 }

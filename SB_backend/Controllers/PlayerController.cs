@@ -34,28 +34,28 @@ namespace SB_backend.Controllers
             var pitchers = _plrep.GetPitchers();
             return Ok(pitchers);
         }
-        [HttpGet("{id}")]
-        public IActionResult GetPlayer(Guid Id)
+        [HttpGet("{id}/{PositionId}")]
+        public IActionResult GetPlayer(Guid Id, Guid PositionId)
         {
-            var player = _plrep.GetPlayer(Id);
+            var player = _plrep.GetPlayer(Id,PositionId);
 
             if (player != null)
             {
                 return Ok(player);
             }
 
-            return NotFound($"Not player with id = {Id}");
+            return NotFound($"Not player with id = {Id} and posId = {PositionId}");
         }
 
         [HttpPost]
         public IActionResult AddPlayer(Player player)
         {
             _plrep.AddPlayer(player);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + player.Id, player);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + player.Id + "/" + player.PositionId, player);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult RemovePlayer(Guid Id, Player player)
+        [HttpDelete("{id}/{PositionId}")]
+        public IActionResult RemovePlayer(Guid Id, Guid PositionId,Player player)
         {
             var flag = _plrep.RemovePlayer(player);
 
@@ -64,22 +64,23 @@ namespace SB_backend.Controllers
                 return Ok();
             }
 
-            return NotFound($"Not player with id = {Id}");
+            return NotFound($"Not player with id = {Id} and posId = {PositionId}");
         }
 
-        [HttpPatch("{id}")]
-        public IActionResult UpdatePlayer(Guid Id, Player player)
+        [HttpPatch("{id}/{PositionId}")]
+        public IActionResult UpdatePlayer(Guid Id, Guid PositionId,Player player)
         {
-            var current_player = _plrep.GetPlayer(Id);
+            var current_player = _plrep.GetPlayer(Id,PositionId);
 
             if (current_player != null)
             {
                 player.Id = current_player.Id;
+                player.PositionId = current_player.PositionId;
                 _plrep.UpdatePlayer(player);
                 return Ok(player);
             }
 
-            return NotFound($"Not player with id = {Id}");
+            return NotFound($"Not player with id = {Id} and posId = {PositionId}");
         }
     }
 }

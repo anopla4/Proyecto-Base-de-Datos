@@ -22,7 +22,10 @@ namespace SB_backend.Models
         [Required]
         public int Year_Experience { get; set; }
         [Required]
-        public List<Position> Positions { get; set; }
+        [Key]
+        public Guid PositionId { get; set; }
+        //[NotMapped]
+        public Position Position { get; set; }
         public int DeffAverage { get; set; }
         public int? ERA { get; set; }
         public int? Average { get; set; }

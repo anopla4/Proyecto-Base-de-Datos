@@ -13,5 +13,6 @@ namespace SB_backend.Models
         public Guid Id { get; set; }
         [Required]
         public string PositionName { get; set; }
+        List<Player> players { get; set; }
     }
 }

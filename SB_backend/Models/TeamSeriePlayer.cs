@@ -10,6 +10,7 @@ namespace SB_backend.Models
     public class TeamSeriePlayer
     {
         public Guid PlayerId { get; set; }
+        public Guid PlayerPositionId { get; set; }
         public Player Player { get; set; }
         //[Key, ForeignKey("Serie"), Column(Order = 1)]
         public Guid SerieId { get; set; }
