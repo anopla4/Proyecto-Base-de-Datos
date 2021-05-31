@@ -9,7 +9,6 @@ namespace SB_backend.Models
 {
     public class Player
     {
-        [Key]
         public Guid Id { get; set; }
         [Required]
         [MaxLength(50, ErrorMessage = "Este nombre excede el número de caracteres permitidos")]
@@ -22,7 +21,7 @@ namespace SB_backend.Models
         [Required]
         public int Year_Experience { get; set; }
         [Required]
-        [Key]
+        [ForeignKey("Position")]
         public Guid PositionId { get; set; }
         //[NotMapped]
         public Position Position { get; set; }

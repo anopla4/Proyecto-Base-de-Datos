@@ -50,7 +50,9 @@ namespace SB_backend.Controllers
         [HttpPost]
         public IActionResult AddPlayer(Player player)
         {
-            _plrep.AddPlayer(player);
+            Player p = _plrep.AddPlayer(player);
+            if (p == null)
+                return BadRequest("Not Player Created");
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + player.Id + "/" + player.PositionId, player);
         }
 
