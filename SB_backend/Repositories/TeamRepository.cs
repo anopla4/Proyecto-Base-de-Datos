@@ -51,6 +51,11 @@ namespace SB_backend.Repositories
                     _teamContext.TeamsSeriesPlayers.Remove(tsp);
                 foreach (var tsd in _teamContext.TeamsSeriesDirectors.Where(x => x.TeamSerieId == curr_team.Id))
                     _teamContext.TeamsSeriesDirectors.Remove(tsd);
+                foreach (var player in _teamContext.Players.Where(x => x.Current_TeamId == curr_team.Id))
+                {
+                    player.Current_TeamId = null;
+                    _teamContext.Players.Update(player);
+                }
                 _teamContext.Teams.Remove(curr_team);
                 _teamContext.SaveChanges();
                 return true;
