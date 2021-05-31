@@ -35,37 +35,8 @@ class Teams extends Component {
       "Blanco",
       "Amarillo",
     ],
+    file: undefined,
     teams: [],
-    // teams: [
-    //   {
-    //     id: 1,
-    //     name: "Matanzas",
-    //     color: "Rojo",
-    //     initials: "MTN",
-    //     img: "http://localhost:8000/src/logos/matanzas.png",
-    //   },
-    //   {
-    //     id: 2,
-    //     name: "Pinar del Río",
-    //     color: "Verde",
-    //     initials: "PR",
-    //     img: "http://localhost:8000/src/logos/pinar-del-rio.jpg",
-    //   },
-    //   {
-    //     id: 3,
-    //     name: "Industriales",
-    //     color: "Azul",
-    //     initials: "IND",
-    //     img: "http://localhost:8000/src/logos/industriales.png",
-    //   },
-    //   {
-    //     id: 4,
-    //     name: "Cienfuegos",
-    //     color: "Verde",
-    //     initials: "CFG",
-    //     img: "http://localhost:8000/src/logos/cienfuegos.png",
-    //   },
-    // ],
   };
 
   componentDidMount() {
@@ -121,27 +92,32 @@ class Teams extends Component {
     this.setState({ series: n_teams });
   };
 
+  setFile = (e) => {
+    this.setState({ file: e.target.files[0] });
+  };
+
   onFormSubmit = (e) => {
     let formElements = e.target.elements;
     const name = formElements.name.value;
     const initials = formElements.initials.value;
     const color = formElements.color.value;
+    var formdata = new FormData();
+    formdata.append("name", name);
+    formdata.append("initials", initials);
+    formdata.append("color", color);
+    formdata.append("img", this.state.file, this.state.file.name);
 
-    let team = {
-      name,
-      initials,
-      color,
+    var requestOptions = {
+      method: this.state.editTeam ? "PATCH" : "POST",
+      body: formdata,
+      mode: "cors",
     };
 
-    let postUrl =
+    fetch(
       "https://localhost:44334/api/Team" +
-      (this.state.editTeam ? `/${this.state.teamEdit.id}` : "");
-    fetch(postUrl, {
-      mode: "cors",
-      headers: { "Content-Type": "application/json" },
-      method: this.state.editTeam ? "PATCH" : "POST",
-      body: JSON.stringify(team),
-    })
+        (this.state.editTeam ? `/${this.state.teamEdit.id}` : ""),
+      requestOptions
+    )
       .then((response) => {
         if (!response.ok) {
           throw Error(response.statusText);
@@ -219,9 +195,12 @@ class Teams extends Component {
                         }
                       />
                     </Form.Group>
-                    <Form.Group>
-                      <Image src={this.state.teamEdit.img} />
-                      <Form.File id="img" label="Logo del equipo" />
+                    <Form.Group controlId="img">
+                      <Image src={this.state.teamEdit.imgPath} />
+                      <Form.File
+                        label="Logo del equipo"
+                        onChange={(e) => this.setFile(e)}
+                      />
                     </Form.Group>
                     <Form.Group controlId="initials">
                       <Form.Label>Iniciales:</Form.Label>
@@ -254,6 +233,7 @@ class Teams extends Component {
                       style={{ float: "left" }}
                       variant="primary"
                       type="submit"
+                      // onClick={this.onFormSubmit}
                     >
                       Aceptar
                     </Button>
