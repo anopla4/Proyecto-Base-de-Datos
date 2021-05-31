@@ -40,7 +40,7 @@ namespace SB_backend
             services.AddScoped<ITeamSeriePlayerRepository, TeamSeriePlayerRepository>();
             services.AddScoped<ITeamSerieDirectorRepository, TeamSerieDirectorRepository>();
             //services.AddScoped<IPitcherRepository, PitcherRepository>();
-            services.AddScoped<IStartPositionPlayerSerieRepository, StartPositionPlayerSerieRepository>();
+            services.AddScoped<IStarPositionPlayerSerieRepository, StarPositionPlayerSerieRepository>();
             services.AddScoped<IGameRepository, GameRepository>();
             services.AddScoped<IPlayerGameRepository, PlayerGameRepository>();
             services.AddScoped<IPlayerChangeGameRepository, PlayerChangeGameRepository>();
