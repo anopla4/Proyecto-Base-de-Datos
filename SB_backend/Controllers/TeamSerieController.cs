@@ -23,23 +23,23 @@ namespace SB_backend.Controllers
         {
             return Ok(_tsRep.GetTeamsSeries());
         }
-        [HttpGet("Standing/{SerieId}")]
-        public IActionResult GetStanding(Guid SerieId)
+        [HttpGet("Standing/{SerieId}/{initDate}/{endDate}")]
+        public IActionResult GetStanding(Guid SerieId, DateTime initDate, DateTime endDate)
         {
-            List<TeamSerie> serie = _tsRep.GetStanding(SerieId);
+            List<TeamSerie> serie = _tsRep.GetStanding(SerieId, initDate, endDate);
             if (serie.Count == 0)
             {
                 return NotFound($"Not Standing to serie {SerieId}");
             }
             return Ok(serie);
         }
-        [HttpGet("{TeamId}/{SerieId}")]
-        public IActionResult GetTeamSerie(Guid TeamId, Guid SerieId)
+        [HttpGet("{TeamId}/{SerieId}/{initDate}/{endDate}")]
+        public IActionResult GetTeamSerie(Guid TeamId, Guid SerieId, DateTime initDate, DateTime endDate)
         {
-            TeamSerie teamSerie = _tsRep.GetTeamSerie(TeamId, SerieId);
+            TeamSerie teamSerie = _tsRep.GetTeamSerie(TeamId, SerieId, initDate, endDate);
             if (teamSerie == null)
             {
-                return NotFound($"Not TeamSerie with ids = {TeamId},{SerieId}");
+                return NotFound($"Not TeamSerie with ids = {TeamId},{SerieId},{initDate},{endDate}");
             }
             return Ok(teamSerie);
         }
@@ -61,10 +61,10 @@ namespace SB_backend.Controllers
             {
                 return NotFound($"TeamId or SerieId are not valid");
             }
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + teamSerie.TeamId + teamSerie.SerieId, teamSerie);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + teamSerie.TeamId + "/" +teamSerie.SerieId + "/" + teamSerie.SerieInitDate + "/" + teamSerie.SerieEndDate, teamSerie);
         }
-        [HttpDelete("{TeamId}/{SerieId}")]
-        public IActionResult RemoveTeamSerie(Guid TeamId,Guid SerieID,TeamSerie teamSerie)
+        [HttpDelete("{TeamId}/{SerieId}/{initDate}/{endDate}")]
+        public IActionResult RemoveTeamSerie(Guid TeamId,Guid SerieID, DateTime initDate, DateTime endTime, TeamSerie teamSerie)
         {
             var flag = _tsRep.RemoveTeamSerie(teamSerie);
             if (flag)
@@ -73,13 +73,13 @@ namespace SB_backend.Controllers
             }
             return NotFound($"Not valid TeamSerie");
         }
-        [HttpPatch("{TeamId}/{SerieId}")]
-        public IActionResult UpdateTeamSerie(Guid TeamId,Guid SerieId,TeamSerie teamSerie)
+        [HttpPatch("{TeamId}/{SerieId}/{initDate}/{endDate}")]
+        public IActionResult UpdateTeamSerie(Guid TeamId,Guid SerieId,DateTime initDate, DateTime endDate,TeamSerie teamSerie)
         {
             var teamSerieUpd = _tsRep.UpdateTeamSerie(teamSerie);
             if(teamSerieUpd == null)
             {
-                return NotFound($"Not TeamSerie with ids = {TeamId},{SerieId}");
+                return NotFound($"Not TeamSerie with ids = {TeamId},{SerieId},{initDate},{endDate}");
             }
             return Ok(teamSerieUpd);
         }

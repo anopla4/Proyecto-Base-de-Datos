@@ -23,7 +23,7 @@ namespace SB_backend.Repositories
             Serie serie = _context.Series.Find(teamSerie.SerieId,teamSerie.SerieInitDate,teamSerie.SerieEndDate);
             if (serie == null)
                 return null;
-            serie.NumberOfTeams += 1;
+            //serie.NumberOfTeams += 1;
             if (teamSerie.FinalPosition > serie.NumberOfTeams)
                 return null;
             if (_context.TeamsSeries.Any(c => c.FinalPosition == teamSerie.FinalPosition && c.SerieId == teamSerie.SerieId && c.SerieInitDate == teamSerie.SerieInitDate && c.SerieEndDate == teamSerie.SerieEndDate))
@@ -38,14 +38,14 @@ namespace SB_backend.Repositories
             return teamSerie;
         }
 
-        public List<TeamSerie> GetStanding(Guid SerieId)
+        public List<TeamSerie> GetStanding(Guid SerieId, DateTime initDate, DateTime endDate)
         {
-            return _context.TeamsSeries.Where(c => c.SerieId == SerieId).ToList();
+            return _context.TeamsSeries.Where(c => c.SerieId == SerieId && c.SerieInitDate == initDate && c.SerieEndDate == endDate).ToList();
         }
 
-        public TeamSerie GetTeamSerie(Guid TeamId, Guid SerieId)
+        public TeamSerie GetTeamSerie(Guid TeamId, Guid SerieId, DateTime initDate, DateTime endDate)
         {
-            return _context.TeamsSeries.Include(c => c.Team).Include(c => c.Serie).SingleOrDefault(c => (c.TeamId == TeamId && c.SerieId == SerieId));
+            return _context.TeamsSeries.Include(c => c.Team).Include(c => c.Serie).SingleOrDefault(c => (c.TeamId == TeamId && c.SerieId == SerieId && c.SerieInitDate == initDate && c.SerieEndDate == endDate));
         }
 
         public List<TeamSerie> GetTeamsSeries()
