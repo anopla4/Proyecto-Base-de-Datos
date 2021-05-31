@@ -150,7 +150,11 @@ class Teams extends Component {
                     style={{ width: "18rem" }}
                     border="primary"
                   >
-                    <Card.Img height="250vw" variant="top" src={team.img} />
+                    <Card.Img
+                      height="250vw"
+                      variant="top"
+                      src={"https://localhost:44334/" + team.imgPath}
+                    />
                     <Card.Body>
                       <Card.Title>{team.initials}</Card.Title>
                       <Card.Subtitle>{team.name}</Card.Subtitle>
