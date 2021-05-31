@@ -10,7 +10,7 @@ namespace SB_backend.Interfaces
     {
         List<Game> GetGames();
         Game GetGame(Guid Id);
-        List<Game> GetGames(Guid SerieId);
+        List<Game> GetGames(Guid SerieId, DateTime InitDate, DateTime EndDate);
         Game AddGame(Game game);
         Game UpdateGame(Game game);
         bool RemoveGame(Game game);
