@@ -62,10 +62,10 @@ class Serie extends Component {
     });
   };
 
-  handleOnClickTeam = (idT, idS) => {
+  handleOnClickTeam = (team, serie) => {
     this.props.history.push({
       pathname: "/serie_team",
-      state: { idTeam: idT, idSerie: idS },
+      state: { team: team, serie: serie },
     });
   };
 
@@ -302,14 +302,14 @@ class Serie extends Component {
                           <tr key={item.team.id}>
                             <td
                               onClick={() =>
-                                this.handleOnClickTeam(item.team.id, id)
+                                this.handleOnClickTeam(item.team, item.serie)
                               }
                             >
                               {item.finalPosition}
                             </td>
                             <td
                               onClick={() =>
-                                this.handleOnClickTeam(item.team.id, id)
+                                this.handleOnClickTeam(item.team, item.serie)
                               }
                               style={{ width: "7%" }}
                             >
@@ -317,21 +317,21 @@ class Serie extends Component {
                             </td>
                             <td
                               onClick={() =>
-                                this.handleOnClickTeam(item.team.id, id)
+                                this.handleOnClickTeam(item.team, item.serie)
                               }
                             >
                               {item.team.name}
                             </td>
                             <td
                               onClick={() =>
-                                this.handleOnClickTeam(item.team.id, id)
+                                this.handleOnClickTeam(item.team, item.serie)
                               }
                             >
                               {item.wonGames}
                             </td>
                             <td
                               onClick={() =>
-                                this.handleOnClickTeam(item.team.id, id)
+                                this.handleOnClickTeam(item.team, item.serie)
                               }
                             >
                               {item.lostGames}
