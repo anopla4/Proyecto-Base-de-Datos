@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -26,6 +27,10 @@ namespace SB_backend.Models
         public int DeffAverage { get; set; }
         public int? ERA { get; set; }
         public int? Average { get; set; }
-        public string img { get; set; }
+
+        public int? Hand { get; set; }
+        public string ImgPath { get; set; }
+        [NotMapped]
+        public IFormFile Img{ get; set; }
     }
 }
