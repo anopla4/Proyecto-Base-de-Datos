@@ -21,11 +21,6 @@ namespace SB_backend.Models
         public int Age { get; set; }
         [Required]
         public int Year_Experience { get; set; }
-        [Required]
-        [ForeignKey("Position")]
-        public Guid PositionId { get; set; }
-        //[NotMapped]
-        public Position Position { get; set; }
         public int DeffAverage { get; set; }
         public int? ERA { get; set; }
         public int? Average { get; set; }
