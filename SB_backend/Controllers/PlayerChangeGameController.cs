@@ -40,10 +40,10 @@ namespace SB_backend.Controllers
             var changeA = _pchRep.AddChangeInGame(change);
             if (changeA == null)
                 return BadRequest("Not created Object");
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + change.GameGameId + "/" + change.PlayerInPlayerId, change);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + change.GameGameId + "/" + change.PlayerInId + "/" + change.PositionId, change);
         }
-        [HttpDelete("{GameId}/{PlayerInId}")]
-        public IActionResult RemoveChange(Guid GameId, Guid PlayerInId, PlayerChangeGame change)
+        [HttpDelete("{GameId}/{PlayerInId}/{PositionId}")]
+        public IActionResult RemoveChange(Guid GameId, Guid PlayerInId, Guid PositionId,PlayerChangeGame change)
         {
             var rem = _pchRep.RemoveChangeInGame(change);
             if (rem)
