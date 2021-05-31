@@ -45,7 +45,7 @@ namespace SB_backend.Controllers
             var playerGameA = _pgRep.AddPositionPlayerInGame(playerGame);
             if (playerGameA == null)
                 return BadRequest("Not created object");
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + playerGameA.gameGameId + "/" + playerGameA.PositionPlayerPositionId + "/" + playerGameA.PositionPlayerPlayerId, playerGameA);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + playerGameA.gameGameId + "/" + playerGameA.PositionId + "/" + playerGameA.PlayerId, playerGameA);
         }
         [HttpPatch("{GameId}/WinerTeam/{PositionId}")]
         public IActionResult UpdatePlayerInWinerTeam(Guid GameId,Guid PositionId, PlayerGame playerGame)

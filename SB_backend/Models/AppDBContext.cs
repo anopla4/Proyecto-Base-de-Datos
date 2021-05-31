@@ -138,28 +138,7 @@ namespace SB_backend.Models
                 .HasOne(c => c.Player)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
-            //PitcherChangeGameBuilder
-            modelBuilder.Entity<PitcherChangeGame>().HasKey(c => new { c.GameTime, c.GameDate, c.SerieId, c.SerieInitDate, c.SerieEndDate, c.PitcherInPlayerId, c.PitcherInPositionId });
-            modelBuilder.Entity<PitcherChangeGame>()
-                .HasOne(c => c.Serie)
-                .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<PitcherChangeGame>()
-                .HasOne(c => c.WinerTeam)
-                .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<PitcherChangeGame>()
-                .HasOne(c => c.LoserTeam)
-                .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<PitcherChangeGame>()
-                .HasOne(c => c.PitcherIn)
-                .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<PitcherChangeGame>()
-                .HasOne(c => c.PitcherOut)
-                .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
+            
         }
 
         public DbSet<Player> Players { get; set; }
@@ -178,6 +157,6 @@ namespace SB_backend.Models
         public DbSet<Game> Games { get; set; }
         public DbSet<PlayerGame> PlayersGames { get; set; }
         public DbSet<PlayerChangeGame> PlayersChangesGames { get; set; }
-        public DbSet<PitcherChangeGame> PitcherChangesGames { get; set; } 
+        //public DbSet<PitcherChangeGame> PitcherChangesGames { get; set; } 
     }
 }
