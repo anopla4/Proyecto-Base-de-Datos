@@ -153,30 +153,7 @@ class Serie extends Component {
         editTeam: false,
       });
     } else {
-      // const player = formElements.player;
-      // const playerId = player.children[player.selectedIndex].id;
-      // let postUrl =
-      //   "https://localhost:44334/api/Game" +
-      //   (this.state.edit
-      //     ? `/${this.props.location.state.serie.id}/${serie.initDate}/${serie.endDate}`
-      //     : "");
-      // fetch(postUrl, {
-      //   mode: "cors",
-      //   headers: { "Content-Type": "application/json" },
-      //   method: this.state.edit ? "PATCH" : "POST",
-      //   body: JSON.stringify({ playerId: playerId }),
-      // })
-      //   .then((response) => {
-      //     if (!response.ok) {
-      //       throw Error(response.statusText);
-      //     }
-      //     return response.json();
-      //   })
-      //   .catch(function (error) {
-      //     console.log(
-      //       "Hubo un problema con la petición Fetch:" + error.message
-      //     );
-      //   });
+      //TODO: Add request for POST/PATCH AllStarGames
     }
   };
 
@@ -208,19 +185,8 @@ class Serie extends Component {
       .catch(function (error) {
         console.log("Hubo un problema con la petición Fetch:" + error.message);
       });
-    // fetch("https://localhost:44334/api/Team", { mode: "cors" })
-    //   .then((response) => {
-    //     if (!response.ok) {
-    //       throw Error(response.statusText);
-    //     }
-    //     return response.json();
-    //   })
-    //   .then((response) => {
-    //     this.setState({ teams: response });
-    //   })
-    //   .catch(function (error) {
-    //     console.log("Hubo un problema con la petición Fetch:" + error.message);
-    //   });
+
+    //TODO: Add request for players
 
     this.setState({
       idSerie: this.props.location.state.serie.id,
@@ -251,19 +217,7 @@ class Serie extends Component {
         console.log("Hubo un problema con la petición Fetch:" + error.message);
         this.setState({ nothingInStanding: true });
       });
-    // fetch("https://localhost:44334/api/TeamSerie", { mode: "cors" })
-    //   .then((response) => {
-    //     if (!response.ok) {
-    //       throw Error(response.statusText);
-    //     }
-    //     return response.json();
-    //   })
-    //   .then((response) => {
-    //     this.setState({ standingsData: response });
-    //   })
-    //   .catch(function (error) {
-    //     console.log("Hubo un problema con la petición Fetch:" + error.message);
-    //   });
+    //TODO: Add request for GET AllStarTeam
   }
 
   handleOnDelete = (idT, index) => {
