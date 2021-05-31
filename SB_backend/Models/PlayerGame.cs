@@ -30,11 +30,10 @@ namespace SB_backend.Models
         [ForeignKey("gameGameId,gameWinerTeamId,gameLoserTeamId,gameGameDate,gameGameTime,gameSerieId,gameSerieInitDate,gameSerieEndDate")]
         public Game game {get; set;}
         [Required]
-        public Guid PositionId { get; set; }
-        public Position Position { get; set; }
+        public Guid PlayerPositionId { get; set; }
         [Required]
         public Guid PlayerId { get; set; }
-        //[ForeignKey("PositionPlayerPlayerId,PositionPlayerPositionId")]
+        [ForeignKey("PlayerId,PlayerPositionId")]
         public Player Player { get; set; }
     }
 }
