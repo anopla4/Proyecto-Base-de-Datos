@@ -27,22 +27,19 @@ class SerieForm extends Component {
     }
   }
 
-  formatDate = (date) => {
-    return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
-  };
-
   onFormSubmit = (e) => {
     let formElements = e.target.elements;
     const name = formElements.name.value;
     const initDate = this.state.edit
       ? this.props.location.state.serie.initDate
-      : this.formatDate(new Date(formElements.initDate.value));
+      : formElements.initDate.value;
     const endDate = this.state.edit
       ? this.props.location.state.serie.endDate
-      : this.formatDate(new Date(formElements.endDate.value));
+      : formElements.endDate.value;
     const caracter = formElements.caracter;
     const caracterId = caracter.children[caracter.selectedIndex].id;
     const numberOfGames = formElements.numberOfGames.value;
+    const numberOfTeams = formElements.numberOfTeams.value;
 
     let serie = {
       name,
@@ -50,6 +47,7 @@ class SerieForm extends Component {
       endDate,
       caracterId,
       numberOfGames,
+      numberOfTeams,
     };
     let postUrl =
       "https://localhost:44334/api/Serie" +
@@ -75,7 +73,15 @@ class SerieForm extends Component {
   };
 
   render() {
-    const { id, name, caracter, initDate, endDate, numberOfGames } = {
+    const {
+      id,
+      name,
+      caracterSerie,
+      initDate,
+      endDate,
+      numberOfGames,
+      numberOfTeams,
+    } = {
       ...this.props.location.state.serie,
     };
     return (
@@ -136,13 +142,19 @@ class SerieForm extends Component {
                 <Form.Group controlId="caracter">
                   <Form.Label>Carácter:</Form.Label>
                   <Form.Control
-                    defaultValue={caracter ? caracter.caracter_Name : ""}
+                    defaultValue={
+                      caracterSerie ? caracterSerie.caracter_Name : ""
+                    }
                     as="select"
                     custom
                   >
                     <option>{""}</option>
                     {this.state.reaches.map((reach) => (
-                      <option id={reach.id} key={reach.id}>
+                      <option
+                        value={reach.caracter_Name}
+                        id={reach.id}
+                        key={reach.id}
+                      >
                         {reach.caracter_Name}
                       </option>
                     ))}
@@ -156,6 +168,16 @@ class SerieForm extends Component {
                     defaultValue={numberOfGames ? numberOfGames : ""}
                     type="numeric"
                     name="numberOfGames"
+                  />
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group controlId="numberOfTeams">
+                  <Form.Label>Número de equipos:</Form.Label>
+                  <Form.Control
+                    defaultValue={numberOfTeams ? numberOfTeams : ""}
+                    type="numeric"
+                    name="numberOfTeams"
                   />
                 </Form.Group>
               </Col>

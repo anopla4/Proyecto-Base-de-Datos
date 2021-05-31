@@ -10,6 +10,7 @@ import {
   Button,
   Navbar,
   Form,
+  Toast,
 } from "react-bootstrap";
 import "./Serie.css";
 import DeleteEdit from "../../components/DeleteEdit/DeleteEdit";
@@ -26,13 +27,19 @@ import "react-pro-sidebar/dist/css/styles.css";
 
 class Serie extends Component {
   state = {
+    nothingInStanding: false,
     idSerie: "",
-    teams: [{ name: "Industriales" }, { name: "Matanzas" }],
+    initDate: "",
+    endDate: "",
+    standingsData: [],
+    allstarteamsData: [],
+    // players:[],
+    teams: [],
     players: [
       { name: "Alexander Malleta", team: "Industriales" },
       { name: "Pedro Luis Lazo", team: "Pinar del Río" },
     ],
-    positions: ["Primera base", "Segunda base", "Lanzador"],
+    positions: [],
     editTeam: false,
     addTeam: false,
     addPlayer: false,
@@ -71,7 +78,12 @@ class Serie extends Component {
   };
 
   handleOnAddTeam = () => {
-    this.setState({ addTeam: true, editTeam: false, itemEdit: {} });
+    this.setState({
+      nothingInStanding: false,
+      addTeam: true,
+      editTeam: false,
+      itemEdit: {},
+    });
   };
   handleOnAddPlayer = () => {
     this.setState({ addPlayer: true });
@@ -83,60 +95,94 @@ class Serie extends Component {
     this.setState({ addPlayer: false });
   };
 
+  formatDate = (date) => {
+    let d = new Date(date);
+    return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+  };
+
   onFormSubmit = (e) => {
     let formElements = e.target.elements;
-    const name = formElements.name.value;
-    const initDate = this.state.edit
-      ? this.props.location.state.serie.initDate
-      : this.formatDate(new Date(formElements.initDate.value));
-    const endDate = this.state.edit
-      ? this.props.location.state.serie.endDate
-      : this.formatDate(new Date(formElements.endDate.value));
-    const serie = formElements.serie;
-    const serieId = serie.children[serie.selectedIndex].id;
-    const winner = formElements.winner;
-    const winnerId = winner.children[winner.selectedIndex].id;
-    const loser = formElements.loser;
-    const winner_pitcher = winner.children[winner_pitcher.selectedIndex].id;
-    const winner_pitcherId = formElements.winner_pitcher;
-    const loserId = loser.children[loser.selectedIndex].id;
-    const runs_against = formElements.runs_against.value;
-    const runs_in_favor = formElements.runs_in_favor.value;
+    if (this.state.standings) {
+      const team = formElements.team;
+      const teamId = team ? team.children[team.selectedIndex].id : "";
+      const wonGames = formElements.won_games.value;
+      const lostGames = formElements.lost_games.value;
+      const finalPosition = formElements.position.value;
+      let item = {
+        wonGames: wonGames,
+        lostGames: lostGames,
+        finalPosition: finalPosition,
+      };
+      let postUrl =
+        "https://localhost:44334/api/TeamSerie" +
+        (this.state.editTeam
+          ? `/${this.state.itemEdit.team.id}/${
+              this.state.idSerie
+            }/${this.formatDate(this.state.initDate)}/${this.formatDate(
+              this.state.endDate
+            )}`
+          : "");
 
-    let item = {
-      name,
-      initDate,
-      endDate,
-    };
-    let postUrl =
-      "https://localhost:44334/api/Game" +
-      (this.state.edit
-        ? `/${this.props.location.state.serie.id}/${serie.initDate}/${serie.endDate}`
-        : "");
-    fetch(postUrl, {
-      mode: "cors",
-      headers: { "Content-Type": "application/json" },
-      method: this.state.edit ? "PATCH" : "POST",
-      body: JSON.stringify(serie),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw Error(response.statusText);
-        }
-        return response.json();
+      let teamSerie = this.state.editTeam
+        ? item
+        : {
+            teamId: teamId,
+            serieId: this.state.idSerie,
+            serieInitDate: this.formatDate(this.state.initDate),
+            serieEndDate: this.formatDate(this.state.endDate),
+            ...item,
+          };
+      fetch(postUrl, {
+        mode: "cors",
+        headers: { "Content-Type": "application/json" },
+        method: this.state.editTeam ? "PATCH" : "POST",
+        body: JSON.stringify(teamSerie),
       })
-      .catch(function (error) {
-        console.log("Hubo un problema con la petición Fetch:" + error.message);
+        .then((response) => {
+          if (!response.ok) {
+            throw Error(response.statusText);
+          }
+          return response.json();
+        })
+        .catch(function (error) {
+          console.log(
+            "Hubo un problema con la petición Fetch:" + error.message
+          );
+        });
+      this.setState({
+        editTeam: false,
       });
-    this.props.history.push({ pathname: "/series", state: { edited: true } });
+    } else {
+      // const player = formElements.player;
+      // const playerId = player.children[player.selectedIndex].id;
+      // let postUrl =
+      //   "https://localhost:44334/api/Game" +
+      //   (this.state.edit
+      //     ? `/${this.props.location.state.serie.id}/${serie.initDate}/${serie.endDate}`
+      //     : "");
+      // fetch(postUrl, {
+      //   mode: "cors",
+      //   headers: { "Content-Type": "application/json" },
+      //   method: this.state.edit ? "PATCH" : "POST",
+      //   body: JSON.stringify({ playerId: playerId }),
+      // })
+      //   .then((response) => {
+      //     if (!response.ok) {
+      //       throw Error(response.statusText);
+      //     }
+      //     return response.json();
+      //   })
+      //   .catch(function (error) {
+      //     console.log(
+      //       "Hubo un problema con la petición Fetch:" + error.message
+      //     );
+      //   });
+    }
   };
 
   componentWillMount() {
-    this.setState({ idSerie: this.props.location.state.id });
-  }
-
-  componentDidMount() {
-    fetch("https://localhost:44334/api/Serie", { mode: "cors" })
+    console.log("Will Mount");
+    fetch("https://localhost:44334/api/Team", { mode: "cors" })
       .then((response) => {
         if (!response.ok) {
           throw Error(response.statusText);
@@ -144,19 +190,132 @@ class Serie extends Component {
         return response.json();
       })
       .then((response) => {
-        this.setState({ series: response });
+        this.setState({ teams: response });
       })
       .catch(function (error) {
         console.log("Hubo un problema con la petición Fetch:" + error.message);
       });
+    fetch("https://localhost:44334/api/Position", { mode: "cors" })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ positions: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+    // fetch("https://localhost:44334/api/Team", { mode: "cors" })
+    //   .then((response) => {
+    //     if (!response.ok) {
+    //       throw Error(response.statusText);
+    //     }
+    //     return response.json();
+    //   })
+    //   .then((response) => {
+    //     this.setState({ teams: response });
+    //   })
+    //   .catch(function (error) {
+    //     console.log("Hubo un problema con la petición Fetch:" + error.message);
+    //   });
+
+    this.setState({
+      idSerie: this.props.location.state.serie.id,
+      initDate: this.props.location.state.serie.initDate,
+      endDate: this.props.location.state.serie.endDate,
+    });
   }
 
+  componentDidMount() {
+    fetch(
+      `https://localhost:44334/api/TeamSerie/Standing/${
+        this.state.idSerie
+      }/${this.formatDate(this.state.initDate)}/${this.formatDate(
+        this.state.endDate
+      )}`,
+      { mode: "cors" }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ standingsData: response });
+      })
+      .catch((error) => {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+        this.setState({ nothingInStanding: true });
+      });
+    // fetch("https://localhost:44334/api/TeamSerie", { mode: "cors" })
+    //   .then((response) => {
+    //     if (!response.ok) {
+    //       throw Error(response.statusText);
+    //     }
+    //     return response.json();
+    //   })
+    //   .then((response) => {
+    //     this.setState({ standingsData: response });
+    //   })
+    //   .catch(function (error) {
+    //     console.log("Hubo un problema con la petición Fetch:" + error.message);
+    //   });
+  }
+
+  handleOnDelete = (idT, index) => {
+    fetch(
+      `https://localhost:44334/api/Serie/${idT}/${
+        this.state.idSerie
+      }/${this.formatDate(this.state.initDate)}/${this.formatDate(
+        this.state.endDate
+      )}`,
+      {
+        mode: "cors",
+        method: "DELETE",
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+
+    let n_standings = [...this.state.standingsData];
+    n_standings.splice(index, 1);
+
+    this.setState({ standingsData: n_standings });
+    if (this.state.standingsData.length === 0) {
+      this.setState({ nothingInStanding: true });
+    }
+  };
+
   render() {
-    const { id, name, standings, allstarteams } =
-      this.props.location.state.serie;
+    const { id, name } = this.props.location.state.serie;
     return (
       <Container>
         <h1 className="mb-5 my-style-header">{name}</h1>
+        {this.state.nothingInStanding && (
+          <Row className="mb-3">
+            <Col md={3} style={{ alignItems: "right" }}>
+              <Toast>
+                <Toast.Header>
+                  <strong className="mr-auto">Atención!</strong>
+                </Toast.Header>
+                <Toast.Body>
+                  No se ha agregado la tabla de posiciones de la serie.
+                </Toast.Body>
+              </Toast>
+            </Col>
+          </Row>
+        )}
         <Row>
           <Col>
             <Card>
@@ -184,14 +343,14 @@ class Serie extends Component {
                         </tr>
                       </thead>
                       <tbody>
-                        {standings.map((item) => (
-                          <tr key={item.place}>
+                        {this.state.standingsData.map((item, index) => (
+                          <tr key={item.team.id}>
                             <td
                               onClick={() =>
                                 this.handleOnClickTeam(item.team.id, id)
                               }
                             >
-                              {item.place}
+                              {item.finalPosition}
                             </td>
                             <td
                               onClick={() =>
@@ -199,7 +358,7 @@ class Serie extends Component {
                               }
                               style={{ width: "7%" }}
                             >
-                              <Image fluid src={item.team.img} alt="" />
+                              {/* <Image fluid src={item.team.img} alt="" /> */}
                             </td>
                             <td
                               onClick={() =>
@@ -213,19 +372,22 @@ class Serie extends Component {
                                 this.handleOnClickTeam(item.team.id, id)
                               }
                             >
-                              {item.won_games}
+                              {item.wonGames}
                             </td>
                             <td
                               onClick={() =>
                                 this.handleOnClickTeam(item.team.id, id)
                               }
                             >
-                              {item.lost_games}
+                              {item.lostGames}
                             </td>
                             <DeleteEdit
                               delete={true}
                               edit={true}
                               onEdit={() => this.handleEditTeam(item)}
+                              onDelete={() =>
+                                this.handleDeleteTeam(item.team.id, index)
+                              }
                               size="lg"
                               top="3"
                               space="2"
@@ -239,7 +401,7 @@ class Serie extends Component {
                 )}
                 {this.state.allstarteams && (
                   <Container className="list-unstyled">
-                    {allstarteams.map((player) => (
+                    {this.state.allstarteamsData.map((player) => (
                       <Card key={player.id} className="mb-2" border="light">
                         <Card.Header style={{ padding: "0.5%" }}>
                           <Row className="row">
@@ -294,12 +456,12 @@ class Serie extends Component {
                     }
                   >
                     {this.state.addTeam && (
-                      <Form.Group controlId="name">
+                      <Form.Group controlId="team">
                         <Form.Label>Equipo:</Form.Label>
                         <Form.Control as="select" custom>
                           <option>{""}</option>
                           {this.state.teams.map((team) => (
-                            <option>{team.name}</option>
+                            <option id={team.id}>{team.name}</option>
                           ))}
                         </Form.Control>
                       </Form.Group>
@@ -314,7 +476,7 @@ class Serie extends Component {
                       <Form.Control
                         defaultValue={
                           this.state.editTeam
-                            ? this.state.itemEdit.won_games
+                            ? this.state.itemEdit.wonGames
                             : ""
                         }
                         type="numeric"
@@ -324,9 +486,9 @@ class Serie extends Component {
                     <Form.Group controlId="lost_games">
                       <Form.Label>Juegos perdidos:</Form.Label>
                       <Form.Control
-                        value={
+                        defaultValue={
                           this.state.editTeam
-                            ? this.state.itemEdit.lost_games
+                            ? this.state.itemEdit.lostGames
                             : ""
                         }
                         type="numeric"
@@ -336,8 +498,10 @@ class Serie extends Component {
                     <Form.Group controlId="position">
                       <Form.Label>Posición:</Form.Label>
                       <Form.Control
-                        value={
-                          this.state.editTeam ? this.state.itemEdit.place : ""
+                        defaultValue={
+                          this.state.editTeam
+                            ? this.state.itemEdit.finalPosition
+                            : ""
                         }
                         type="numeric"
                         name="position"
@@ -348,6 +512,8 @@ class Serie extends Component {
                         className="mr-2"
                         style={{ float: "left" }}
                         variant="primary"
+                        type="submit"
+                        // onClick={this.onFormSubmit}
                       >
                         Aceptar
                       </Button>
@@ -369,7 +535,7 @@ class Serie extends Component {
             <Col md={3}>
               <Navbar fixed="right">
                 <Nav.Item>
-                  <Form>
+                  <Form onSubmit={this.onFormSubmit}>
                     <Form.Group controlId="name">
                       <Form.Label>Jugador:</Form.Label>
                       <Form.Control as="select" custom>
@@ -394,6 +560,7 @@ class Serie extends Component {
                       <Button
                         className="mr-2"
                         style={{ float: "left" }}
+                        type="submit"
                         variant="primary"
                       >
                         Aceptar
