@@ -22,8 +22,11 @@ class PlayerForm extends Component {
         ],
       }));
     } else {
+      let index = e.target.selectedIndex;
+      let el = e.target.childNodes[index];
+      let option = el.getAttribute("id");
       this.setState((prevState) => ({
-        selectedPositions: [...prevState.selectedPositions, e.target.value],
+        selectedPositions: [...prevState.selectedPositions, option],
       }));
     }
   };
@@ -66,31 +69,42 @@ class PlayerForm extends Component {
   onFormSubmit = (e) => {
     let formElements = e.target.elements;
     const name = formElements.name.value;
-    const positionsT = formElements.positions;
-    const positionsId = positionsT.children[positionsT.selectedIndex].id;
-    const positions = [...this.state.positions].filter((c) =>
-      positionsId.includes(c.id)
-    );
-    console.log(positions);
-    const current_Team = formElements.current_Team.value;
+    const positions = [
+      ...this.state.positions.filter((c) =>
+        this.state.selectedPositions.includes(c.id)
+      ),
+    ];
+    const current_Team = formElements.current_Team;
+    const current_TeamId = current_Team.children[current_Team.selectedIndex].id;
     const age = formElements.age.value;
     const year_Experience = formElements.year_Experience.value;
     const deffAverage = formElements.deffAverage.value;
-    const average = formElements.average.value;
     const era = formElements.era.value;
-    const hand = formElements.hand.value;
-
+    console.log("AAAAAAAAAAAAAAAAAa");
+    const average = formElements.average.disabled
+      ? ""
+      : formElements.average.value;
+    // const era = formElements.era.disabled ? "" : formElements.era.value;
+    const hand = formElements.hand.disabled ? "" : formElements.hand.value;
     let player = {
       name,
       positions,
-      current_Team,
+      current_TeamId,
       age,
       year_Experience,
       deffAverage,
-      average,
-      era,
-      hand,
     };
+
+    if (era !== "") {
+      player = { ...player, era };
+    }
+    if (hand !== "") {
+      player = { ...player, hand };
+    }
+    if (average !== "") {
+      player = { ...player, average };
+    }
+
     let postUrl =
       "https://localhost:44334/api/Player" +
       (this.state.edit ? `/${this.state.playerEdit.id}` : "");
@@ -154,7 +168,7 @@ class PlayerForm extends Component {
             </Row>
             <Row>
               <Col>
-                <Form.Group style={{ width: "100%" }} controlId="currentTeam">
+                <Form.Group style={{ width: "100%" }} controlId="current_Team">
                   <Form.Label>Equipo actual:</Form.Label>
                   <Form.Control
                     defaultValue={current_Team ? current_Team : ""}
@@ -164,7 +178,7 @@ class PlayerForm extends Component {
                     <option>{""}</option>
                     <option>{"Retirado"}</option>
                     {this.state.teams.map((team) => (
-                      <option>{team.name}</option>
+                      <option id={team.id}>{team.name}</option>
                     ))}
                   </Form.Control>
                 </Form.Group>
@@ -207,7 +221,7 @@ class PlayerForm extends Component {
                   >
                     <option>{""}</option>
                     {this.state.positions.map((pos) => (
-                      <option>{pos.positionName}</option>
+                      <option id={pos.id}>{pos.positionName}</option>
                     ))}
                   </Form.Control>
                 </Form.Group>
