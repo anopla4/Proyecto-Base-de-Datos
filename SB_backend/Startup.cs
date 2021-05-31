@@ -65,9 +65,10 @@ namespace SB_backend
             }
             else
             {
-                app.UseHsts();
+                app.UseHsts();  
             }
 
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseCors();
             app.UseMvc();

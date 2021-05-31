@@ -25,6 +25,7 @@ namespace SB_backend.Models
         public List<Position> Positions { get; set; }
         public int DeffAverage { get; set; }
         public int? ERA { get; set; }
-        public int Average { get; set; }
+        public int? Average { get; set; }
+        public string img { get; set; }
     }
 }

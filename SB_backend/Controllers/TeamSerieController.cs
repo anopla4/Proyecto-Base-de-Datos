@@ -64,8 +64,10 @@ namespace SB_backend.Controllers
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + teamSerie.TeamId + "/" +teamSerie.SerieId + "/" + teamSerie.SerieInitDate + "/" + teamSerie.SerieEndDate, teamSerie);
         }
         [HttpDelete("{TeamId}/{SerieId}/{initDate}/{endDate}")]
-        public IActionResult RemoveTeamSerie(Guid TeamId,Guid SerieID, DateTime initDate, DateTime endTime, TeamSerie teamSerie)
+        public IActionResult RemoveTeamSerie(Guid TeamId, Guid SerieId, DateTime initDate, DateTime endDate)
         {
+            TeamSerie teamSerie = _tsRep.GetTeamSerie(TeamId, SerieId, initDate, endDate);
+
             var flag = _tsRep.RemoveTeamSerie(teamSerie);
             if (flag)
             {
@@ -73,6 +75,7 @@ namespace SB_backend.Controllers
             }
             return NotFound($"Not valid TeamSerie");
         }
+
         [HttpPatch("{TeamId}/{SerieId}/{initDate}/{endDate}")]
         public IActionResult UpdateTeamSerie(Guid TeamId,Guid SerieId,DateTime initDate, DateTime endDate,TeamSerie teamSerie)
         {

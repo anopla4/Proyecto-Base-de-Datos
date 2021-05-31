@@ -13,5 +13,6 @@ namespace SB_backend.Models
         public string Color { get; set; }
         [Required]
         public string Initials { get; set; }
+        public string img { get; set; }
     }
 }

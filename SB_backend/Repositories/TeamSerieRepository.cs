@@ -40,7 +40,7 @@ namespace SB_backend.Repositories
 
         public List<TeamSerie> GetStanding(Guid SerieId, DateTime initDate, DateTime endDate)
         {
-            return _context.TeamsSeries.Where(c => c.SerieId == SerieId && c.SerieInitDate == initDate && c.SerieEndDate == endDate).ToList();
+            return _context.TeamsSeries.Include(c => c.Team).Where(c => c.SerieId == SerieId && c.SerieInitDate == initDate && c.SerieEndDate == endDate).ToList();
         }
 
         public TeamSerie GetTeamSerie(Guid TeamId, Guid SerieId, DateTime initDate, DateTime endDate)
@@ -66,7 +66,7 @@ namespace SB_backend.Repositories
 
         public bool RemoveTeamSerie(TeamSerie teamSerie)
         {
-            var current_teamSerie = _context.TeamsSeries.Find(teamSerie.TeamId, teamSerie.SerieId);
+            var current_teamSerie = _context.TeamsSeries.Find(teamSerie.TeamId, teamSerie.SerieId, teamSerie.SerieInitDate, teamSerie.SerieEndDate);
             if(current_teamSerie != null)
             {
                 foreach (var change in _context.PlayersChangesGames.Where(c => c.GameSerieId == teamSerie.SerieId && c.GameSerieInitDate == teamSerie.SerieInitDate && c.GameSerieEndDate == teamSerie.SerieEndDate && (c.GameLoserTeamId == teamSerie.TeamId || c.GameWinerTeamId == teamSerie.TeamId)))
@@ -90,7 +90,7 @@ namespace SB_backend.Repositories
 
         public TeamSerie UpdateTeamSerie(TeamSerie teamSerie)
         {
-            var current_teamSerie = _context.TeamsSeries.Find(teamSerie.TeamId, teamSerie.SerieId);
+            var current_teamSerie = _context.TeamsSeries.Find(teamSerie.TeamId, teamSerie.SerieId, teamSerie.SerieInitDate, teamSerie.SerieEndDate);
             if (current_teamSerie != null)
             {
                 current_teamSerie.FinalPosition = teamSerie.FinalPosition;
