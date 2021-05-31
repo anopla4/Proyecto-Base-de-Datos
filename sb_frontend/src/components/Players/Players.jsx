@@ -65,16 +65,17 @@ class Players extends Component {
                   {this.props.playerGeneral && <Col>Equipo actual</Col>}
                   {this.props.playerGeneral && <Col>Equipos</Col>}
                   <Col>Años de experiencia</Col>
-                  {player.position
+                  <Col>Average defensivo</Col>
+                  {player.positions
                     .map((pos) => pos.positionName)
-                    .includes("Lanzador") && <Col>Mano</Col>}
-                  {player.position
+                    .includes("P") && <Col>Mano</Col>}
+                  {player.positions
                     .map((pos) => pos.positionName)
-                    .includes("Lanzador") && <Col md={2}>ERA</Col>}
-                  {player.position.length === 1 &&
-                    !player.position
+                    .includes("P") && <Col md={2}>ERA</Col>}
+                  {player.positions.length === 1 &&
+                    !player.positions
                       .map((pos) => pos.positionName)
-                      .includes("Lanzador") && <Col md={2}>AVE</Col>}
+                      .includes("P") && <Col md={2}>AVE</Col>}
                 </Row>
                 <Row className="set-size">
                   <Col md={2}>{player.age}</Col>
@@ -83,18 +84,17 @@ class Players extends Component {
                     <Col>{player.teams.join(", ")}.</Col>
                   )}
                   <Col>{player.year_Experience}</Col>
-                  {player.position
+                  {player.positions
                     .map((pos) => pos.positionName)
-                    .includes("Lanzador") && <Col>{player.hand}</Col>}
-                  {player.position
+                    .includes("P") && <Col>{player.hand}</Col>}
+                  <Col>{player.deffAverage}</Col>
+                  {player.positions
                     .map((pos) => pos.positionName)
-                    .includes("Lanzador") && <Col md={2}>{player.era}</Col>}
-                  {player.position.length === 1 &&
-                    !player.position
+                    .includes("P") && <Col md={2}>{player.era}</Col>}
+                  {player.positions.length === 1 &&
+                    !player.positions
                       .map((pos) => pos.positionName)
-                      .includes("Lanzador") && (
-                      <Col md={2}>{player.position_Average}</Col>
-                    )}
+                      .includes("P") && <Col md={2}>{player.average}</Col>}
                 </Row>
               </Card.Body>
             </Accordion.Collapse>

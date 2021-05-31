@@ -7,31 +7,6 @@ import Add from "../../components/Add/Add";
 class PlayersGeneral extends Component {
   state = {
     players: [],
-    // players: [
-    //   {
-    //     id: 1,
-    //     name: "Alexander Malleta",
-    //     position: [{ id: 1, positionName: "Primera base" }],
-    //     img: "http://localhost:8000/src/logos/malleta.jpg",
-    //     age: 44,
-    //     teams: ["Industriales", "Metropolitano"],
-    //     current_Team: "Retirado",
-    //     year_Experience: 20,
-    //     position_Average: 301,
-    //   },
-    //   {
-    //     id: 2,
-    //     name: "Pedro Luis Lazo",
-    //     position: [{ id: 2, positionName: "Lanzador" }],
-    //     img: "http://localhost:8000/src/logos/pedro_luis_lazo.jpg",
-    //     age: 49,
-    //     teams: ["Pinar del Río"],
-    //     current_Team: "Retirado",
-    //     year_Experience: 20,
-    //     era: 3.22,
-    //     hand: "Derecha",
-    //   },
-    // ],
   };
 
   handleOnClick = (id) => {
@@ -127,6 +102,7 @@ class PlayersGeneral extends Component {
           players={this.state.players}
           onClick={this.handleOnClick}
           onEdit={this.handleOnClickEdit}
+          onDelete={this.handleOnDelete}
         />
         <Add text="Agregar jugador" onClick={this.handleOnClickAdd} />
       </Container>

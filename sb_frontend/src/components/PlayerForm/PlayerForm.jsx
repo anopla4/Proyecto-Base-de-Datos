@@ -5,6 +5,7 @@ import "./PlayerForm.css";
 class PlayerForm extends Component {
   state = {
     edit: false,
+    playerEdit: {},
     selectedPositions: [],
     hands: ["Izquierda", "Derecha"],
     positions: [],
@@ -65,28 +66,34 @@ class PlayerForm extends Component {
   onFormSubmit = (e) => {
     let formElements = e.target.elements;
     const name = formElements.name.value;
-    const positions = formElements.position;
-    const positionsId = positions.children[positions.selectedIndex].id;
+    const positionsT = formElements.positions;
+    const positionsId = positionsT.children[positionsT.selectedIndex].id;
+    const positions = [...this.state.positions].filter((c) =>
+      positionsId.includes(c.id)
+    );
+    console.log(positions);
     const current_Team = formElements.current_Team.value;
     const age = formElements.age.value;
     const year_Experience = formElements.year_Experience.value;
-    const ave = formElements.ave.value;
+    const deffAverage = formElements.deffAverage.value;
+    const average = formElements.average.value;
     const era = formElements.era.value;
     const hand = formElements.hand.value;
 
     let player = {
       name,
-      positionsId,
+      positions,
       current_Team,
       age,
       year_Experience,
-      ave,
+      deffAverage,
+      average,
       era,
       hand,
     };
     let postUrl =
-      "https://localhost:44334/api/PositionPlayer" +
-      (this.state.edit ? `/${this.props.location.state.serie.id}` : "");
+      "https://localhost:44334/api/Player" +
+      (this.state.edit ? `/${this.state.playerEdit.id}` : "");
     fetch(postUrl, {
       mode: "cors",
       headers: { "Content-Type": "application/json" },
@@ -109,14 +116,15 @@ class PlayerForm extends Component {
     const {
       id,
       name,
-      img,
+      // img,
       age,
       year_Experience,
       current_Team,
       era,
       hand,
-      position,
-      position_Average,
+      positions,
+      deffAverage,
+      average,
     } = {
       ...this.props.location.state.player,
     };
@@ -139,7 +147,7 @@ class PlayerForm extends Component {
               </Col>
               <Col>
                 <Form.Group>
-                  <Image src={img} />
+                  {/* <Image src={img} /> */}
                   <Form.File id="img" label="Imagen del jugador" />
                 </Form.Group>
               </Col>
@@ -172,7 +180,7 @@ class PlayerForm extends Component {
                 </Form.Group>
               </Col>
               <Col>
-                <Form.Group controlId="hand">
+                <Form.Group controlId="year_Experience">
                   <Form.Label>Años de experiencia:</Form.Label>
                   <Form.Control
                     defaultValue={year_Experience ? year_Experience : ""}
@@ -184,12 +192,12 @@ class PlayerForm extends Component {
             </Row>
             <Row>
               <Col>
-                <Form.Group controlId="position">
+                <Form.Group controlId="positions">
                   <Form.Label>Posición:</Form.Label>
                   <Form.Control
                     defaultValue={
-                      position
-                        ? position.map((pos) => pos.positionName)
+                      positions
+                        ? positions.map((pos) => pos.positionName)
                         : undefined
                     }
                     as="select"
@@ -223,8 +231,18 @@ class PlayerForm extends Component {
                 </Form.Group>
               </Col>
             </Row>
-
             <Row>
+              <Col>
+                <Form.Group controlId="deffAverage">
+                  <Form.Label>Average defensivo:</Form.Label>
+                  <Form.Control
+                    defaultValue={deffAverage ? deffAverage : ""}
+                    type="numeric"
+                    name="deffAverage"
+                    s
+                  />
+                </Form.Group>
+              </Col>
               <Col>
                 <Form.Group controlId="era">
                   <Form.Label>Promedio de carreras limpias:</Form.Label>
@@ -239,12 +257,12 @@ class PlayerForm extends Component {
                 </Form.Group>
               </Col>
               <Col>
-                <Form.Group controlId="position_Average">
+                <Form.Group controlId="average">
                   <Form.Label>Average:</Form.Label>
                   <Form.Control
-                    defaultValue={position_Average ? position_Average : ""}
+                    defaultValue={average ? average : ""}
                     type="numeric"
-                    name="position_Average"
+                    name="average"
                     disabled={
                       this.state.selectedPositions.includes("P") &&
                       this.state.selectedPositions.length === 1

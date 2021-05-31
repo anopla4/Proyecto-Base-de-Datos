@@ -85,6 +85,7 @@ class Serie extends Component {
       itemEdit: {},
     });
   };
+
   handleOnAddPlayer = () => {
     this.setState({ addPlayer: true });
   };
@@ -151,6 +152,7 @@ class Serie extends Component {
         });
       this.setState({
         editTeam: false,
+        addTeam: false,
       });
     } else {
       //TODO: Add request for POST/PATCH AllStarGames
@@ -158,7 +160,6 @@ class Serie extends Component {
   };
 
   componentWillMount() {
-    console.log("Will Mount");
     fetch("https://localhost:44334/api/Team", { mode: "cors" })
       .then((response) => {
         if (!response.ok) {
@@ -220,9 +221,9 @@ class Serie extends Component {
     //TODO: Add request for GET AllStarTeam
   }
 
-  handleOnDelete = (idT, index) => {
+  handleDeleteTeam = (idT, index) => {
     fetch(
-      `https://localhost:44334/api/Serie/${idT}/${
+      `https://localhost:44334/api/TeamSerie/${idT}/${
         this.state.idSerie
       }/${this.formatDate(this.state.initDate)}/${this.formatDate(
         this.state.endDate
