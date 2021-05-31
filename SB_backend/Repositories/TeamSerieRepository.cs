@@ -69,6 +69,18 @@ namespace SB_backend.Repositories
             var current_teamSerie = _context.TeamsSeries.Find(teamSerie.TeamId, teamSerie.SerieId);
             if(current_teamSerie != null)
             {
+                foreach (var change in _context.PlayersChangesGames.Where(c => c.GameSerieId == teamSerie.SerieId && c.GameSerieInitDate == teamSerie.SerieInitDate && c.GameSerieEndDate == teamSerie.SerieEndDate && (c.GameLoserTeamId == teamSerie.TeamId || c.GameWinerTeamId == teamSerie.TeamId)))
+                    _context.PlayersChangesGames.Remove(change);
+                foreach (var game in _context.Games.Where(c => c.SerieId == teamSerie.SerieId && c.SerieInitDate == teamSerie.SerieInitDate && c.SerieEndDate == teamSerie.SerieEndDate && (c.LoserTeamId == teamSerie.TeamId || c.WinerTeamId == teamSerie.TeamId)))
+                    _context.Games.Remove(game);
+                var teamPlayerIDs = _context.TeamsSeriesPlayers.Where(c => c.SerieId == teamSerie.SerieId && c.SerieInitDate == teamSerie.SerieInitDate && c.SerieEndDate == teamSerie.SerieEndDate && c.TeamSerieId == teamSerie.TeamId).Select(c => c.PlayerId).ToList();
+                foreach (var stp in _context.StarPositionPlayersSeries.Where(c => c.SerieId == teamSerie.SerieId && c.SerieInitDate == teamSerie.SerieInitDate && c.SerieEndDate == teamSerie.SerieEndDate && teamPlayerIDs.Contains(c.PlayerId)))
+                    _context.StarPositionPlayersSeries.Remove(stp);
+                foreach (var tsp in _context.TeamsSeriesPlayers.Where(c => c.SerieId == teamSerie.SerieId && c.SerieInitDate == teamSerie.SerieInitDate && c.SerieEndDate == teamSerie.SerieEndDate && c.TeamSerieId == teamSerie.TeamId))
+                    _context.TeamsSeriesPlayers.Remove(tsp);
+                foreach (var tsd in _context.TeamsSeriesDirectors.Where(c => c.SerieId == teamSerie.SerieId && c.SerieInitDate == teamSerie.SerieInitDate && c.SerieEndDate == teamSerie.SerieEndDate && c.TeamSerieId == teamSerie.TeamId))
+                    _context.TeamsSeriesDirectors.Remove(tsd);
+
                 _context.TeamsSeries.Remove(current_teamSerie);
                 _context.SaveChanges();
                 return true;

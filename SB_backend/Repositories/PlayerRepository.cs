@@ -59,7 +59,14 @@ namespace SB_backend.Repositories
 
             if (curr_player != null)
             {
-                //Agregar Validaciones
+                foreach (var change in _playerContext.PlayersChangesGames.Where(x => x.PlayerInId == player.Id || x.PlayerOutId == player.Id))
+                    _playerContext.PlayersChangesGames.Remove(change);
+                foreach (var game in _playerContext.Games.Where(x => x.PitcherWinerId == player.Id || x.PitcherLoserId == player.Id))
+                    _playerContext.Games.Remove(game);
+                foreach (var tsp in _playerContext.TeamsSeriesPlayers.Where(x => x.PlayerId == player.Id))
+                    _playerContext.TeamsSeriesPlayers.Remove(tsp);
+                foreach (var stp in _playerContext.StarPositionPlayersSeries.Where(x => x.PlayerId == player.Id))
+                    _playerContext.StarPositionPlayersSeries.Remove(stp);
                 _playerContext.Players.Remove(player);
                 _playerContext.SaveChanges();
                 return true;

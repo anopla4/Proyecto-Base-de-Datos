@@ -38,6 +38,8 @@ namespace SB_backend.Repositories
             var current_director = _context.Directors.Find(Id);
             if(current_director != null)
             {
+                foreach (var tsd in _context.TeamsSeriesDirectors.Where(x => x.DirectorId == Id))
+                    _context.TeamsSeriesDirectors.Remove(tsd);
                 _context.Directors.Remove(current_director);
                 _context.SaveChanges();
                 return true;

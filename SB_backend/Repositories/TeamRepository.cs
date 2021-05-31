@@ -41,8 +41,16 @@ namespace SB_backend.Repositories
             {
                 foreach (var teamSerie in _teamContext.TeamsSeries.Where(x => x.TeamId == curr_team.Id))
                     _teamContext.TeamsSeries.Remove(teamSerie);
-                foreach (var serie in _teamContext.Series.Where(x => x.Winer.Id == curr_team.Id || x.Loser.Id == curr_team.Id))
+                foreach (var serie in _teamContext.Series.Where(x => x.WinerId == curr_team.Id || x.LoserId == curr_team.Id))
                     _teamContext.Series.Remove(serie);
+                foreach (var change in _teamContext.PlayersChangesGames.Where(x => x.GameWinerTeamId == curr_team.Id || x.GameLoserTeamId == curr_team.Id))
+                    _teamContext.PlayersChangesGames.Remove(change);
+                foreach (var game in _teamContext.Games.Where(x => x.WinerTeamId == curr_team.Id || x.LoserTeamId == curr_team.Id))
+                    _teamContext.Games.Remove(game);
+                foreach (var tsp in _teamContext.TeamsSeriesPlayers.Where(x => x.TeamSerieId == curr_team.Id))
+                    _teamContext.TeamsSeriesPlayers.Remove(tsp);
+                foreach (var tsd in _teamContext.TeamsSeriesDirectors.Where(x => x.TeamSerieId == curr_team.Id))
+                    _teamContext.TeamsSeriesDirectors.Remove(tsd);
                 _teamContext.Teams.Remove(curr_team);
                 _teamContext.SaveChanges();
                 return true;

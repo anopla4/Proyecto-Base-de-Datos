@@ -19,7 +19,6 @@ namespace SB_backend.Models
             modelBuilder.Entity<Player>()
                 .HasMany(c => c.Positions)
                 .WithOne()
-                .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
            modelBuilder.Entity<Player>()
                 .HasOne(c => c.Current_Team)
