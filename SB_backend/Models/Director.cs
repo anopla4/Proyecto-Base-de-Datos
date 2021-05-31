@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,5 +15,10 @@ namespace SB_backend.Models
         [Required]
         [MaxLength(50,ErrorMessage = "El nombre excede la cantidad de caracteres permitidos")]
         public string Name { get; set; }
+
+        public string ImgPath { get; set; }
+
+        [NotMapped]
+        public IFormFile Img { get; set; }
     }
 }

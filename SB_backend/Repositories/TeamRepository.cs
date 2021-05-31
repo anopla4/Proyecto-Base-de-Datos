@@ -72,6 +72,7 @@ namespace SB_backend.Repositories
                 curr_team.Color = team.Color;
                 curr_team.Initials = team.Initials;
                 curr_team.Name = team.Name;
+                curr_team.ImgPath = team.ImgPath;
                 _teamContext.Teams.Update(curr_team);
                 _teamContext.SaveChanges();
             }

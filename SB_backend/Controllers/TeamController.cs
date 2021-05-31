@@ -31,21 +31,7 @@ namespace SB_backend.Controllers
         [HttpPost]
         public IActionResult AddTeam([FromForm]Team team)
         {
-            var file = team.Img;
-            var folderName = Path.Combine("Resources", "Images");
-            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-            if (file.Length > 0)
-            {
-                var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                var fullPath = Path.Combine(pathToSave, fileName);
-                var dbPath = Path.Combine(folderName, fileName);
-                using (var stream = new FileStream(fullPath, FileMode.Create))
-                {
-                    file.CopyTo(stream);
-                }
-                team.ImgPath = dbPath;
-
-            }
+            this.SaveFile(team);
 
             _teamRep.AddTeam(team);
 
@@ -67,18 +53,39 @@ namespace SB_backend.Controllers
         }
 
         [HttpPatch("{id}")]
-        public IActionResult UpdateTeam(Guid Id, Team team)
+        public IActionResult UpdateTeam(Guid Id, [FromForm]Team team)
         {
             var current_team = _teamRep.getTeam(Id);
 
             if (current_team != null)
             {
+                //System.IO.File.Delete(team.ImgPath);
+                this.SaveFile(team);
                 team.Id = current_team.Id;
                 _teamRep.UpdateTeam(team);
                 return Ok(team);
             }
 
             return NotFound($"Not team with id = {Id}");
+        }
+
+        void SaveFile(Team team)
+        {
+            var file = team.Img;
+            var folderName = Path.Combine("Resources", "Images");
+            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            if (file.Length > 0)
+            {
+                var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                var fullPath = Path.Combine(pathToSave, fileName);
+                var dbPath = Path.Combine(folderName, fileName);
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+                team.ImgPath = dbPath;
+
+            }
         }
 
     }

@@ -31,12 +31,12 @@ namespace SB_backend.Repositories
             return teamSerieDirector;
         }
 
-        public List<Director> GetDirectorsOfTeamInSerie(Guid TeamId, Guid SerieId)
+        public List<Director> GetDirectorsOfTeamInSerie(Guid TeamId, Guid SerieId, DateTime initDate, DateTime endDate)
         {
             bool teamSD = _context.TeamsSeriesDirectors.Any(c => c.TeamSerieId == TeamId && c.SerieId == SerieId);
             if (!teamSD)
                 return null;
-            return _context.TeamsSeriesDirectors.Include(c => c.Director).Where(c => c.SerieId == SerieId && c.TeamSerieId == TeamId).Select(c => c.Director).ToList();
+            return _context.TeamsSeriesDirectors.Include(c => c.Director).Where(c => c.SerieId == SerieId && c.SerieInitDate == initDate && c.SerieEndDate == endDate && c.TeamSerieId == TeamId).Select(c => c.Director).ToList();
         }
 
         public List<Director> GetTeamDirectors(Guid TeamId)
@@ -48,9 +48,9 @@ namespace SB_backend.Repositories
             return directors;
         }
 
-        public TeamSerieDirector GetTeamSerieDirector(Guid SerieId, Guid DirectorId)
+        public TeamSerieDirector GetTeamSerieDirector(Guid teamId, Guid SerieId, DateTime initDate, DateTime endDate, Guid DirectorId)
         {
-            return _context.TeamsSeriesDirectors.Include(c => c.Serie).Include(c => c.Director).Include(c => c.TeamSerie).SingleOrDefault(c => c.DirectorId == DirectorId && c.SerieId == SerieId);
+            return _context.TeamsSeriesDirectors.Include(c => c.Serie).Include(c => c.Director).Include(c => c.TeamSerie).SingleOrDefault(c => c.DirectorId == DirectorId && c.SerieId == SerieId && c.SerieInitDate == initDate && c.SerieEndDate == endDate && c.TeamSerieId == teamId);
         }
 
 

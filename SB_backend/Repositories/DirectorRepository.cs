@@ -53,6 +53,7 @@ namespace SB_backend.Repositories
             if(current_director != null)
             {
                 current_director.Name = director.Name;
+                current_director.ImgPath = director.ImgPath;
                 _context.Directors.Update(current_director);
                 _context.SaveChanges();
                 return current_director;
