@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using SB_backend.Interfaces;
 using SB_backend.Models;
 using SB_backend.Repositories;
@@ -68,9 +70,14 @@ namespace SB_backend
                 app.UseHsts();  
             }
 
-            app.UseStaticFiles();
-            app.UseHttpsRedirection();
             app.UseCors();
+            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+                RequestPath = new PathString("/Resources")
+            });
+            app.UseHttpsRedirection();
             app.UseMvc();
         }
     }
