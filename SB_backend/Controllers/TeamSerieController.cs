@@ -76,6 +76,10 @@ namespace SB_backend.Controllers
         [HttpPatch("{TeamId}/{SerieId}/{initDate}/{endDate}")]
         public IActionResult UpdateTeamSerie(Guid TeamId,Guid SerieId,DateTime initDate, DateTime endDate,TeamSerie teamSerie)
         {
+            teamSerie.TeamId = TeamId;
+            teamSerie.SerieId = SerieId;
+            teamSerie.SerieInitDate = initDate;
+            teamSerie.SerieEndDate = endDate;
             var teamSerieUpd = _tsRep.UpdateTeamSerie(teamSerie);
             if(teamSerieUpd == null)
             {
