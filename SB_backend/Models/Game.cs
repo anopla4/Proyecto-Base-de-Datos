@@ -32,11 +32,11 @@ namespace SB_backend.Models
         public Serie Serie { get; set; }
         public Guid PitcherWinerId { get; set; }
         public Guid PitcherWinerPositionId { get; set; }
-        [ForeignKey("PitcherWinerPlayerId,PitcherWinerPositionId")]
+        [ForeignKey("PitcherWinerId,PitcherWinerPositionId")]
         public Player PitcherWiner { get; set; }
         public Guid PitcherLoserId { get; set; }
         public Guid PitcherLoserPositionId { get; set; }
-        [ForeignKey("PitcherLoserPlayerId,PitcherLoserPositionId")]
+        [ForeignKey("PitcherLoserId,PitcherLoserPositionId")]
         public Player PitcherLoser { get; set; }
         public int InFavorCarrers { get; set; }
         public int AgaintsCarrers { get; set; }

@@ -66,7 +66,9 @@ namespace SB_backend.Controllers
                 }
                 player.ImgPath = dbPath;
             }
-            _plrep.AddPlayer(player);
+            Player p = _plrep.AddPlayer(player);
+            if (p == null)
+                return BadRequest("Not Player Created");
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + player.Id + "/" + player.PositionId, player);
         }
 

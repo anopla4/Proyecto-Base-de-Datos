@@ -13,7 +13,7 @@ namespace SB_backend.Models
         public Guid PlayerId { get; set; }
         [Required]
         public Guid PlayerPositionId { get; set; }
-        [ForeignKey("PlayerId,PositionId")]
+        [ForeignKey("PlayerId,PlayerPositionId")]
         public Player Player { get; set; }
         [Required]
         public Guid SerieId { get; set; }
