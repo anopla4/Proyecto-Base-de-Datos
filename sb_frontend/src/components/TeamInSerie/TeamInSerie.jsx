@@ -4,7 +4,6 @@ import {
   Button,
   Row,
   Col,
-  Card,
   Image,
   Form,
   Navbar,
@@ -15,18 +14,16 @@ import {
 import "./TeamInSerie.css";
 import Players from "../../components/Players/Players";
 import Add from "../../components/Add/Add";
-import { List, PencilSquare } from "react-bootstrap-icons";
 import { TrashFill } from "react-bootstrap-icons";
 
 class TeamInSerie extends Component {
   state = {
     addPlayer: false,
     addDirector: false,
-    team_name: "Industriales",
-    serie_name: "Serie Nacional de Béisbol",
-    serie_season: "1994-1995",
-    directors: [{ name: "Lázaro Vargas" }],
-    allDirectors: [{ name: "Lázaro Vargas" }],
+    serie: {},
+    team: {},
+    allDirectors: [],
+    directors: [],
     playerImg: "",
     selectedPlayer: false,
     allPlayers: [
@@ -79,6 +76,59 @@ class TeamInSerie extends Component {
     ],
   };
 
+  componentWillMount() {
+    fetch("https://localhost:44334/api/Director", { mode: "cors" })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ allDirectors: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+    // fetch("https://localhost:44334/api/Player", { mode: "cors" })
+    //   .then((response) => {
+    //     if (!response.ok) {
+    //       throw Error(response.statusText);
+    //     }
+    //     return response.json();
+    //   })
+    //   .then((response) => {
+    //     this.setState({ allPlayers: response });
+    //   })
+    //   .catch(function (error) {
+    //     console.log("Hubo un problema con la petición Fetch:" + error.message);
+    //   });
+  }
+
+  componentDidMount() {
+    fetch(
+      `https://localhost:44334/api/TeamSerieDirector/Directors/${this.state.serie.id}/
+      ${this.state.serie.initDate}/${this.state.serie.endDate}/${this.state.team.id}`,
+      { mode: "cors" }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ directors: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+    this.setState({
+      team: this.props.location.state.team,
+      serie: this.props.location.state.serie,
+    });
+  }
+
   handleOnClickAdd = () => {
     this.setState({ addPlayer: true, addDirector: false });
   };
@@ -86,18 +136,141 @@ class TeamInSerie extends Component {
   handleCloseAddPlayer = () => {
     this.setState({ addPlayer: false });
   };
-  handleonDeleteDirector = () => {};
+  handleonDeleteDirector = (idD, index) => {
+    fetch(
+      `https://localhost:44334/api/TeamSerieDirector/${idD}/${this.state.serie.id}/
+      ${this.state.serie.initDate}/${this.state.serie.endDate}/${this.state.team.id}`,
+      { mode: "cors", method: "DELETE" }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ directors: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
 
-  handleAddDirector = () => {
+    let n_directors = [...this.state.directors];
+    n_directors.splice(index, 1);
+
+    this.setState({ directors: n_directors });
+  };
+
+  handleonDeletePlayer = (idP, index) => {
+    fetch(
+      `https://localhost:44334/api/TeamSeriePlayer/${idP}/${this.state.serie.id}/
+      ${this.state.serie.initDate}/${this.state.serie.endDate}/${this.state.team.id}`,
+      { mode: "cors", method: "DELETE" }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ players: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+
+    let n_players = [...this.state.players];
+    n_players.splice(index, 1);
+
+    this.setState({ players: n_players });
+  };
+
+  handleOnClickAddDirector = () => {
     this.setState({ addDirector: true, addPlayer: false });
+  };
+
+  onFormSubmit = (e) => {
+    let formElements = e.target.elements;
+    if (this.state.addDirector) {
+      const director = formElements.director;
+      const directorId = director
+        ? director.children[director.selectedIndex].id
+        : "";
+      let item = {
+        directorId: directorId,
+        serieId: this.state.serie.id,
+        serieInitDate: this.state.serie.initDate,
+        serieEndDate: this.state.serie.endDate,
+        teamsSerieId: this.state.team.id,
+      };
+      fetch("https://localhost:44334/api/TeamSerieDirector", {
+        mode: "cors",
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        body: JSON.stringify(item),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw Error(response.statusText);
+          }
+          return response.json();
+        })
+        .catch(function (error) {
+          console.log(
+            "Hubo un problema con la petición Fetch:" + error.message
+          );
+        });
+      this.setState({
+        addDirector: false,
+      });
+    } else {
+      const player = formElements.player;
+      const playerId = player ? player.children[player.selectedIndex].id : "";
+      let item = {
+        playerId: playerId,
+        serieId: this.state.serie.id,
+        serieInitDate: this.state.serie.initDate,
+        serieEndDate: this.state.serie.endDate,
+        teamsSerieId: this.state.team.id,
+      };
+      fetch("https://localhost:44334/api/TeamSeriePlayer", {
+        mode: "cors",
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        body: JSON.stringify(item),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw Error(response.statusText);
+          }
+          return response.json();
+        })
+        .catch(function (error) {
+          console.log(
+            "Hubo un problema con la petición Fetch:" + error.message
+          );
+        });
+      this.setState({
+        addPlayer: false,
+      });
+    }
   };
 
   handleCloseAddDirector = () => this.setState({ addDirector: false });
 
-  handleSelectChange = () => {};
+  handleOnChange = (e) => {
+    e.preventDefault();
+    let index = e.target.selectedIndex;
+    let el = e.target.childNodes[index];
+    let option = el.getAttribute("id");
+    this.setState((prevState) => ({
+      selectedPositions: [...prevState.selectedPositions, option],
+    }));
+  };
 
   render() {
-    const { idTeam, idSerie } = this.props.location.state;
+    const { team, serie } = this.props.location.state;
     return (
       <Container>
         <h1 className="mb-5 my-style-header">
@@ -110,13 +283,15 @@ class TeamInSerie extends Component {
             <Row className="mt-2 mb-3">
               <Col md={3}>
                 <ListGroup>
-                  {this.state.directors.map((dir) => (
+                  {this.state.directors.map((dir, index) => (
                     <ListGroupItem>
                       {dir.name}
                       <Button
                         className="ml-3"
                         style={{ padding: "0px", float: "right" }}
-                        onClick={this.state.handleonDeleteDirector}
+                        onClick={() =>
+                          this.state.handleonDeleteDirector(dir.id, index)
+                        }
                         variant="danger"
                       >
                         <TrashFill style={{ width: "100%" }} />
@@ -130,7 +305,7 @@ class TeamInSerie extends Component {
                 <Add
                   className="mt-2"
                   text="Agregar director"
-                  onClick={this.handleAddDirector}
+                  onClick={this.handleOnClickAddDirector}
                 />
               </Col>
             </Row>
@@ -152,34 +327,9 @@ class TeamInSerie extends Component {
             <Players
               playerGeneral={false}
               delete={true}
+              onDelete={this.handleonDeletePlayer}
               players={this.state.players}
             />
-            {/* {this.state.players.map((player) => (
-            <Card key={player.id} className="player-hover">
-              <Card.Header style={{ padding: "0.5%" }}>
-                <Row className="row align-items-center">
-                  <Col md={1}>
-                    <Image
-                      fluid
-                      roundedCircle
-                      src={player.img}
-                      alt=""
-                      className="custom-circle-image"
-                    />
-                  </Col>
-                  <Col>
-                    <h6>{player.name}</h6>
-                  </Col>
-                  <Col>
-                    <p style={{ display: "inline" }}>
-                      <h className="header-posiciones-team">Posiciones: </h>
-                      {player.positions.join(", ")}.
-                    </p>
-                  </Col>
-                </Row>
-              </Card.Header>
-            </Card>
-          ))} */}
             <Add text="Agregar jugador" onClick={this.handleOnClickAdd} />
           </Col>
 
@@ -187,13 +337,13 @@ class TeamInSerie extends Component {
             <Col md={3}>
               <Navbar fixed="right">
                 <Nav.Item>
-                  <Form>
+                  <Form onSubmit={this.onFormSubmit}>
                     <Form.Group>
                       <Form.Label>
                         <h5>Seleccione un jugador</h5>
                       </Form.Label>
                     </Form.Group>
-                    <Form.Group controlId="name">
+                    <Form.Group controlId="player">
                       <Form.Label>Jugador:</Form.Label>
                       <Form.Label>
                         {this.state.selectedPlayer && (
@@ -201,13 +351,13 @@ class TeamInSerie extends Component {
                         )}
                       </Form.Label>
                       <Form.Control
-                        onChange={this.handleSelectChange}
+                        onChange={this.handleOnChange}
                         as="select"
                         custom
                       >
                         <option>{""}</option>
                         {this.state.allPlayers.map((player) => (
-                          <option>{player.name}</option>
+                          <option id={player.id}>{player.name}</option>
                         ))}
                       </Form.Control>
                     </Form.Group>
@@ -216,6 +366,7 @@ class TeamInSerie extends Component {
                         className="mr-2"
                         style={{ float: "left" }}
                         variant="primary"
+                        type="submit"
                       >
                         Aceptar
                       </Button>
@@ -236,13 +387,14 @@ class TeamInSerie extends Component {
             <Col md={3}>
               <Navbar fixed="right">
                 <Nav.Item>
+                  onSubmit={this.onFormSubmit}
                   <Form>
                     <Form.Group>
                       <Form.Label>
                         <h5>Seleccione un director</h5>
                       </Form.Label>
                     </Form.Group>
-                    <Form.Group controlId="name">
+                    <Form.Group controlId="director">
                       <Form.Label>Director:</Form.Label>
                       {/* <Form.Label>
                         {this.state.selectedPlayer && (
@@ -256,7 +408,7 @@ class TeamInSerie extends Component {
                       >
                         <option>{""}</option>
                         {this.state.allDirectors.map((dir) => (
-                          <option>{dir.name}</option>
+                          <option id={dir.id}>{dir.name}</option>
                         ))}
                       </Form.Control>
                     </Form.Group>
@@ -265,6 +417,7 @@ class TeamInSerie extends Component {
                         className="mr-2"
                         style={{ float: "left" }}
                         variant="primary"
+                        type="submit"
                       >
                         Aceptar
                       </Button>
