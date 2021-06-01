@@ -42,22 +42,15 @@ namespace SB_backend.Controllers
         [HttpPost]
         public IActionResult AddPlayerInGame(Guid GameId,PlayerGame playerGame)
         {
-            var playerGameA = _pgRep.AddPositionPlayerInGame(playerGame);
+            var playerGameA = _pgRep.AddPlayerInGame(playerGame);
             if (playerGameA == null)
                 return BadRequest("Not created object");
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + playerGameA.gameGameId + "/" + playerGameA.PlayerPositionId + "/" + playerGameA.PlayerId, playerGameA);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + playerGameA.GameId + "/" + playerGameA.PlayerId, playerGameA);
         }
-        [HttpPatch("{GameId}/WinerTeam/{PositionId}")]
-        public IActionResult UpdatePlayerInWinerTeam(Guid GameId,Guid PositionId, PlayerGame playerGame)
+        [HttpDelete("{GameId}/{PlayerId}")]
+        public IActionResult RemovePlayerInGame(Guid GameId, Guid PlayerId)
         {
-            var playerGameU = _pgRep.UpdatePlayerInGameWinerTeam(playerGame);
-            if (playerGameU == null)
-                return NotFound("Object Not  Found");
-            return Ok(playerGameU);
-        }
-        [HttpDelete("{GameId}/{PositionId}/{PlayerId}")]
-        public IActionResult RemovePlayerInGame(Guid GameId, Guid PositionID, Guid PlayerId, PlayerGame playerGame)
-        {
+            var playerGame = _pgRep.GetPlayerInGame(GameId, PlayerId);
             var playerGameR = _pgRep.DeletePlayerInGame(playerGame);
             if (!playerGameR)
                 return NotFound("Object Not Found");

@@ -12,10 +12,8 @@ namespace SB_backend.Interfaces
         List<PlayerGame> GetPlayersInGame(Guid GameId);
         List<PlayerGame> GetPlayersInGameWinerTeam(Guid GameId);
         List<PlayerGame> GetPlayersInGameLoserTeam(Guid GameId);
-        PlayerGame GetPlayerInGame(Guid GameId, Guid PlayerId, Guid PlayerPositionId);
-        PlayerGame AddPositionPlayerInGame(PlayerGame PlayerGame);
-        PlayerGame UpdatePlayerInGameWinerTeam(PlayerGame PlayerGame);
-        PlayerGame UpdatePlayerInGameLoserTeam(PlayerGame PlayerGame);
+        PlayerGame GetPlayerInGame(Guid GameId, Guid PlayerId);
+        PlayerGame AddPlayerInGame(PlayerGame PlayerGame);
         bool DeletePlayerInGame(PlayerGame PlayerGame);
 
 

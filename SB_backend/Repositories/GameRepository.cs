@@ -31,16 +31,15 @@ namespace SB_backend.Repositories
             if (game.WinerTeamId == game.LoserTeamId)
                 return null;
             Position pitcher = _context.Positions.SingleOrDefault(c => c.PositionName == "P");
-            //Player pitcherWiner = _context.Players.Find(game.PitcherWinerId, pitcher.Id);
-            if (game.PitcherWinerPositionId !=  pitcher.Id)
+            if (game.PitcherWinerId !=  pitcher.Id)
                 return null;
-            if (game.PitcherLoserPositionId != pitcher.Id)
-                return null;
-
-            if (!_context.TeamsSeriesPlayers.Any(c => c.SerieId == game.SerieId && c.TeamSerieId == game.WinerTeamId && c.PlayerId == game.PitcherWinerId))
+            if (game.PitcherLoserId != pitcher.Id)
                 return null;
 
-            if (!_context.TeamsSeriesPlayers.Any(c => c.SerieId == game.SerieId && c.TeamSerieId == game.LoserTeamId && c.PlayerId == game.PitcherLoserId))
+            if (!_context.TeamsSeriesPlayers.Any(c => c.SerieId == game.SerieId && c.TeamId == game.WinerTeamId && c.PlayerId == game.PitcherWinerId))
+                return null;
+
+            if (!_context.TeamsSeriesPlayers.Any(c => c.SerieId == game.SerieId && c.TeamId == game.LoserTeamId && c.PlayerId == game.PitcherLoserId))
                 return null;
 
             bool flagWonGames = (_context.TeamsSeries.SingleOrDefault(c => c.TeamId == game.WinerTeamId && c.SerieId == game.SerieId).WonGames >= _context.Games.Where(c => c.SerieId == game.SerieId && c.WinerTeamId == game.WinerTeamId).ToList().Count);
@@ -49,6 +48,18 @@ namespace SB_backend.Repositories
             bool flagLostGames = (_context.TeamsSeries.SingleOrDefault(c => c.TeamId == game.LoserTeamId && c.SerieId == game.SerieId).LostGames >= _context.Games.Where(c => c.SerieId == game.SerieId && c.LoserTeamId == game.LoserTeamId).ToList().Count);
             if (!flagLostGames)
                 return null;
+
+            PlayerGame winnerPitcherplayerGame = new PlayerGame();
+            winnerPitcherplayerGame.GameId = game.GameId;
+            winnerPitcherplayerGame.PlayerId = game.PitcherWinerId;
+            _context.PlayersGames.Add(winnerPitcherplayerGame);
+
+            PlayerGame loserPitcherplayerGame = new PlayerGame();
+            loserPitcherplayerGame.GameId = game.GameId;
+            loserPitcherplayerGame.PlayerId = game.PitcherLoserId;
+            _context.PlayersGames.Add(loserPitcherplayerGame);
+
+
             _context.Games.Add(game);
             _context.SaveChanges();
             return game;
@@ -77,10 +88,10 @@ namespace SB_backend.Repositories
 
         public bool RemoveGame(Game game)
         {
-            var currentGame = _context.Games.SingleOrDefault(c => c.GameId == game.GameId && c.SerieId == game.SerieId && c.SerieInitDate == game.SerieInitDate && c.WinerTeamId == game.WinerTeamId && c.LoserTeamId == game.LoserTeamId && c.GameTime == game.GameTime && c.GameDate == game.GameDate);
+            var currentGame = _context.Games.SingleOrDefault(c => c.GameId == game.GameId && c.SerieId == game.SerieId && c.SerieInitDate == game.SerieInitDate);
             if (currentGame == null)
                 return false;
-            foreach (var change in _context.PlayersChangesGames.Where(c => c.GameGameId == game.GameId && c.GameSerieId == game.SerieId && c.GameSerieInitDate == game.SerieInitDate && c.GameWinerTeamId == game.WinerTeamId && c.GameLoserTeamId == game.LoserTeamId && c.GameGameTime == game.GameTime && c.GameGameDate == game.GameDate))
+            foreach (var change in _context.PlayersChangesGames.Include(c=>c.Game).Where(c => c.GameId == game.GameId && c.Game.SerieId == game.SerieId && c.Game.SerieInitDate == game.SerieInitDate))
                 _context.PlayersChangesGames.Remove(change);
 
             _context.Games.Remove(currentGame);
@@ -90,7 +101,7 @@ namespace SB_backend.Repositories
 
         public Game UpdateGame(Game game)
         {
-            var currentGame = _context.Games.SingleOrDefault(c => c.GameId == game.GameId && c.SerieId == c.SerieId && c.SerieInitDate == game.SerieInitDate && c.WinerTeamId == game.WinerTeamId && c.LoserTeamId == game.LoserTeamId && c.GameTime == game.GameTime && c.GameDate == game.GameDate);
+            var currentGame = _context.Games.SingleOrDefault(c => c.GameId == game.GameId && c.SerieId == c.SerieId && c.SerieInitDate == game.SerieInitDate);
             if (currentGame == null)
                 return null;
             currentGame.PitcherWinerId = game.PitcherWinerId;

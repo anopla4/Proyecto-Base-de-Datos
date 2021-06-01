@@ -10,39 +10,19 @@ namespace SB_backend.Models
     public class PlayerChangeGame
     {
         [Required]
-        public Guid GameGameId { get; set; }
-        [Required]
-        public Guid GameWinerTeamId { get; set; }
-        [Required]
-        public Guid GameLoserTeamId { get; set; }
-        [Column(TypeName = "date")]
-        [Required]
-        public DateTime GameGameDate { get; set; }
-        [Column(TypeName = "time")]
-        [Required]
-        public TimeSpan GameGameTime { get; set; }
-        [Required]
-        public Guid GameSerieId { get; set; }
-        [Required]
-        public DateTime GameSerieInitDate { get; set; }
-        [Required]
-        public DateTime GameSerieEndDate { get; set; }
-        [ForeignKey("GameGameId,GameWinerTeamId,GameLoserTeamId,GameGameDate,GameGameTime,GameSerieId,GameSerieInitDate,GameSerieEndDate")]
+        public Guid GameId { get; set; }
+        [ForeignKey("GameId")]
         public Game Game { get; set; }
-        //[Required]
-        //public Guid PositionId { get; set; }
-        //public Position Position { get; set; }
+        public Guid PlayerIdIn { get; set; }
+        public Guid PositionIdIn { get; set; }
         [Required]
-        public Guid PlayerInId { get; set; }
+        [ForeignKey("PlayerIdIn,PositionIdIn")]
+        public PlayerPosition PlayerPositionIn { get; set; }
+
+        public Guid PlayerIdOut { get; set; }
+        public Guid PositionIdOut { get; set; }
         [Required]
-        public Guid PlayerInPositionId { get; set; }
-        [ForeignKey("PlayerInId,PlayerInPositionId")]
-        public Player PlayerIn { get; set; }
-        [Required]
-        public Guid PlayerOutId { get; set; }
-        [Required]
-        public Guid PlayerOutPositionId { get; set; }
-        [ForeignKey("PlayerOutId,PlayerOutPositionId")]
-        public Player PlayerOut { get; set; }
+        [ForeignKey("PlayerIdOut,PositionIdOut")]
+        public PlayerPosition PlayerPositionOut { get; set; }
     }
 }

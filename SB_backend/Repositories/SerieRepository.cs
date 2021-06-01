@@ -20,6 +20,24 @@ namespace SB_backend.Repositories
         {
             serie.Id = Guid.NewGuid();
             _context.Series.Add(serie);
+            if (serie.WinerId != null)
+            {
+                var winnerTeamSerie = new TeamSerie();
+                winnerTeamSerie.TeamId = serie.WinerId.Value;
+                winnerTeamSerie.SerieId = serie.Id;
+                winnerTeamSerie.SerieInitDate = serie.InitDate;
+                winnerTeamSerie.SerieEndDate = serie.EndDate;
+                _context.TeamsSeries.Add(winnerTeamSerie);
+            }
+            if (serie.WinerId != null)
+            {
+                var loserTeamSerie = new TeamSerie();
+                loserTeamSerie.TeamId = serie.LoserId.Value;
+                loserTeamSerie.SerieId = serie.Id;
+                loserTeamSerie.SerieInitDate = serie.InitDate;
+                loserTeamSerie.SerieEndDate = serie.EndDate;
+                _context.TeamsSeries.Add(loserTeamSerie);
+            }
             _context.SaveChanges();
             return serie;
         }
@@ -41,9 +59,9 @@ namespace SB_backend.Repositories
 
             if (curr_serie != null)
             {
-                foreach (var change in _context.PlayersChangesGames.Where(c => c.GameSerieId == Id && c.GameSerieInitDate == initDate && c.GameSerieEndDate == endDate))
+                foreach (var change in _context.PlayersChangesGames.Include(c=>c.Game).Where(c => c.Game.SerieId == Id && c.Game.SerieInitDate == initDate && c.Game.SerieEndDate == endDate))
                     _context.PlayersChangesGames.Remove(change);
-                foreach (var playerGame in _context.PlayersGames.Where(c => c.gameSerieId == Id && c.gameSerieInitDate == initDate && c.gameSerieEndDate == endDate))
+                foreach (var playerGame in _context.PlayersGames.Include(c => c.Game).Where(c => c.Game.SerieId == Id && c.Game.SerieInitDate == initDate && c.Game.SerieEndDate == endDate))
                     _context.PlayersGames.Remove(playerGame);
                 foreach (var playerGame in _context.Games.Where(c => c.SerieId == Id && c.SerieInitDate == initDate && c.SerieEndDate == endDate))
                     _context.Games.Remove(playerGame);

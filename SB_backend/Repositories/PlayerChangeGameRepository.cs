@@ -15,29 +15,24 @@ namespace SB_backend.Repositories
         {
             _context = context;
         }
-        public PlayerChangeGame AddChangeInGame(PlayerChangeGame PlayerChangeGame)
+        public PlayerChangeGame AddChangeInGame(PlayerChangeGame playerChangeGame)
         {
-            var flagGame = _context.Games.Any(c => c.GameId == PlayerChangeGame.GameGameId && c.GameDate == PlayerChangeGame.GameGameDate && c.GameTime == PlayerChangeGame.GameGameTime && c.WinerTeamId == PlayerChangeGame.GameWinerTeamId && c.LoserTeamId == PlayerChangeGame.GameLoserTeamId && c.SerieId == PlayerChangeGame.GameSerieId && c.SerieInitDate == PlayerChangeGame.GameSerieInitDate && c.SerieEndDate == PlayerChangeGame.GameSerieEndDate);
-            if (!flagGame)
+            var game = _context.Games.Find(playerChangeGame.GameId);
+            if (game == null)
                 return null;
-            List<Guid> teamLoser = _context.TeamsSeriesPlayers.Where(d => d.SerieId == PlayerChangeGame.GameSerieId && d.TeamSerieId == PlayerChangeGame.GameLoserTeamId).Select(d => d.PlayerId).ToList();
-            List<Guid> teamWiner = _context.TeamsSeriesPlayers.Where(d => d.SerieId == PlayerChangeGame.GameSerieId && d.TeamSerieId == PlayerChangeGame.GameWinerTeamId).Select(d => d.PlayerId).ToList();
-            Position position = _context.Positions.Find(PlayerChangeGame.PlayerInPositionId);
-            if (PlayerChangeGame.PlayerInPositionId != PlayerChangeGame.PlayerOutPositionId)
+            List<Guid> teamLoser = _context.TeamsSeriesPlayers.Where(d => d.SerieId == game.SerieId && d.TeamId == game.LoserTeamId).Select(d => d.PlayerId).ToList();
+            List<Guid> teamWiner = _context.TeamsSeriesPlayers.Where(d => d.SerieId == game.SerieId && d.TeamId == game.WinerTeamId).Select(d => d.PlayerId).ToList();
+            var playerPositionInFlag = _context.PlayerPosition.Any(c => c.PlayerId == playerChangeGame.PositionIdIn && c.PositionId == playerChangeGame.PositionIdOut);
+            if (!playerPositionInFlag)
                 return null;
-            var flagPlayerIn = (_context.Players.Any(c => c.Id == PlayerChangeGame.PlayerInId && c.PositionId == PlayerChangeGame.PlayerInPositionId) && 
-                (teamLoser.Contains(PlayerChangeGame.PlayerInId) || teamLoser.Contains(PlayerChangeGame.PlayerInId)));
-            if (!flagPlayerIn)
+
+            if (playerChangeGame.PositionIdIn != playerChangeGame.PositionIdOut)
                 return null;
-            var flagPlayerOut = (_context.Players.Any(c => c.Id == PlayerChangeGame.PlayerOutId && c.PositionId == PlayerChangeGame.PlayerOutPositionId) &&
-                (teamLoser.Contains(PlayerChangeGame.PlayerOutId) || teamLoser.Contains(PlayerChangeGame.PlayerOutId)));
-            if (!flagPlayerOut)
+            if ((teamWiner.Contains(playerChangeGame.PlayerIdIn) && teamWiner.Contains(playerChangeGame.PlayerIdOut)) || (teamLoser.Contains(playerChangeGame.PlayerIdOut) && teamLoser.Contains(playerChangeGame.PlayerIdIn)))
                 return null;
-            if ((teamLoser.Contains(PlayerChangeGame.PlayerInId) && teamWiner.Contains(PlayerChangeGame.PlayerOutId)) || (teamLoser.Contains(PlayerChangeGame.PlayerOutId) && teamWiner.Contains(PlayerChangeGame.PlayerInId)))
-                return null;
-            _context.PlayersChangesGames.Add(PlayerChangeGame);
+            _context.PlayersChangesGames.Add(playerChangeGame);
             _context.SaveChanges();
-            return PlayerChangeGame;
+            return playerChangeGame;
         }
 
         public List<PlayerChangeGame> GetPlayersChangesGames()
@@ -47,36 +42,36 @@ namespace SB_backend.Repositories
 
         public List<PlayerChangeGame> GetPlayersChangesInGame(Guid GameId)
         {
-            var flag = _context.PlayersChangesGames.Any(c => c.GameGameId == GameId);
+            var flag = _context.PlayersChangesGames.Any(c => c.GameId == GameId);
             if (!flag)
                 return null;
-            return _context.PlayersChangesGames.Where(c => c.GameGameId == GameId).ToList();
+            return _context.PlayersChangesGames.Where(c => c.GameId == GameId).ToList();
 
         }
 
         public List<PlayerChangeGame> GetPlayersChangesInGameLoserTeam(Guid GameId)
         {
-            var flag = _context.PlayersChangesGames.Any(c => c.GameGameId == GameId);
+            var flag = _context.PlayersChangesGames.Any(c => c.GameId == GameId);
             if (!flag)
                 return null;
             var game = _context.Games.SingleOrDefault(c => c.GameId == GameId);
-            List<Guid> teamLoser = _context.TeamsSeriesPlayers.Where(d => d.SerieId == game.SerieId && d.TeamSerieId == game.LoserTeamId).Select(d => d.PlayerId).ToList();
-            return _context.PlayersChangesGames.Include(c => c.PlayerIn).Include(c => c.PlayerIn.Position).Include(c => c.PlayerOut).Include(c => c.PlayerOut.Position).Include(c => c.Game).Where(c => c.GameGameId == GameId && teamLoser.Contains(c.PlayerInId)).ToList();
+            List<Guid> teamLoser = _context.TeamsSeriesPlayers.Where(d => d.SerieId == game.SerieId && d.TeamId == game.LoserTeamId).Select(d => d.PlayerId).ToList();
+            return _context.PlayersChangesGames.Include(c => c.PlayerPositionIn).Include(c => c.PlayerPositionOut).Include(c => c.Game).Where(c => c.GameId == GameId && teamLoser.Contains(c.PlayerIdIn)).ToList();
         }
 
         public List<PlayerChangeGame> GetPlayersChangesInGameWinerTeam(Guid GameId)
         {
-            var flag = _context.PlayersChangesGames.Any(c => c.GameGameId == GameId);
+            var flag = _context.PlayersChangesGames.Any(c => c.GameId == GameId);
             if (!flag)
                 return null;
             var game = _context.Games.SingleOrDefault(c => c.GameId == GameId);
-            List<Guid> teamWiner = _context.TeamsSeriesPlayers.Where(d => d.SerieId == game.SerieId && d.TeamSerieId == game.WinerTeamId).Select(d => d.PlayerId).ToList();
-            return _context.PlayersChangesGames.Include(c => c.PlayerIn).Include(c => c.PlayerIn.Position).Include(c => c.PlayerOut).Include(c => c.PlayerOut.Position).Include(c => c.Game).Where(c => c.GameGameId == GameId && teamWiner.Contains(c.PlayerInId)).ToList();
+            List<Guid> teamWiner = _context.TeamsSeriesPlayers.Where(d => d.SerieId == game.SerieId && d.TeamId == game.WinerTeamId).Select(d => d.PlayerId).ToList();
+            return _context.PlayersChangesGames.Include(c => c.PlayerPositionIn).Include(c => c.PlayerPositionOut).Include(c => c.Game).Where(c => c.GameId == GameId && teamWiner.Contains(c.PlayerIdIn)).ToList();
         }
 
-        public bool RemoveChangeInGame(PlayerChangeGame PlayerChangeGame)
+        public bool RemoveChangeInGame(PlayerChangeGame playerChangeGame)
         {
-            var currPlayerChange = _context.PlayersChangesGames.SingleOrDefault(c => c.GameGameId == PlayerChangeGame.GameGameId && c.PlayerInId == PlayerChangeGame.PlayerInId && c.PlayerInPositionId == PlayerChangeGame.PlayerInPositionId && c.PlayerOutId == PlayerChangeGame.PlayerOutId && c.PlayerOutPositionId == PlayerChangeGame.PlayerOutPositionId);
+            var currPlayerChange = _context.PlayersChangesGames.SingleOrDefault(c => c.GameId == playerChangeGame.GameId && c.PlayerIdIn == playerChangeGame.PlayerIdIn && c.PlayerIdOut == playerChangeGame.PlayerIdOut && c.PositionIdIn == playerChangeGame.PositionIdIn && c.PositionIdOut == playerChangeGame.PositionIdOut);
             if (currPlayerChange == null)
                 return false;
             _context.PlayersChangesGames.Remove(currPlayerChange);

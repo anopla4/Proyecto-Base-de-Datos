@@ -17,16 +17,17 @@ namespace SB_backend.Repositories
         }
         public StarPositionPlayerSerie AddStarPositionPlayerSerie(StarPositionPlayerSerie starPositionPlayerSerie)
         {
-            var flagSerie = _context.Series.Any(c => c.Id == starPositionPlayerSerie.SerieId && c.InitDate == starPositionPlayerSerie.SerieInitDate && c.EndDate == starPositionPlayerSerie.SerieEndDate);
+            var flagSerie = _context.Series.Any(c => c.Id == starPositionPlayerSerie.SerieId 
+            && c.InitDate == starPositionPlayerSerie.SerieInitDate 
+            && c.EndDate == starPositionPlayerSerie.SerieEndDate);
             if (!flagSerie)
                 return null;
-            Position position = _context.Positions.Find(starPositionPlayerSerie.PlayerPositionId);
-            if (position == null)
+
+            var flagPlayerPosition = _context.PlayerPosition.Any(c => c.PlayerId == starPositionPlayerSerie.PlayerId && c.PositionId == starPositionPlayerSerie.PositionId);
+            if (!flagPlayerPosition)
                 return null;
-            var flagPlayer = _context.Players.Any(c => c.Id == starPositionPlayerSerie.PlayerId && c.PositionId == position.Id);
-            if (!flagPlayer)
-                return null;
-            if (_context.StarPositionPlayersSeries.Any(c => c.SerieId == starPositionPlayerSerie.SerieId && c.SerieInitDate == starPositionPlayerSerie.SerieInitDate && c.SerieEndDate == starPositionPlayerSerie.SerieEndDate && c.PlayerPositionId == starPositionPlayerSerie.PlayerPositionId))
+
+            if (_context.StarPositionPlayersSeries.Any(c => c.SerieId == starPositionPlayerSerie.SerieId && c.SerieInitDate == starPositionPlayerSerie.SerieInitDate && c.SerieEndDate == starPositionPlayerSerie.SerieEndDate && (c.PlayerId == starPositionPlayerSerie.PlayerId || c.PositionId == starPositionPlayerSerie.PositionId)))
                 return null;
             _context.StarPositionPlayersSeries.Add(starPositionPlayerSerie);
             _context.SaveChanges();
@@ -44,7 +45,7 @@ namespace SB_backend.Repositories
 
         public StarPositionPlayerSerie GetStarPositionPlayerSerie(Guid SerieId, DateTime SerieInitDate, DateTime SerieEndDate, Guid PositionId)
         {
-            var starPosPlayer = _context.StarPositionPlayersSeries.Include(c => c.Player).Include(c => c.Player.Position).Include(c => c.Serie).SingleOrDefault(c => c.SerieId == SerieId && c.SerieInitDate == SerieInitDate && c.SerieEndDate == SerieEndDate && c.PlayerPositionId == PositionId);
+            var starPosPlayer = _context.StarPositionPlayersSeries.Include(c => c.Player).Include(c => c.Player.Position).Include(c => c.Serie).SingleOrDefault(c => c.SerieId == SerieId && c.SerieInitDate == SerieInitDate && c.SerieEndDate == SerieEndDate && c.PositionId == PositionId);
             if (starPosPlayer == null)
                 return null;
             return starPosPlayer;
@@ -57,7 +58,7 @@ namespace SB_backend.Repositories
 
         public bool RemoveStarPositionPlayer(StarPositionPlayerSerie starPositionPlayerSerie)
         {
-            var currStarPosPlayer = _context.StarPositionPlayersSeries.SingleOrDefault(c => c.SerieId == starPositionPlayerSerie.SerieId && c.SerieInitDate == starPositionPlayerSerie.SerieInitDate && c.SerieEndDate == starPositionPlayerSerie.SerieEndDate && c.PlayerPositionId == starPositionPlayerSerie.PlayerPositionId);
+            var currStarPosPlayer = _context.StarPositionPlayersSeries.SingleOrDefault(c => c.SerieId == starPositionPlayerSerie.SerieId && c.SerieInitDate == starPositionPlayerSerie.SerieInitDate && c.SerieEndDate == starPositionPlayerSerie.SerieEndDate && c.PositionId == starPositionPlayerSerie.PositionId);
             if(currStarPosPlayer == null)
                 return false;
             _context.StarPositionPlayersSeries.Remove(currStarPosPlayer);
@@ -68,7 +69,7 @@ namespace SB_backend.Repositories
 
         public StarPositionPlayerSerie UpdateStarPositionPlayerSerie(StarPositionPlayerSerie starPositionPlayerSerie)
         {
-            var currStarPosPlayer = _context.StarPositionPlayersSeries.SingleOrDefault(c => c.SerieId == starPositionPlayerSerie.SerieId && c.SerieInitDate == starPositionPlayerSerie.SerieInitDate && c.SerieEndDate == starPositionPlayerSerie.SerieEndDate && c.PlayerPositionId == starPositionPlayerSerie.PlayerPositionId);
+            var currStarPosPlayer = _context.StarPositionPlayersSeries.SingleOrDefault(c => c.SerieId == starPositionPlayerSerie.SerieId && c.SerieInitDate == starPositionPlayerSerie.SerieInitDate && c.SerieEndDate == starPositionPlayerSerie.SerieEndDate && c.PositionId == starPositionPlayerSerie.PositionId);
             if (currStarPosPlayer == null)
                 return null;
             currStarPosPlayer.PlayerId = starPositionPlayerSerie.PlayerId;

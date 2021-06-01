@@ -39,7 +39,7 @@ namespace SB_backend.Controllers
         [HttpGet("{id}/{PositionId}")]
         public IActionResult GetPlayer(Guid Id, Guid PositionId)
         {
-            var player = _plrep.GetPlayer(Id,PositionId);
+            var player = _plrep.GetPlayer(Id);
 
             if (player != null)
             {
@@ -69,7 +69,7 @@ namespace SB_backend.Controllers
             Player p = _plrep.AddPlayer(player);
             if (p == null)
                 return BadRequest("Not Player Created");
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + player.Id + "/" + player.PositionId, player);
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + player.Id, player);
         }
 
         [HttpDelete("{id}/{PositionId}")]
@@ -88,12 +88,11 @@ namespace SB_backend.Controllers
         [HttpPatch("{id}/{PositionId}")]
         public IActionResult UpdatePlayer(Guid Id, Guid PositionId,Player player)
         {
-            var current_player = _plrep.GetPlayer(Id,PositionId);
+            var current_player = _plrep.GetPlayer(Id);
 
             if (current_player != null)
             {
                 player.Id = current_player.Id;
-                player.PositionId = current_player.PositionId;
                 _plrep.UpdatePlayer(player);
                 return Ok(player);
             }
