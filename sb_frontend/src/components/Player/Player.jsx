@@ -6,7 +6,7 @@ class Player extends Component {
     player: {
       id: 1,
       name: "Alexander Malleta",
-      img: "http://localhost:8000/src/logos/malleta.jpg",
+      img: "https://localhost:8000/src/logos/malleta.jpg",
       description:
         "Alexander Malleta (La Habana, Cuba, 22 de enero de 1977) es un jugador de béisbol cubano. Actúa como primera base para el equipo Industriales, y ha integrado varias veces la Selección de béisbol de Cuba. Ha participado en 13 Series Nacionales, alcanzando 3 títulos, todos con Industriales y siendo elegido el MVP (jugador más valioso) de las post-temporadas del 2006 y 2010, coincidiendo con los últimos campeonatos conquistados por Industriales. Con el equipo Cuba obtuvo la medalla de plata en los Juegos Olímpicos de Pekín 2008 y participó en el Clásico Mundial de Béisbol 2009.",
     },

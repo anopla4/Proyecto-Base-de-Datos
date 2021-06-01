@@ -87,13 +87,21 @@ class Games extends Component {
                   </Row>
                   <Row>
                     <Col>
-                      <Image rounded fluid src={game.winnerTeam.imgPath} />
+                      <Image
+                        rounded
+                        fluid
+                        src={`https://localhost:44334/${game.winnerTeam.imgPath}`}
+                      />
                     </Col>
                     <Col className="my-score" style={{ textAlign: "center" }}>
                       {game.runs_in_favor} - {game.runs_against}
                     </Col>
                     <Col>
-                      <Image rounded fluid src={game.loserTeam.imgPath} />
+                      <Image
+                        rounded
+                        fluid
+                        src={`https://localhost:44334/${game.loserTeam.imgPath}`}
+                      />
                     </Col>
                   </Row>
                 </Card.Header>

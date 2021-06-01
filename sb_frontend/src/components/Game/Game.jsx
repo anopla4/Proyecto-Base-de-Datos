@@ -317,7 +317,7 @@ class Game extends Component {
             <Image
               style={{ width: "25%" }}
               fluid
-              src={`http://localhost:44334/${this.state.game.winerTeam.imgPath}`}
+              src={`https://localhost:44334/${this.state.game.winerTeam.imgPath}`}
               alt=""
             />
           </Col>
@@ -328,7 +328,7 @@ class Game extends Component {
             <Image
               style={{ width: "25%" }}
               fluid
-              src={`http://localhost:44334/${this.state.game.loserTeam.imgPath}`}
+              src={`https://localhost:44334/${this.state.game.loserTeam.imgPath}`}
               alt=""
             />
           </Col>

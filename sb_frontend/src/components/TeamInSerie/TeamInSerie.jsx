@@ -272,14 +272,14 @@ class TeamInSerie extends Component {
                 <h5 style={{ display: "inline" }}>Directores: </h5>
               </Col>
               <Col md={3} className="mt-2 mb-3">
-                  <Add
-                    // className="mt-2"
-                    text="Agregar director"
-                    onClick={this.handleOnClickAddDirector}
-                  />
+                <Add
+                  // className="mt-2"
+                  text="Agregar director"
+                  onClick={this.handleOnClickAddDirector}
+                />
               </Col>
             </Row>
-            
+
             <Row className="mt-2 mb-3">
               <Col md={3}>
                 <ListGroup>
@@ -300,9 +300,6 @@ class TeamInSerie extends Component {
                   ))}
                 </ListGroup>
               </Col>
-
-              
-              
             </Row>
             <Row className="mb-3">
               <Col>
@@ -333,7 +330,9 @@ class TeamInSerie extends Component {
                       <Form.Label>Jugador:</Form.Label>
                       <Form.Label>
                         {this.state.selectedPlayer && (
-                          <Image src={this.playerImg}></Image>
+                          <Image
+                            src={`https://localhost:44334/${this.playerImg}`}
+                          ></Image>
                         )}
                       </Form.Label>
                       <Form.Control

@@ -35,7 +35,7 @@ class Serie extends Component {
     allstarteamsData: [],
     teams: [],
     positions: [],
-    players:[],
+    players: [],
     editTeam: false,
     addTeam: false,
     addPlayer: false,
@@ -214,8 +214,10 @@ class Serie extends Component {
       .catch(function (error) {
         console.log("Hubo un problema con la petición Fetch:" + error.message);
       });
-       fetch(`https://localhost:44334/api/TeamSeriePlayer/${this.state.idSerie}/${this.state.initDate}/${this.state.endDate}`, 
-       { mode: "cors" })
+    fetch(
+      `https://localhost:44334/api/TeamSeriePlayer/${this.state.idSerie}/${this.state.initDate}/${this.state.endDate}`,
+      { mode: "cors" }
+    )
       .then((response) => {
         if (!response.ok) {
           throw Error(response.statusText);
@@ -312,9 +314,13 @@ class Serie extends Component {
     }
   };
 
-  handleDeletePlayer= (idPos, index) => {
+  handleDeletePlayer = (idPos, index) => {
     fetch(
-      `https://localhost:44334/api/StarPositionPlayerSerie/${this.state.idSerie}/${this.formatDate(this.state.initDate)}/${this.formatDate(this.state.endDate)}/${idPos}`,
+      `https://localhost:44334/api/StarPositionPlayerSerie/${
+        this.state.idSerie
+      }/${this.formatDate(this.state.initDate)}/${this.formatDate(
+        this.state.endDate
+      )}/${idPos}`,
       {
         mode: "cors",
         method: "DELETE",
@@ -397,7 +403,11 @@ class Serie extends Component {
                               }
                               style={{ width: "7%" }}
                             >
-                              <Image fluid src={`http://localhost:44334:${item.team.imgPath}`} alt="" />
+                              <Image
+                                fluid
+                                src={`https://localhost:44334:${item.team.imgPath}`}
+                                alt=""
+                              />
                             </td>
                             <td
                               onClick={() =>
@@ -448,7 +458,7 @@ class Serie extends Component {
                               <Image
                                 fluid
                                 roundedCircle
-                                src={player.imgPath}
+                                src={`https://localhost:44334/${player.imgPath}`}
                                 alt=""
                                 className="custom-circle-image"
                               />

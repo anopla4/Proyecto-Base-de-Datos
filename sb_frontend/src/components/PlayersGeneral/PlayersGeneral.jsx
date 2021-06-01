@@ -100,7 +100,7 @@ class PlayersGeneral extends Component {
           delete={true}
           edit={true}
           players={this.state.players}
-          onClick={this.handleOnClick}
+          // onClick={this.handleOnClick}
           onEdit={this.handleOnClickEdit}
           onDelete={this.handleOnDelete}
         />
