@@ -36,9 +36,16 @@ class Teams extends Component {
       "Amarillo",
     ],
     file: undefined,
+    fileTmpURL: undefined,
     teams: [],
   };
 
+  componentWillMount() {
+    console.log(this.state.editTeam);
+  }
+  componentWillUpdate() {
+    console.log(this.state.editTeam);
+  }
   componentDidMount() {
     fetch("https://localhost:44334/api/Team", { mode: "cors" })
       .then((response) => {
@@ -55,8 +62,8 @@ class Teams extends Component {
       });
   }
 
-  handleOnClick = (idT) => {
-    this.props.history.push({ pathname: "/team", state: { idTeam: idT } });
+  handleOnClick = (team) => {
+    this.props.history.push({ pathname: "/team", state: { team: team } });
   };
 
   handleAddClick = () => {
@@ -93,7 +100,11 @@ class Teams extends Component {
   };
 
   setFile = (e) => {
-    this.setState({ file: e.target.files[0] });
+    let f_url = URL.createObjectURL(e.target.files[0]);
+    this.setState({
+      fileTmpURL: f_url,
+      file: e.target.files[0],
+    });
   };
 
   onFormSubmit = (e) => {
@@ -165,7 +176,7 @@ class Teams extends Component {
                     <Card.Body>
                       <Card.Link
                         href="/team"
-                        onClick={() => this.handleOnClick(team.id)}
+                        onClick={() => this.handleOnClick(team)}
                       >
                         Saber más
                       </Card.Link>
@@ -200,7 +211,13 @@ class Teams extends Component {
                       />
                     </Form.Group>
                     <Form.Group controlId="img">
-                      <Image src={this.state.teamEdit.imgPath} />
+                      <Image
+                        src={
+                          this.state.fileTmpURL
+                            ? this.state.fileTmpURL
+                            : `https://localhost:44334/${this.state.teamEdit.imgPath}`
+                        }
+                      />
                       <Form.File
                         label="Logo del equipo"
                         onChange={(e) => this.setFile(e)}

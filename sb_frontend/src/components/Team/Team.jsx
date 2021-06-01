@@ -6,57 +6,81 @@ import Directors from "../../components/Directors/Directors";
 class Team extends Component {
   state = {
     page: 1,
-    name: "Industriales",
-    directors: [
-      {
-        id: 1,
-        name: "Lázaro Vargas",
-        img: "http://localhost:8000/src/logos/lazaro-vargas.jpg",
-      },
-      {
-        id: 2,
-        name: "Rey Vicente Anglada",
-        img: "http://localhost:8000/src/logos/anglada.jpg",
-      },
-    ],
-    players: [
-      {
-        id: 1,
-        name: "Alexander Malleta",
-        position: [{ id: 1, positionName: "Primera base" }],
-        img: "http://localhost:8000/src/logos/malleta.jpg",
-        age: 44,
-        teams: ["Industriales", "Metropolitano"],
-        current_team: "Retirado",
-        years_of_experience: 20,
-        ave: 301,
-      },
-      {
-        id: 2,
-        name: "Frank Camilo Morejón",
-        position: [{ id: 4, positionName: "Catcher" }],
-        img: "http://localhost:8000/src/logos/frank-camilo.jpg",
-        age: 44,
-        teams: ["Industriales"],
-        current_team: "Retirado",
-        years_of_experience: 17,
-        ave: 253,
-      },
-    ],
-    wonSeries: [
-      { id: 1, name: "Serie Nacional de Bésibol", season: "2009-2010" },
-    ],
+    team: {},
+    directors: [],
+    players: [],
+    wonSeries: [],
   };
 
   handleOnClick = (p) => {
     this.setState({ page: p });
   };
 
+  componentWillMount() {
+    this.setState({ team: this.props.location.state.team });
+  }
+  formatDate = (date) => {
+    let d = new Date(date);
+    return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+  };
+
+  componentDidMount() {
+    fetch(
+      `https://localhost:44334/api/TeamSerieDirector/${this.state.team.id}`,
+      { mode: "cors" }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ directors: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+    fetch(
+      `https://localhost:44334/api/TeamSerie/TeamWonSeries/${this.state.team.id}`,
+      {
+        mode: "cors",
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ wonSeries: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+    fetch(`https://localhost:44334/api/TeamSeriePlayer/${this.state.team.id}`, {
+      mode: "cors",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ players: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+  }
+
   render() {
-    const { idTeam } = this.props.location.state;
+    const { name, initials, color, imgPath } = this.props.location.state;
     return (
       <Container>
-        <h1 className="mb-5 my-style-header">{this.state.name}</h1>
+        <h1 className="mb-5 my-style-header">{name}</h1>
         <Card>
           <Card.Header>
             <Nav variant="tabs" defaultActiveKey={1}>
@@ -82,13 +106,23 @@ class Team extends Component {
               <Table striped bordered hover>
                 <thead>
                   <th>Nombre</th>
-                  <th>Temporada</th>
+                  <th>Fecha de inicio</th>
+                  <th>Fecha de culminación</th>
                 </thead>
                 <tbody>
                   {this.state.wonSeries.map((serie) => (
                     <tr>
                       <td>{serie.name}</td>
-                      <td>{serie.season}</td>
+                      <td>
+                        {
+                          new Date(serie.initDate)
+                            .toLocaleString()
+                            .split(",")[0]
+                        }
+                      </td>
+                      <td>
+                        {new Date(serie.endDate).toLocaleString().split(",")[0]}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

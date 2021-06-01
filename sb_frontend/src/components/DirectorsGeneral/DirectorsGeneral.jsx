@@ -7,6 +7,7 @@ import {
   Nav,
   Row,
   Col,
+  Image,
 } from "react-bootstrap";
 import "../../containers/App/App.css";
 import Directors from "../../components/Directors/Directors";
@@ -18,6 +19,8 @@ class DirectorsGeneral extends Component {
     editDirector: false,
     itemEdit: {},
     directors: [],
+    file: undefined,
+    fileTmpURL: undefined,
   };
 
   handleAddClick = () => {
@@ -57,21 +60,33 @@ class DirectorsGeneral extends Component {
     this.setState({ directors: n_directors });
   };
 
+  setFile = (e) => {
+    let f_url = URL.createObjectURL(e.target.files[0]);
+    this.setState({
+      fileTmpURL: f_url,
+      file: e.target.files[0],
+    });
+  };
+
   onFormSubmit = (e) => {
     let formElements = e.target.elements;
     const name = formElements.name.value;
-    let director = {
-      name,
+    // const name = "Anglada";
+    var formdata = new FormData();
+    formdata.append("name", name);
+    formdata.append("img", this.state.file, this.state.file.name);
+
+    var requestOptions = {
+      method: this.state.editDirector ? "PATCH" : "POST",
+      body: formdata,
+      mode: "cors",
     };
+
     let postUrl =
       "https://localhost:44334/api/Director" +
       (this.state.editDirector ? `/${this.state.itemEdit.id}` : "");
-    fetch(postUrl, {
-      mode: "cors",
-      headers: { "Content-Type": "application/json" },
-      method: this.state.editDirector ? "PATCH" : "POST",
-      body: JSON.stringify(director),
-    })
+    console.log(postUrl);
+    fetch(postUrl, requestOptions)
       .then((response) => {
         if (!response.ok) {
           throw Error(response.statusText);
@@ -81,6 +96,7 @@ class DirectorsGeneral extends Component {
       .catch(function (error) {
         console.log("Hubo un problema con la petición Fetch:" + error.message);
       });
+    this.setState({ addDirector: false, editDirector: false });
   };
 
   componentDidMount() {
@@ -97,6 +113,18 @@ class DirectorsGeneral extends Component {
       .catch(function (error) {
         console.log("Hubo un problema con la petición Fetch:" + error.message);
       });
+    // if (this.state.editDirector) {
+    //   fetch(`https://localhost:44334/${this.state.itemEdit.imgPath}`).then(
+    //     (res) => {
+    //       let file = res.blob();
+    //       let fileTmpURL = URL.createObjectURL(file);
+    //       this.setState({
+    //         file: file,
+    //         fileTmpUrl: fileTmpURL,
+    //       });
+    //     }
+    //   );
+    // }
   }
 
   render() {
@@ -130,11 +158,25 @@ class DirectorsGeneral extends Component {
                         }
                       />
                     </Form.Group>
+                    <Form.Group controlId="img">
+                      <Image
+                        src={
+                          this.state.fileTmpURL
+                            ? this.state.fileTmpURL
+                            : `https://localhost:44334/${this.state.itemEdit.imgPath}`
+                        }
+                      />
+                      <Form.File
+                        label="Foto del director"
+                        onChange={(e) => this.setFile(e)}
+                      />
+                    </Form.Group>
                     <Button
                       className="mr-2"
                       style={{ float: "left" }}
                       variant="primary"
                       type="submit"
+                      // onClick={this.onFormSubmit}
                     >
                       Aceptar
                     </Button>

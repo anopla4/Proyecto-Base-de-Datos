@@ -16,7 +16,7 @@ class Directors extends Component {
                   <Image
                     fluid
                     roundedCircle
-                    src={dir.img}
+                    src={`https://localhost:44334/${dir.imgPath}`}
                     style={{ height: "85px" }}
                     alt=""
                     className="custom-circle-image"

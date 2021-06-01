@@ -26,54 +26,13 @@ class TeamInSerie extends Component {
     directors: [],
     playerImg: "",
     selectedPlayer: false,
-    allPlayers: [
-      {
-        id: 1,
-        name: "Alexander Malleta",
-        position: ["Primera base"],
-        img: "http://localhost:8000/src/logos/malleta.jpg",
-        age: 44,
-        teams: ["Industriales", "Metropolitano"],
-        current_team: "Retirado",
-        years_of_experience: 20,
-        ave: 301,
-      },
-      {
-        id: 2,
-        name: "Frank Camilo Morejón",
-        position: ["Catcher"],
-        img: "http://localhost:8000/src/logos/frank-camilo.jpg",
-        age: 44,
-        teams: ["Industriales"],
-        current_team: "Retirado",
-        years_of_experience: 17,
-        ave: 253,
-      },
-    ],
-    players: [
-      {
-        id: 1,
-        name: "Alexander Malleta",
-        position: ["Primera base"],
-        img: "http://localhost:8000/src/logos/malleta.jpg",
-        age: 44,
-        teams: ["Industriales", "Metropolitano"],
-        current_team: "Retirado",
-        years_of_experience: 20,
-        ave: 301,
-      },
-      {
-        id: 2,
-        name: "Frank Camilo Morejón",
-        position: ["Catcher"],
-        img: "http://localhost:8000/src/logos/frank-camilo.jpg",
-        age: 44,
-        teams: ["Industriales"],
-        current_team: "Retirado",
-        years_of_experience: 17,
-        ave: 253,
-      },
-    ],
+    allPlayers: [],
+    players: [],
+  };
+
+  formatDate = (date) => {
+    let d = new Date(date);
+    return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
   };
 
   componentWillMount() {
@@ -90,25 +49,32 @@ class TeamInSerie extends Component {
       .catch(function (error) {
         console.log("Hubo un problema con la petición Fetch:" + error.message);
       });
-    // fetch("https://localhost:44334/api/Player", { mode: "cors" })
-    //   .then((response) => {
-    //     if (!response.ok) {
-    //       throw Error(response.statusText);
-    //     }
-    //     return response.json();
-    //   })
-    //   .then((response) => {
-    //     this.setState({ allPlayers: response });
-    //   })
-    //   .catch(function (error) {
-    //     console.log("Hubo un problema con la petición Fetch:" + error.message);
-    //   });
+    fetch(`https://localhost:44334/api/Player`, { mode: "cors" })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ allPlayers: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+    this.setState({
+      team: this.props.location.state.team,
+      serie: this.props.location.state.serie,
+    });
   }
 
   componentDidMount() {
     fetch(
-      `https://localhost:44334/api/TeamSerieDirector/Directors/${this.state.serie.id}/
-      ${this.state.serie.initDate}/${this.state.serie.endDate}/${this.state.team.id}`,
+      `https://localhost:44334/api/TeamSerieDirector/Directors/${
+        this.state.serie.id
+      }/${this.formatDate(this.state.serie.initDate)}/${this.formatDate(
+        this.state.serie.endDate
+      )}/${this.state.team.id}`,
       { mode: "cors" }
     )
       .then((response) => {
@@ -123,10 +89,27 @@ class TeamInSerie extends Component {
       .catch(function (error) {
         console.log("Hubo un problema con la petición Fetch:" + error.message);
       });
-    this.setState({
-      team: this.props.location.state.team,
-      serie: this.props.location.state.serie,
-    });
+
+    fetch(
+      `https://localhost:44334/api/TeamSeriePlayer/Players/${
+        this.state.team.id
+      }/${this.state.serie.id}/${this.formatDate(
+        this.state.serie.initDate
+      )}/${this.formatDate(this.state.serie.endDate)}`,
+      { mode: "cors" }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ players: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
   }
 
   handleOnClickAdd = () => {
@@ -253,6 +236,7 @@ class TeamInSerie extends Component {
         });
       this.setState({
         addPlayer: false,
+        addDirector: false,
       });
     }
   };
@@ -274,8 +258,9 @@ class TeamInSerie extends Component {
     return (
       <Container>
         <h1 className="mb-5 my-style-header">
-          {this.state.team_name} en {this.state.serie_name} (
-          {this.state.serie_season})
+          {this.state.team.name} en {this.state.serie.name} (
+          {this.formatDate(this.state.serie.initDate)}/
+          {this.formatDate(this.state.serie.endDate)})
         </h1>
         <Row>
           <Col>
@@ -309,15 +294,6 @@ class TeamInSerie extends Component {
                 />
               </Col>
             </Row>
-
-            {/* {this.state.directors.map((dir) => dir.name).join(", ")}. */}
-            {/* <Button
-                style={{ padding: "0px" }}
-                className={"ml-3 btn-outline-secondary"}
-                variant="light"
-              >
-                <PencilSquare style={{ width: "100%" }} />
-              </Button> */}
             <Row className="mb-3">
               <Col>
                 <h5 style={{ display: "inline" }}>Jugadores: </h5>
@@ -387,8 +363,7 @@ class TeamInSerie extends Component {
             <Col md={3}>
               <Navbar fixed="right">
                 <Nav.Item>
-                  onSubmit={this.onFormSubmit}
-                  <Form>
+                  <Form onSubmit={this.onFormSubmit}>
                     <Form.Group>
                       <Form.Label>
                         <h5>Seleccione un director</h5>

@@ -10,6 +10,8 @@ class PlayerForm extends Component {
     hands: ["Izquierda", "Derecha"],
     positions: [],
     teams: [],
+    file: undefined,
+    fileTmpURL: undefined,
   };
   onChange = (e) => {
     e.preventDefault();
@@ -66,6 +68,14 @@ class PlayerForm extends Component {
     }
   }
 
+  setFile = (e) => {
+    let f_url = URL.createObjectURL(e.target.files[0]);
+    this.setState({
+      fileTmpURL: f_url,
+      file: e.target.files[0],
+    });
+  };
+
   onFormSubmit = (e) => {
     let formElements = e.target.elements;
     const name = formElements.name.value;
@@ -80,7 +90,6 @@ class PlayerForm extends Component {
     const year_Experience = formElements.year_Experience.value;
     const deffAverage = formElements.deffAverage.value;
     const era = formElements.era.value;
-    console.log("AAAAAAAAAAAAAAAAAa");
     const average = formElements.average.disabled
       ? ""
       : formElements.average.value;
@@ -161,7 +170,13 @@ class PlayerForm extends Component {
               </Col>
               <Col>
                 <Form.Group>
-                  {/* <Image src={img} /> */}
+                  <Image
+                    src={
+                      this.state.fileTmpURL
+                        ? this.state.fileTmpURL
+                        : `https://localhost:44334/${this.state.playerEdit.imgPath}`
+                    }
+                  />
                   <Form.File id="img" label="Imagen del jugador" />
                 </Form.Group>
               </Col>

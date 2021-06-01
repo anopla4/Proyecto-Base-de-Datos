@@ -17,7 +17,7 @@ class Players extends Component {
                   <Image
                     fluid
                     roundedCircle
-                    src={player.img}
+                    src={`https://localhost:44334/${player.imgPath}`}
                     alt=""
                     className="custom-circle-image"
                   />
