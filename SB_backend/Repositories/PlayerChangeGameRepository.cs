@@ -76,9 +76,13 @@ namespace SB_backend.Repositories
             return _context.PlayersChangesGames.Include(c => c.PlayerPositionIn).Include(c => c.PlayerPositionOut).Include(c => c.Game).Where(c => c.GameId == GameId && teamWiner.Contains(c.PlayerIdIn)).ToList();
         }
 
-        public bool RemoveChangeInGame(PlayerChangeGame playerChangeGame)
+        public bool RemoveChangeInGame(Guid gameId, Guid playerInId, Guid positionIdIn, Guid playerOutId, Guid positionIdOut)
         {
-            var currPlayerChange = _context.PlayersChangesGames.SingleOrDefault(c => c.GameId == playerChangeGame.GameId && c.PlayerIdIn == playerChangeGame.PlayerIdIn && c.PlayerIdOut == playerChangeGame.PlayerIdOut && c.PositionIdIn == playerChangeGame.PositionIdIn && c.PositionIdOut == playerChangeGame.PositionIdOut);
+            var currPlayerChange = _context.PlayersChangesGames.SingleOrDefault(c => c.GameId == gameId
+            && c.PlayerIdIn == playerInId
+            && c.PlayerIdOut == playerOutId
+            && c.PositionIdIn == positionIdIn
+            && c.PositionIdOut == positionIdOut);
             if (currPlayerChange == null)
                 return false;
             _context.PlayersChangesGames.Remove(currPlayerChange);

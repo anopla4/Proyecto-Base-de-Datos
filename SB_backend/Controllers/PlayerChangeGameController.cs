@@ -42,10 +42,10 @@ namespace SB_backend.Controllers
                 return BadRequest("Not created Object");
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + change.GameId + "/" + change.PlayerIdIn + "/" + change.PositionIdIn, change);
         }
-        [HttpDelete("{GameId}/{PlayerInId}/{PositionId}")]
-        public IActionResult RemoveChange(Guid GameId, Guid PlayerInId, Guid PositionId,PlayerChangeGame change)
+        [HttpDelete("{GameId}/{PlayerInId}/{PositionIdIn}/{PlayerOutId}/{PositionIdOut}/")]
+        public IActionResult RemoveChange(Guid GameId, Guid PlayerInId, Guid PositionIdIn, Guid PlayerOutId, Guid PositionIdOut)
         {
-            var rem = _pchRep.RemoveChangeInGame(change);
+            var rem = _pchRep.RemoveChangeInGame(Guid GameId, Guid PlayerInId, Guid PositionIdIn, Guid PlayerOutId, Guid PositionIdOut);
             if (rem)
                 return Ok();
             return NotFound("Not change Found");
