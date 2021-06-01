@@ -16,99 +16,42 @@ import chevron from "../../static/chevron-compact-down.svg";
 
 class AllStarTeams extends Component {
   state = {
-    series: [
-      {
-        id: 1,
-        name: "Serie Nacional de Béisbol",
-        reach: "Nacional",
-        season: "1994-1995",
-        players: [
-          {
-            name: "Alexander Malleta",
-            team: "Industriales",
-            position: "Primera base",
-          },
-          {
-            name: "Frank Camilo Morejón",
-            team: "Industriales",
-            position: "Catcher",
-          },
-        ],
-      },
-      {
-        id: 2,
-        name: "Serie Nacional de Béisbol",
-        reach: "Nacional",
-        season: "1996-1997",
-        players: [
-          {
-            name: "Alexander Malleta",
-            team: "Industriales",
-            position: "Primera base",
-          },
-          {
-            name: "Frank Camilo Morejón",
-            team: "Industriales",
-            position: "Catcher",
-          },
-        ],
-      },
-      {
-        id: 3,
-        name: "Serie Nacional de Béisbol",
-        reach: "Nacional",
-        season: "1997-1998",
-        players: [
-          {
-            name: "Alexander Malleta",
-            team: "Industriales",
-            position: "Primera base",
-          },
-          {
-            name: "Frank Camilo Morejón",
-            team: "Industriales",
-            position: "Catcher",
-          },
-        ],
-      },
-      {
-        id: 4,
-        name: "Serie Nacional de Béisbol",
-        reach: "Nacional",
-        season: "1998-1999",
-        players: [
-          {
-            name: "Lázaro Blanco",
-            team: "Granma",
-            position: "Primera base",
-          },
-          {
-            name: "Yulieski Gourriel",
-            team: "Industriales",
-            position: "Tercera base",
-          },
-        ],
-      },
-      {
-        id: 5,
-        name: "Serie Nacional de Béisbol",
-        reach: "Nacional",
-        season: "1999-2000",
-        players: [
-          {
-            name: "Tabares",
-            team: "Industriales",
-            position: "Jardinero Central",
-          },
-          {
-            name: "Rivero",
-            team: "Industriales",
-            position: "Pitcher",
-          },
-        ],
-      },
-    ],
+    series: [],
   };
+
+  componentDidMount() {
+    fetch("https://localhost:44334/api/StarPositionPlayerSerie", {
+      mode: "cors",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ series: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+    fetch("https://localhost:44334/api/StarPositionPlayerSerie", {
+      mode: "cors",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ allstarteams: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+  }
+
   render() {
     return (
       <Container>
@@ -117,39 +60,47 @@ class AllStarTeams extends Component {
           {/* <img src={star} width="30" height="30" alt="" /> */}
         </h1>
         <Accordion className="mb-3">
-          {this.state.series.map((serie) => (
-            <Card key={serie.id}>
+          {this.state.series.map((team) => (
+            <Card key={team.serie.id}>
               <Card.Header>
                 <Row>
                   <Col>
                     <Card.Title className="my-style-card-header">
-                      {serie.name}
+                      {team.serie.name}
                     </Card.Title>
                     <Card.Subtitle style={{ color: "midnightblue" }}>
-                      {serie.season}
+                      {
+                        new Date(team.serie.serieInitDate)
+                          .toLocaleString()
+                          .split(",")[0]
+                      }
+                      -
+                      {
+                        new Date(team.serie.serieEndDate)
+                          .toLocaleString()
+                          .split(",")[0]
+                      }
                     </Card.Subtitle>
                   </Col>
                   <Col md={2}>
                     <Accordion.Toggle
                       as={Button}
                       variant="link"
-                      eventKey={serie.id}
+                      eventKey={team.serie.id}
                       className="my-button star"
                     >
                       <img src={star} width="30" height="30" alt="" />
-
-                      {/* <Image src={chevron} /> */}
                     </Accordion.Toggle>
                   </Col>
                 </Row>
               </Card.Header>
-              <Accordion.Collapse eventKey={serie.id}>
+              <Accordion.Collapse eventKey={team.serie.id}>
                 <Card.Body>
                   <Table>
-                    {serie.players.map((player) => (
+                    {team.map((player) => (
                       <tr>
                         <td>{player.name}</td>
-                        <td>{player.team}</td>
+                        <td>{player.position}</td>
                       </tr>
                     ))}
                   </Table>
@@ -158,37 +109,6 @@ class AllStarTeams extends Component {
             </Card>
           ))}
         </Accordion>
-        {/* <CardDeck>
-          {this.state.series.map((serie) => (
-            <Col md="4">
-              <Card
-                border="info"
-                key={serie.id}
-                text={"black"}
-                className="mb-3 my-style-card active_hover"
-              >
-                <Card.Header>
-                  <Card.Title className="my-style-card-header">
-                    {serie.name}
-                  </Card.Title>
-                  <Card.Subtitle style={{ color: "midnightblue" }}>
-                    {serie.season}
-                  </Card.Subtitle>
-                </Card.Header>
-                <Card.Body>
-                  <Table>
-                    {serie.players.map((player) => (
-                      <tr>
-                        <td>{player.name}</td>
-                        <td>{player.team}</td>
-                      </tr>
-                    ))}
-                  </Table>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </CardDeck> */}
       </Container>
     );
   }

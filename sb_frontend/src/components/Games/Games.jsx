@@ -81,6 +81,12 @@ class Games extends Component {
                   </Row>
                   <Row>
                     <Col>
+                      {new Date(game.gameDate).toLocaleString().split(",")[0]} (
+                      {game.gameTime})
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
                       <Image rounded fluid src={game.winnerTeam.imgPath} />
                     </Col>
                     <Col className="my-score" style={{ textAlign: "center" }}>
