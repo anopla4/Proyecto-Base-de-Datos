@@ -23,183 +23,15 @@ class Game extends Component {
     addPlayer: false,
     typeTeam: "",
     addChange: false,
-    playersWinnerGame: [
-      {
-        id: 1,
-        name: "Alexander Malleta",
-        position: [{ positionName: "Primera base" }],
-        img: "http://localhost:8000/src/logos/malleta.jpg",
-        age: 44,
-        teams: ["Industriales", "Metropolitano"],
-        current_Team: "Retirado",
-        year_Experience: 20,
-        position_Average: 301,
-      },
-      {
-        id: 2,
-        name: "Frank Camilo Morejón",
-        position: [{ positionName: "Catcher" }],
-        img: "http://localhost:8000/src/logos/frank-camilo.jpg",
-        age: 44,
-        teams: ["Industriales"],
-        current_Team: "Retirado",
-        year_Experience: 17,
-        position_Average: 253,
-      },
-    ],
-    playersLoserGame: [
-      {
-        id: 1,
-        name: "Alexander Malleta",
-        position: [{ positionName: "Primera base" }],
-        img: "http://localhost:8000/src/logos/malleta.jpg",
-        age: 44,
-        teams: ["Industriales", "Metropolitano"],
-        current_Team: "Retirado",
-        year_Experience: 20,
-        position_Average: 301,
-      },
-      {
-        id: 2,
-        name: "Frank Camilo Morejón",
-        position: [{ positionName: "Catcher" }],
-        img: "http://localhost:8000/src/logos/frank-camilo.jpg",
-        age: 44,
-        teams: ["Industriales"],
-        current_Team: "Retirado",
-        year_Experience: 17,
-        position_Average: 253,
-      },
-    ],
-    playersWinnerSerie: [
-      {
-        id: 1,
-        name: "Alexander Malleta",
-        position: [{ positionName: "Primera base" }],
-        img: "http://localhost:8000/src/logos/malleta.jpg",
-        age: 44,
-        teams: ["Industriales", "Metropolitano"],
-        current_Team: "Retirado",
-        year_Experience: 20,
-        position_Average: 301,
-      },
-      {
-        id: 2,
-        name: "Frank Camilo Morejón",
-        position: [{ positionName: "Catcher" }],
-        img: "http://localhost:8000/src/logos/frank-camilo.jpg",
-        age: 44,
-        teams: ["Industriales"],
-        current_Team: "Retirado",
-        year_Experience: 17,
-        position_Average: 253,
-      },
-    ],
-    playersLoserSerie: [
-      {
-        id: 1,
-        name: "Alexander Malleta",
-        position: [{ positionName: "Primera base" }],
-        img: "http://localhost:8000/src/logos/malleta.jpg",
-        age: 44,
-        teams: ["Industriales", "Metropolitano"],
-        current_Team: "Retirado",
-        year_Experience: 20,
-        position_Average: 301,
-      },
-      {
-        id: 2,
-        name: "Frank Camilo Morejón",
-        position: [{ positionName: "Catcher" }],
-        img: "http://localhost:8000/src/logos/frank-camilo.jpg",
-        age: 44,
-        teams: ["Industriales"],
-        current_Team: "Retirado",
-        year_Experience: 17,
-        position_Average: 253,
-      },
-    ],
-    winner: {
-      id: 3,
-      name: "Industriales",
-      color: "Azul",
-      iniciales: "IND",
-      img: "http://localhost:8000/src/logos/industriales.png",
-    },
-    loser: {
-      id: 4,
-      name: "Cienfuegos",
-      color: "Verde, Blanco",
-      iniciales: "CFG",
-      img: "http://localhost:8000/src/logos/cienfuegos.png",
-    },
-    winner_pitcher: { name: "Rivero" },
-    runs_in_favor: 9,
-    runs_against: 3,
-    winner_players: [
-      {
-        id: 1,
-        name: "Alexander Malleta",
-        position: [{ positionName: "Primera base" }],
-        img: "http://localhost:8000/src/logos/malleta.jpg",
-        age: 44,
-        teams: ["Industriales", "Metropolitano"],
-        current_Team: "Retirado",
-        year_Experience: 20,
-        position_Average: 301,
-      },
-      {
-        id: 2,
-        name: "Frank Camilo Morejón",
-        position: [{ positionName: "Catcher" }],
-        img: "http://localhost:8000/src/logos/frank-camilo.jpg",
-        age: 44,
-        teams: ["Industriales"],
-        current_Team: "Retirado",
-        year_Experience: 17,
-        position_Average: 253,
-      },
-    ],
-    loser_players: [
-      {
-        id: 1,
-        name: "Alexander Malleta",
-        position: [{ positionName: "Primera base" }],
-        img: "http://localhost:8000/src/logos/malleta.jpg",
-        age: 44,
-        teams: ["Industriales", "Metropolitano"],
-        current_Team: "Retirado",
-        year_Experience: 20,
-        position_Average: 301,
-      },
-      {
-        id: 2,
-        name: "Frank Camilo Morejón",
-        position: [{ positionName: "Catcher" }],
-        img: "http://localhost:8000/src/logos/frank-camilo.jpg",
-        age: 44,
-        teams: ["Industriales"],
-        current_Team: "Retirado",
-        year_Experience: 17,
-        position_Average: 253,
-      },
-    ],
-    winner_changes: [
-      {
-        player: { name: "Juanito", position: [{ positionName: "Lanzador" }] },
-        change: { name: "Pepito", position: [{ positionName: "Lanzador" }] },
-      },
-    ],
-    loser_changes: [
-      {
-        player: { name: "Juanito", position: [{ positionName: "Lanzador" }] },
-        change: { name: "Pepito", position: [{ positionName: "Lanzador" }] },
-      },
-      {
-        player: { name: "Juanito", position: [{ positionName: "Lanzador" }] },
-        change: { name: "Pepito", position: [{ positionName: "Lanzador" }] },
-      },
-    ],
+    game: {},
+    serie: {},
+    playersWinnerGame: [],
+    playersLoserGame: [],
+    playersWinnerSerie: [],
+    playersLoserSerie: [],
+    winnerChanges: [],
+    loserChanges: [],
+    positions: [],
   };
 
   handleOnClick = (p) => {
@@ -221,38 +53,238 @@ class Game extends Component {
     this.setState({ addChange: false, addPlayer: false });
   };
 
+  componentWillMount() {
+    this.setState({
+      game: this.props.location.state.game,
+      serie: this.props.location.state.serie,
+    });
+    fetch(
+      ` https://localhost:44334/api/TeamSeriePlayer/Players/${this.state.game.winerTeamId}/${this.state.serie.id}/${this.state.serie.initDate}/${this.state.serie.endDate}`,
+      {
+        mode: "cors",
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ playersWinnerSerie: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+    fetch(
+      ` https://localhost:44334/api/TeamSeriePlayer/Players/${this.state.game.loserTeamId}/${this.state.serie.id}/${this.state.serie.initDate}/${this.state.serie.endDate}`,
+      {
+        mode: "cors",
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ playerLoserSerie: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+    fetch("https://localhost:44334/api/Position", { mode: "cors" })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ positions: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+  }
+
+  componentDidMount() {
+    fetch(
+      ` https://localhost:44334/api/PlayerGame/${this.state.game.gameId}/WinerTeam`,
+      {
+        mode: "cors",
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ playersWinnerGame: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+    fetch(
+      ` https://localhost:44334/api/PlayerGame/${this.state.game.gameId}/LoserTeam`,
+      {
+        mode: "cors",
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ playerLoserGame: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+    fetch(
+      ` https://localhost:44334/api/PlayerChangeGame/${this.state.game.gameId}/WinerTeam`,
+      {
+        mode: "cors",
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ winnerChanges: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+    fetch(
+      ` https://localhost:44334/api/PlayerChangeGame/${this.state.game.gameId}/LoserTeam`,
+      {
+        mode: "cors",
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ loserChanges: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+  }
+
+  onFormSubmitPlayer = (e) => {
+    let formElements = e.target.elements;
+    const player = formElements.player;
+    const playerId = player.children[player.selectedIndex].id;
+    const positions = formElements.positions;
+    const positionId = positions.children[positions.selectedIndex].id;
+
+    let playerGame = {
+      gameId: this.state.game.gameId,
+      playerId: playerId,
+      positionId: positionId,
+    };
+
+    fetch("https://localhost:44334/api/PlayerGame", {
+      mode: "cors",
+      headers: { "Content-Type": "application/json" },
+      method: "POST",
+      body: JSON.stringify(playerGame),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+    this.setState({ addPlayer: false });
+  };
+
+  onFormSubmitChange = (e) => {
+    let formElements = e.target.elements;
+    const playerOut = formElements.changeOut;
+    const playerIdOut = playerOut.children[playerOut.selectedIndex].id;
+    const playerIn = formElements.changeOut;
+    const playerIdIn = playerIn.children[playerIn.selectedIndex].id;
+    const positions = formElements.positions;
+    const positionId = positions.children[positions.selectedIndex].id;
+
+    let playerChangeGame = {
+      gameId: this.state.game.gameId,
+      playerIdOut: playerIdOut,
+      positionIdOut: positionId,
+      playerIdIn: playerIdIn,
+      positionIdIn: positionId,
+    };
+
+    fetch("https://localhost:44334/api/PlayerChangeGame", {
+      mode: "cors",
+      headers: { "Content-Type": "application/json" },
+      method: "POST",
+      body: JSON.stringify(playerChangeGame),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+    this.setState({ addPlayer: false });
+  };
+
   render() {
-    const { idGame, IdSerie } = this.props.location.state;
     return (
       <Container>
         <h1 className="mb-5 my-style-header">
-          {this.state.winner.name}-{this.state.loser.name}
+          {this.state.game.winerTeam.name}-{this.state.game.loserTeam.name}
         </h1>
         <Row className="align-items-center">
           <Col className="text-center text-md-right">
             <Image
               style={{ width: "25%" }}
               fluid
-              src={this.state.winner.img}
+              src={`http://localhost:44334/${this.state.game.winerTeam.imgPath}`}
               alt=""
             />
           </Col>
           <Col className="text-center text-md-center bold score" md={2}>
-            {this.state.runs_in_favor} - {this.state.runs_against}
+            {this.state.game.inFavorCarrers} - {this.state.game.againstCarrers}
           </Col>
           <Col className="text-center text-md-left">
             <Image
               style={{ width: "25%" }}
               fluid
-              src={this.state.loser.img}
+              src={`http://localhost:44334/${this.state.game.loserTeam.imgPath}`}
               alt=""
             />
           </Col>
         </Row>
         <Row className="justify-content-center mt-3">
           <p style={{ display: "inline" }}>
-            <h className="bold">Lanzador ganador: </h>{" "}
-            {this.state.winner_pitcher.name}.
+            <Container className="bold">Lanzador ganador: </Container>{" "}
+            {this.state.game.pitcherWiner.name}.
+          </p>
+          <p style={{ display: "inline" }}>
+            <Container className="bold">Lanzador perdedor: </Container>{" "}
+            {this.state.game.pitcherLoser.name}.
           </p>
         </Row>
         <Row>
@@ -276,7 +308,7 @@ class Game extends Component {
                       <Players
                         playerGeneral={false}
                         delete={true}
-                        players={this.state.winner_players}
+                        players={this.state.playersWinnerGame}
                       />
                       <Add
                         text="Agregar jugador"
@@ -288,7 +320,7 @@ class Game extends Component {
                       <Players
                         playerGeneral={false}
                         delete={true}
-                        players={this.state.loser_players}
+                        players={this.state.playersLoserGame}
                       />
                       <Add
                         text="Agregar jugador"
@@ -309,13 +341,13 @@ class Game extends Component {
                           <th></th>
                         </thead>
                         <tbody>
-                          {this.state.winner_changes.map((change) => (
+                          {this.state.winnerChanges.map((change) => (
                             <tr>
-                              <td>{change.player.name}</td>
+                              <td>{change.playerPositionOut.name}</td>
                               <td>
                                 <Image src={arrow} />
                               </td>
-                              <td>{change.change.name}</td>
+                              <td>{change.playerPositionIn.name}</td>
                               <DeleteEdit delete={true} />
                             </tr>
                           ))}
@@ -336,13 +368,13 @@ class Game extends Component {
                           <th></th>
                         </thead>
                         <tbody>
-                          {this.state.loser_changes.map((change) => (
+                          {this.state.loserChanges.map((change) => (
                             <tr>
-                              <td>{change.player.name}</td>
+                              <td>{change.playerPositionOut.name}</td>
                               <td>
                                 <Image src={arrow} />
                               </td>
-                              <td>{change.change.name}</td>
+                              <td>{change.playerPositionIn.name}</td>
                               <DeleteEdit delete={true} />
                             </tr>
                           ))}
@@ -362,14 +394,14 @@ class Game extends Component {
             <Col md={3}>
               <Navbar fixed="right">
                 <Nav.Item>
-                  <Form>
-                    <Form.Group controlId="name">
+                  <Form onSubmit={this.onFormSubmitPlayer}>
+                    <Form.Group controlId="player">
                       <Form.Label>Jugador:</Form.Label>
                       {this.state.typeTeam === "winner" && (
                         <Form.Control as="select" custom>
                           <option>{""}</option>
                           {this.state.playersWinnerSerie.map((player) => (
-                            <option>{player.name}</option>
+                            <option id={player.id}>{player.name}</option>
                           ))}
                         </Form.Control>
                       )}
@@ -377,16 +409,26 @@ class Game extends Component {
                         <Form.Control as="select" custom>
                           <option>{""}</option>
                           {this.state.playersLoserSerie.map((player) => (
-                            <option>{player.name}</option>
+                            <option id={player.id}>{player.name}</option>
                           ))}
                         </Form.Control>
                       )}
+                    </Form.Group>
+                    <Form.Group controlId="positions">
+                      <Form.Label>Posición:</Form.Label>
+                      <Form.Control as="select" custom>
+                        <option>{""}</option>
+                        {this.state.positions.map((pos) => (
+                          <option id={pos.id}>{pos.positionName}</option>
+                        ))}
+                      </Form.Control>
                     </Form.Group>
                     <Form.Group>
                       <Button
                         className="mr-2"
                         style={{ float: "left" }}
                         variant="primary"
+                        type="submit"
                       >
                         Aceptar
                       </Button>
@@ -407,50 +449,60 @@ class Game extends Component {
             <Col md={3}>
               <Navbar fixed="right">
                 <Nav.Item>
-                  <Form>
-                    <Form.Group controlId="name">
+                  <Form onSubmit={this.onFormSubmitChange}>
+                    <Form.Group controlId="changeOut">
                       <Form.Label>Jugador que salió:</Form.Label>
                       {this.state.typeTeam === "winner" && (
                         <Form.Control as="select" custom>
                           <option>{""}</option>
-                          {this.state.playersWinnerGame.map((player) => (
-                            <option>{player.name}</option>
+                          {this.state.playersWinnerSerie.map((player) => (
+                            <option id={player.id}>{player.name}</option>
                           ))}
                         </Form.Control>
                       )}
                       {this.state.typeTeam === "loser" && (
                         <Form.Control as="select" custom>
                           <option>{""}</option>
-                          {this.state.playersLoserGame.map((player) => (
-                            <option>{player.name}</option>
+                          {this.state.playersLoserSerie.map((player) => (
+                            <option id={player.id}>{player.name}</option>
                           ))}
                         </Form.Control>
                       )}
                     </Form.Group>
-                    <Form.Group controlId="name">
+                    <Form.Group controlId="changeIn">
                       <Form.Label>Jugador que entró:</Form.Label>
                       {this.state.typeTeam === "winner" && (
                         <Form.Control as="select" custom>
                           <option>{""}</option>
-                          {this.state.playersWinnerGame.map((player) => (
-                            <option>{player.name}</option>
+                          {this.state.playersWinnerSerie.map((player) => (
+                            <option id={player.id}>{player.name}</option>
                           ))}
                         </Form.Control>
                       )}
                       {this.state.typeTeam === "loser" && (
                         <Form.Control as="select" custom>
                           <option>{""}</option>
-                          {this.state.playersLoserGame.map((player) => (
-                            <option>{player.name}</option>
+                          {this.state.playersLoserSerie.map((player) => (
+                            <option id={player.id}>{player.name}</option>
                           ))}
                         </Form.Control>
                       )}
+                    </Form.Group>
+                    <Form.Group controlId="positions">
+                      <Form.Label>Posición:</Form.Label>
+                      <Form.Control as="select" custom>
+                        <option>{""}</option>
+                        {this.state.positions.map((pos) => (
+                          <option id={pos.id}>{pos.positionName}</option>
+                        ))}
+                      </Form.Control>
                     </Form.Group>
                     <Form.Group>
                       <Button
                         className="mr-2"
                         style={{ float: "left" }}
                         variant="primary"
+                        type="submit"
                       >
                         Aceptar
                       </Button>

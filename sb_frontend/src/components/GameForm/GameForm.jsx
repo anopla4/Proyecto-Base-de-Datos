@@ -4,9 +4,10 @@ import "./GameForm.css";
 
 class GameForm extends Component {
   state = {
+    game: {},
     edit: false,
     changed: false,
-    pitchers: [{ name: "Rivero" }, { name: "Pedro Luis Lazo" }],
+    pitchers: [],
     teams: [],
     series: [],
   };
@@ -18,14 +19,25 @@ class GameForm extends Component {
   //     }));
   //   };
 
-  componentDidMount() {
-    if (this.props.location.state.game) {
-      this.setState({ edit: true });
-    }
-  }
+  formatDate = (date) => {
+    let d = new Date(date);
+    return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+  };
 
   componentWillMount() {
-    fetch("https://localhost:44334/api/Team", { mode: "cors" })
+    if (this.props.location.state.game) {
+      this.setState({ edit: true, game: this.props.location.state.game });
+    }
+    fetch(
+      `https://localhost:44334/api/TeamSerie/Standing/${
+        this.state.serieId
+      }/${this.formatDate(this.state.serieInitDate)}/${this.formatDate(
+        this.state.serieEndDate
+      )}`,
+      {
+        mode: "cors",
+      }
+    )
       .then((response) => {
         if (!response.ok) {
           throw Error(response.statusText);
@@ -51,6 +63,19 @@ class GameForm extends Component {
       .catch(function (error) {
         console.log("Hubo un problema con la petición Fetch:" + error.message);
       });
+    fetch("https://localhost:44334/api/Player/Pitchers", { mode: "cors" })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ pitchers: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
   }
 
   onFormSubmit = (e) => {
@@ -65,29 +90,35 @@ class GameForm extends Component {
     const serie = formElements.serie;
     const serieId = serie.children[serie.selectedIndex].id;
     const winner = formElements.winner;
-    const winnerId = winner.children[winner.selectedIndex].id;
+    const winerTeamId = winner.children[winner.selectedIndex].id;
     const loser = formElements.loser;
-    const winner_pitcher = winner.children[winner_pitcher.selectedIndex].id;
-    const winner_pitcherId = formElements.winner_pitcher;
-    const loserId = loser.children[loser.selectedIndex].id;
-    const runs_against = formElements.runs_against.value;
-    const runs_in_favor = formElements.runs_in_favor.value;
+    const loserTeamId = loser.children[loser.selectedIndex].id;
+    const winner_pitcher = formElements.winner_pitcher;
+    const winerPitcherId =
+      winner_pitcher.children[winner_pitcher.selectedIndex].id;
+    const loser_pitcher = formElements.loser_pitcher;
+    const loserPitcherId =
+      loser_pitcher.children[loser_pitcher.selectedIndex].id;
+    const AgaintsCarrers = formElements.runs_against.value;
+    const inFavorCarrers = formElements.runs_in_favor.value;
 
     let game = {
       name,
       initDate,
       endDate,
+      serieId,
+      winerTeamId,
+      loserTeamId,
+      winerPitcherId,
+      loserPitcherId,
+      AgaintsCarrers,
+      inFavorCarrers,
     };
-    let postUrl =
-      "https://localhost:44334/api/Game" +
-      (this.state.edit
-        ? `/${this.props.location.state.serie.id}/${serie.initDate}/${serie.endDate}`
-        : "");
-    fetch(postUrl, {
+    fetch("https://localhost:44334/api/Game", {
       mode: "cors",
       headers: { "Content-Type": "application/json" },
       method: this.state.edit ? "PATCH" : "POST",
-      body: JSON.stringify(serie),
+      body: JSON.stringify(game),
     })
       .then((response) => {
         if (!response.ok) {
@@ -98,19 +129,19 @@ class GameForm extends Component {
       .catch(function (error) {
         console.log("Hubo un problema con la petición Fetch:" + error.message);
       });
-    this.props.history.push({ pathname: "/series", state: { edited: true } });
+    this.props.history.push({ pathname: "/games", state: { edited: true } });
   };
 
   render() {
     const {
       id,
-      winnerTeam,
+      winerTeam,
       loserTeam,
       gameDate,
       gameTime,
       serie,
-      winner_pitcher,
-      loser_pitcher,
+      pitcherWiner,
+      pitcherLoser,
       InFavorCarrers,
       AgaintsCarrers,
     } = {
@@ -143,7 +174,12 @@ class GameForm extends Component {
                     as="select"
                     custom
                   >
-                    <option>{""}</option>
+                    <option id={serie.id}>
+                      {serie.name} (
+                      {new Date(serie.initDate).toLocaleString().split(",")[0]}{" "}
+                      - {new Date(serie.endDate).toLocaleString().split(",")[0]}
+                      )
+                    </option>
                     {this.state.series.map((serie) => (
                       <option id={serie.id}>
                         {serie.name} (
@@ -196,11 +232,11 @@ class GameForm extends Component {
                 >
                   <Form.Label>Lanzador ganador:</Form.Label>
                   <Form.Control
-                    defaultValue={winner_pitcher ? winner_pitcher.name : ""}
+                    defaultValue={pitcherWiner ? pitcherWiner.name : ""}
                     as="select"
                     custom
                   >
-                    <option>{""}</option>
+                    <option id={pitcherWiner.id}>{pitcherWiner.name}</option>
                     {this.state.pitchers.map((pitcher) => (
                       <option id={pitcher.id}>{pitcher.name}</option>
                     ))}
@@ -208,17 +244,14 @@ class GameForm extends Component {
                 </Form.Group>
               </Col>
               <Col>
-                <Form.Group
-                  style={{ width: "100%" }}
-                  controlId="winner_pitcher"
-                >
+                <Form.Group style={{ width: "100%" }} controlId="loser_pitcher">
                   <Form.Label>Lanzador perdedor:</Form.Label>
                   <Form.Control
-                    defaultValue={loser_pitcher ? loser_pitcher.name : ""}
+                    defaultValue={pitcherLoser ? pitcherLoser.name : ""}
                     as="select"
                     custom
                   >
-                    <option>{""}</option>
+                    <option id={pitcherLoser.id}>{pitcherLoser.name}</option>
                     {this.state.pitchers.map((pitcher) => (
                       <option id={pitcher.id}>{pitcher.name}</option>
                     ))}
@@ -253,11 +286,11 @@ class GameForm extends Component {
                 <Form.Group style={{ width: "100%" }} controlId="winner">
                   <Form.Label>Ganador:</Form.Label>
                   <Form.Control
-                    defaultValue={winnerTeam ? winnerTeam.name : ""}
+                    defaultValue={winerTeam ? winerTeam.name : ""}
                     as="select"
                     custom
                   >
-                    <option>{""}</option>
+                    <option id={winerTeam.id}>{winerTeam.anme}</option>
                     {this.state.teams.map((team) => (
                       <option id={team.id}>{team.name}</option>
                     ))}
@@ -272,7 +305,7 @@ class GameForm extends Component {
                     as="select"
                     custom
                   >
-                    <option>{""}</option>
+                    <option id={loserTeam.id}>{loserTeam.name}</option>
                     {this.state.teams.map((team) => (
                       <option id={team.id}>{team.name}</option>
                     ))}

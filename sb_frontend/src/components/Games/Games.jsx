@@ -8,92 +8,12 @@ import Add from "../../components/Add/Add";
 class Games extends Component {
   state = {
     games: [],
-    // games: [
-    //   {
-    //     id: 1,
-    //     winner: {
-    //       id: 2,
-    //       name: "Industriales",
-    //       color: "Azul",
-    //       iniciales: "IND",
-    //       img: "http://localhost:8000/src/logos/industriales.png",
-    //     },
-    //     loser: {
-    //       id: 1,
-    //       name: "Pinar del Río",
-    //       color: "Verde, Blanco",
-    //       iniciales: "PR",
-    //       img: "http://localhost:8000/src/logos/pinar-del-rio.jpg",
-    //     },
-    //     serie: {
-    //       id: 1,
-    //       name: "Serie Nacional de Béisbol",
-    //     },
-    //     runs_in_favor: 4,
-    //     runs_against: 3,
-    //     date: "5 de febrero de 2009",
-    //     time: "2 pm",
-    //     winner_pitcher: { name: "Rivero" },
-    //   },
-    //   {
-    //     id: 2,
-    //     winner: {
-    //       id: 2,
-    //       name: "Matanzas",
-    //       color: "MTN",
-    //       iniciales: "IND",
-    //       img: "http://localhost:8000/src/logos/matanzas.png",
-    //     },
-    //     loser: {
-    //       id: 1,
-    //       name: "Cienfuegos",
-    //       color: "Verde, Blanco",
-    //       iniciales: "CNF",
-    //       img: "http://localhost:8000/src/logos/cienfuegos.png",
-    //     },
-    //     serie: {
-    //       id: 1,
-    //       name: "Serie Nacional de Béisbol",
-    //     },
-    //     runs_in_favor: 5,
-    //     runs_against: 1,
-    //     date: "5 de febrero de 2009",
-    //     time: "2 pm",
-    //     winner_pitcher: { name: "Rivero" },
-    //   },
-    //   {
-    //     id: 3,
-    //     winner: {
-    //       id: 9,
-    //       name: "Sancti Spíritus",
-    //       color: "Azul, Rojo",
-    //       iniciales: "SNC",
-    //       img: "http://localhost:8000/src/logos/sancti_spiritus.png",
-    //     },
-    //     loser: {
-    //       id: 2,
-    //       name: "Camagüey",
-    //       color: "Verde, Blanco",
-    //       iniciales: "CMY",
-    //       img: "http://localhost:8000/src/logos/camagüey.png",
-    //     },
-    //     serie: {
-    //       id: 1,
-    //       name: "Serie Nacional de Béisbol",
-    //     },
-    //     runs_in_favor: 4,
-    //     runs_against: 3,
-    //     date: "5 de febrero de 2009",
-    //     time: "2 pm",
-    //     winner_pitcher: { name: "Rivero" },
-    //   },
-    // ],
   };
 
-  handleOnClick = (idG, idS) => {
+  handleOnClick = (game, serie) => {
     this.props.history.push({
       pathname: "/game",
-      state: { idGame: idG, idSerie: idS },
+      state: { game: game, serie: serie },
     });
   };
 
@@ -117,13 +37,34 @@ class Games extends Component {
       });
   }
 
+  handleOnDelete = (idG, index) => {
+    fetch(`https://localhost:44334/api/Serie/${idG}`, {
+      mode: "cors",
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+
+    let n_games = [...this.state.games];
+    n_games.splice(index, 1);
+
+    this.setState({ games: n_games });
+  };
+
   render() {
     return (
       <Container>
         <h1 className="mb-5 my-style-header">Juegos</h1>
 
         <CardDeck>
-          {this.state.games.map((game) => (
+          {this.state.games.map((game, index) => (
             <Col md={4}>
               <Card className="mb-3 active_hover" key={game.id}>
                 <Card.Header>
@@ -132,6 +73,7 @@ class Games extends Component {
                       <DeleteEdit
                         delete={true}
                         edit={true}
+                        onDelete={() => this.handleOnDelete(game.gameId, index)}
                         onEdit={() => this.handleOnClickAdd(game)}
                       />
                     </Col>
@@ -139,13 +81,13 @@ class Games extends Component {
                   </Row>
                   <Row>
                     <Col>
-                      <Image rounded fluid src={game.winner.img} />
+                      <Image rounded fluid src={game.winnerTeam.imgPath} />
                     </Col>
                     <Col className="my-score" style={{ textAlign: "center" }}>
                       {game.runs_in_favor} - {game.runs_against}
                     </Col>
                     <Col>
-                      <Image rounded fluid src={game.loser.img} />
+                      <Image rounded fluid src={game.loserTeam.imgPath} />
                     </Col>
                   </Row>
                 </Card.Header>
@@ -158,14 +100,22 @@ class Games extends Component {
                   </Container>
                   <Container>
                     <p style={{ display: "inline" }}>
-                      <h className="bold">Lanzador ganador: </h>{" "}
-                      {game.winner_pitcher.name}.
+                      <Container className="bold">Lanzador ganador: </Container>{" "}
+                      {game.pitcherWinner.name}.
+                    </p>
+                  </Container>
+                  <Container>
+                    <p style={{ display: "inline" }}>
+                      <Container className="bold">
+                        Lanzador perdedor:{" "}
+                      </Container>{" "}
+                      {game.pitcherLoser.name}.
                     </p>
                   </Container>
                   <Container className="my-link">
                     <Card.Link
                       href="/game"
-                      onClick={() => this.handleOnClick(game.id, game.serie.id)}
+                      onClick={() => this.handleOnClick(game, game.serie)}
                     >
                       Saber más
                     </Card.Link>

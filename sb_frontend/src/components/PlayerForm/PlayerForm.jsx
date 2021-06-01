@@ -139,7 +139,7 @@ class PlayerForm extends Component {
     const {
       id,
       name,
-      // img,
+      imgPath,
       age,
       year_Experience,
       current_Team,
