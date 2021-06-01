@@ -28,7 +28,7 @@ const navigation = (props) => {
         <Nav className="ml.auto" navbarScroll>
           <NavItem>
             <Nav.Link onCollapse="" href="/">
-              Home
+              Inicio
             </Nav.Link>
           </NavItem>
           <NavDropdown title="Series" id="collasible-nav-dropdown">
