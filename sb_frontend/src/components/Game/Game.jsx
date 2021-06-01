@@ -250,6 +250,62 @@ class Game extends Component {
     this.setState({ addPlayer: false });
   };
 
+  handleOnDeletePlayer = (player, index, h) => {
+    fetch(
+      `https://localhost:44334/api/Player/${this.state.game.gameId}/${this.state.game.player.playerId}/${this.state.game.player.positionId}`,
+      {
+        mode: "cors",
+        method: "DELETE",
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+    if (h === "winner") {
+      let n_winnerPlayers = [...this.state.playersWinnerGame];
+      n_winnerPlayers.splice(index, 1);
+      this.setState({ playersWinnerGame: n_winnerPlayers });
+    } else {
+      let n_loserPlayers = [...this.state.playersLoserGame];
+      n_loserPlayers.splice(index, 1);
+      this.setState({ playersLoserGame: n_loserPlayers });
+    }
+  };
+
+  handleOnDeleteChange = (change, index, h) => {
+    fetch(
+      `https://localhost:44334/api/Player/${this.state.game.gameId}/${change.playerIdIn}/${change.positionIdIn}/${change.playerIdOut}/${change.positionIdOut}`,
+      {
+        mode: "cors",
+        method: "DELETE",
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+    if (h === "winner") {
+      let n_winnerChanges = [...this.state.winnerChanges];
+      n_winnerChanges.splice(index, 1);
+      this.setState({ winnerChanges: n_winnerChanges });
+    } else {
+      let n_loserChanges = [...this.state.loserChanges];
+      n_loserChanges.splice(index, 1);
+      this.setState({ loserChanges: n_loserChanges });
+    }
+  };
+
   render() {
     return (
       <Container>
@@ -305,11 +361,39 @@ class Game extends Component {
                   <Row style={{ fontSize: "10px" }}>
                     <Col>
                       <h6>Ganador</h6>
-                      <Players
-                        playerGeneral={false}
-                        delete={true}
-                        players={this.state.playersWinnerGame}
-                      />
+                      {this.state.playersWinnerGame.map((player, index) => (
+                        <Card key={player.id} className="mb-2">
+                          <Card.Header style={{ padding: "0.5%" }}>
+                            <Row className="row align-items-center">
+                              <Col md={1}>
+                                <Image
+                                  fluid
+                                  roundedCircle
+                                  src={`https://localhost:44334/${player.imgPath}`}
+                                  style={{ height: "85px" }}
+                                  alt=""
+                                  className="custom-circle-image"
+                                />
+                              </Col>
+                              <Col>
+                                <h5>{player.name}</h5>
+                                <h6>{player.position.positionName}</h6>
+                              </Col>
+                              <Col>
+                                <DeleteEdit
+                                  onDelete={() =>
+                                    this.state.handleOnDeletePlayer(
+                                      player,
+                                      index,
+                                      "winner"
+                                    )
+                                  }
+                                />
+                              </Col>
+                            </Row>
+                          </Card.Header>
+                        </Card>
+                      ))}
                       <Add
                         text="Agregar jugador"
                         onClick={() => this.handleOnClickAddPlayer("winner")}
@@ -317,11 +401,39 @@ class Game extends Component {
                     </Col>
                     <Col>
                       <h6>Perdedor</h6>
-                      <Players
-                        playerGeneral={false}
-                        delete={true}
-                        players={this.state.playersLoserGame}
-                      />
+                      {this.state.playersLoserGame.map((player, index) => (
+                        <Card key={player.id} className="mb-2">
+                          <Card.Header style={{ padding: "0.5%" }}>
+                            <Row className="row align-items-center">
+                              <Col md={1}>
+                                <Image
+                                  fluid
+                                  roundedCircle
+                                  src={`https://localhost:44334/${player.imgPath}`}
+                                  style={{ height: "85px" }}
+                                  alt=""
+                                  className="custom-circle-image"
+                                />
+                              </Col>
+                              <Col>
+                                <h5>{player.name}</h5>
+                                <h6>{player.position.positionName}</h6>
+                              </Col>
+                              <Col>
+                                <DeleteEdit
+                                  onDelete={() =>
+                                    this.state.handleOnDeletePlayer(
+                                      player,
+                                      index,
+                                      "loser"
+                                    )
+                                  }
+                                />
+                              </Col>
+                            </Row>
+                          </Card.Header>
+                        </Card>
+                      ))}
                       <Add
                         text="Agregar jugador"
                         onClick={() => this.handleOnClickAddPlayer("loser")}
@@ -341,14 +453,23 @@ class Game extends Component {
                           <th></th>
                         </thead>
                         <tbody>
-                          {this.state.winnerChanges.map((change) => (
+                          {this.state.winnerChanges.map((change, index) => (
                             <tr>
                               <td>{change.playerPositionOut.name}</td>
                               <td>
                                 <Image src={arrow} />
                               </td>
                               <td>{change.playerPositionIn.name}</td>
-                              <DeleteEdit delete={true} />
+                              <DeleteEdit
+                                delete={true}
+                                onDelete={() =>
+                                  this.handleOnDeleteChange(
+                                    change,
+                                    index,
+                                    "winner"
+                                  )
+                                }
+                              />
                             </tr>
                           ))}
                         </tbody>
@@ -368,14 +489,23 @@ class Game extends Component {
                           <th></th>
                         </thead>
                         <tbody>
-                          {this.state.loserChanges.map((change) => (
+                          {this.state.loserChanges.map((change, index) => (
                             <tr>
                               <td>{change.playerPositionOut.name}</td>
                               <td>
                                 <Image src={arrow} />
                               </td>
                               <td>{change.playerPositionIn.name}</td>
-                              <DeleteEdit delete={true} />
+                              <DeleteEdit
+                                delete={true}
+                                onDelete={() =>
+                                  this.handleOnDeleteChange(
+                                    change,
+                                    index,
+                                    "loser"
+                                  )
+                                }
+                              />
                             </tr>
                           ))}
                         </tbody>
