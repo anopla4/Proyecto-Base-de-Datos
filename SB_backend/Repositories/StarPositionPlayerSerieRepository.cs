@@ -51,9 +51,16 @@ namespace SB_backend.Repositories
             return starPosPlayer;
         }
 
-        public List<StarPositionPlayerSerie> GetStarPositionPlayersSeries()
+        public List<List<PlayerPosition>> GetStarPositionPlayersSeries()
         {
-            return _context.StarPositionPlayersSeries.ToList();
+
+            var all = _context.StarPositionPlayersSeries.ToList();
+            List<List<PlayerPosition>> res = new List<List<PlayerPosition>>();
+            foreach (var item in all.Select(c => c.Serie).ToList())
+            {
+                res.Add(all.Where(c => c.SerieId == item.Id).Select(c=> c.Player).ToList());
+            }
+            return res;
         }
 
         public bool RemoveStarPositionPlayer(StarPositionPlayerSerie starPositionPlayerSerie)
