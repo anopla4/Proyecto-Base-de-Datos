@@ -32,33 +32,37 @@ namespace SB_backend.Repositories
             return lineup;
         }
 
-        public List<PlayerGame> GetPlayersInGameWinerTeam(Guid GameId)
+        public List<PlayerPosition> GetPlayersInGameWinerTeam(Guid GameId)
         {
             var game = _context.Games.SingleOrDefault(c => c.GameId == GameId);
             if (game == null)
                 return null;
-            List<Guid> teamWIDS = _context.TeamsSeriesPlayers.Where(d => d.SerieId == game.SerieId && d.TeamId == game.WinerTeamId).Select(c => c.PlayerId).ToList();
-            if (teamWIDS.Count == 0)
+            List<PlayerPosition> lineupWT = _context.PlayersGames.Include(c => c.Player)
+                 .Where(c => c.GameId == GameId && c.Game.WinerTeamId == game.WinerTeamId)
+                 .Select(c => c.Player)
+                 .ToList();
+            if (lineupWT.Count == 0)
                 return null;
-            List <PlayerGame> lineupWT = _context.PlayersGames.Include(c => c.Player).Where(c => c.GameId == GameId && teamWIDS.Contains(c.PlayerId)).ToList();
             return lineupWT;
         }
 
-        public List<PlayerGame> GetPlayersInGameLoserTeam(Guid GameId)
+        public List<PlayerPosition> GetPlayersInGameLoserTeam(Guid GameId)
         {
             var game = _context.Games.SingleOrDefault(c => c.GameId == GameId);
             if (game == null)
                 return null;
-            List<Guid> teamLIDS = _context.TeamsSeriesPlayers.Where(d => d.SerieId == game.SerieId && d.TeamId == game.LoserTeamId).Select(d => d.PlayerId).ToList();
-            if (teamLIDS.Count == 0)
+            List<PlayerPosition> lineupWT = _context.PlayersGames.Include(c => c.Player)
+                 .Where(c => c.GameId == GameId && c.Game.LoserTeamId == game.LoserTeamId)
+                 .Select(c => c.Player)
+                 .ToList();
+            if (lineupWT.Count == 0)
                 return null;
-            List<PlayerGame> lineupLT = _context.PlayersGames.Include(c => c.Player).Where(c => c.GameId == GameId && teamLIDS.Contains(c.PlayerId)).ToList();
-            return lineupLT;
+            return lineupWT;
         }
 
-        public PlayerGame GetPlayerInGame(Guid GameId, Guid PlayerId)
+        public PlayerGame GetPlayerInGame(Guid gameId, Guid playerId, Guid positionId)
         {
-            var plInGame = _context.PlayersGames.SingleOrDefault(c => c.GameId == GameId && c.PlayerId == PlayerId);
+            var plInGame = _context.PlayersGames.SingleOrDefault(c => c.GameId == gameId && c.PlayerId == playerId && c.PositionId == positionId);
             return plInGame;
         }
 
@@ -70,10 +74,16 @@ namespace SB_backend.Repositories
             bool flagPlayer = _context.TeamsSeriesPlayers.Any(c => c.SerieId == game.SerieId && (c.TeamId == game.WinerTeamId || c.TeamId == game.LoserTeamId) && c.PlayerId == playerGame.PlayerId);
             if (!flagPlayer)
                 return null;
-            bool flagPlayerPosition = _context.PlayerPosition.Any(c => c.PlayerId == playerGame.PlayerId);
+            bool flagPlayerPosition = _context.PlayerPosition.Any(c => c.PlayerId == playerGame.PlayerId && c.PositionId == playerGame.PositionId);
             if (!flagPlayerPosition)
                 return null;
-            
+            bool isPositionTaken = _context.PlayersGames.Any(c => c.GameId == playerGame.GameId && c.PositionId == playerGame.PositionId);
+            if(isPositionTaken)
+                return null;
+            bool isPlayerAlready = _context.PlayersGames.Any(c => c.GameId == playerGame.GameId && c.PlayerId == playerGame.PlayerId);
+            if (isPlayerAlready)
+                return null;
+
             _context.PlayersGames.Add(playerGame);
             _context.SaveChanges();
             return playerGame;
@@ -81,11 +91,16 @@ namespace SB_backend.Repositories
 
         public bool DeletePlayerInGame(PlayerGame playerGame)
         {
-            var currPlayerGame = _context.PlayersGames.SingleOrDefault(c => c.GameId == playerGame.GameId && c.PlayerId == playerGame.PlayerId);
+            var currPlayerGame = _context.PlayersGames.SingleOrDefault(c => c.GameId == playerGame.GameId 
+            && c.PlayerId == playerGame.PlayerId 
+            && c.PositionId == playerGame.PositionId);
             if (currPlayerGame == null)
                 return false;
+
             foreach (var change in _context.PlayersChangesGames.Where(c => c.PlayerIdIn == playerGame.PlayerId || c.PlayerIdOut== playerGame.PlayerId))
-                _context.PlayersChangesGames.Remove(change);
+                if(!_context.PlayersChangesGames.Any(c => c.PlayerIdIn == playerGame.PlayerId))
+                    _context.PlayersChangesGames.Remove(change);
+ 
             _context.PlayersGames.Remove(currPlayerGame);
             _context.SaveChanges();
             return true;

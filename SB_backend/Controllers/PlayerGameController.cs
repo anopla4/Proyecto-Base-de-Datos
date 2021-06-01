@@ -40,17 +40,17 @@ namespace SB_backend.Controllers
             return Ok(lineup);
         }
         [HttpPost]
-        public IActionResult AddPlayerInGame(Guid GameId,PlayerGame playerGame)
+        public IActionResult AddPlayerInGame(PlayerGame playerGame)
         {
             var playerGameA = _pgRep.AddPlayerInGame(playerGame);
             if (playerGameA == null)
                 return BadRequest("Not created object");
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + playerGameA.GameId + "/" + playerGameA.PlayerId, playerGameA);
         }
-        [HttpDelete("{GameId}/{PlayerId}")]
-        public IActionResult RemovePlayerInGame(Guid GameId, Guid PlayerId)
+        [HttpDelete("{GameId}/{PlayerId}/{PositionId}")]
+        public IActionResult RemovePlayerInGame(Guid GameId, Guid PlayerId,Guid PositionId)
         {
-            var playerGame = _pgRep.GetPlayerInGame(GameId, PlayerId);
+            var playerGame = _pgRep.GetPlayerInGame(GameId, PlayerId,PositionId);
             var playerGameR = _pgRep.DeletePlayerInGame(playerGame);
             if (!playerGameR)
                 return NotFound("Object Not Found");

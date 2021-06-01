@@ -30,6 +30,13 @@ namespace SB_backend.Repositories
                 return null;
             if ((teamWiner.Contains(playerChangeGame.PlayerIdIn) && teamWiner.Contains(playerChangeGame.PlayerIdOut)) || (teamLoser.Contains(playerChangeGame.PlayerIdOut) && teamLoser.Contains(playerChangeGame.PlayerIdIn)))
                 return null;
+
+            var isValidPlayerOut = _context.PlayersGames.Any(c => c.GameId == playerChangeGame.GameId && c.PlayerId == playerChangeGame.PlayerIdOut) 
+                || _context.PlayersChangesGames.Any(c => c.GameId == playerChangeGame.GameId && c.PlayerIdIn == playerChangeGame.PlayerIdOut);
+
+            if (!isValidPlayerOut)
+                return null;
+
             _context.PlayersChangesGames.Add(playerChangeGame);
             _context.SaveChanges();
             return playerChangeGame;
@@ -79,14 +86,5 @@ namespace SB_backend.Repositories
             return true;
         }
 
-        public PlayerChangeGame UpdateChangeInGameLoserTeam(PlayerChangeGame PlayerChangeGame)
-        {
-            return null;
-        }
-
-        public PlayerChangeGame UpdateChangeInGameWinerTeam(PlayerChangeGame PlayerChangeGame)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -90,7 +90,7 @@ namespace SB_backend.Models
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
             //PlayerGameBuilder
-            modelBuilder.Entity<PlayerGame>().HasKey(c => new {c.GameId,c.PlayerId});
+            modelBuilder.Entity<PlayerGame>().HasKey(c => new {c.GameId,c.PlayerId,c.PositionId});
             modelBuilder.Entity<PlayerGame>()
                 .HasOne(c => c.Game)
                 .WithMany()

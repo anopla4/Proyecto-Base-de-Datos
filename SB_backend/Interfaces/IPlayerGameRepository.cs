@@ -9,12 +9,12 @@ namespace SB_backend.Interfaces
     public interface IPlayerGameRepository
     {
         List<PlayerGame> GetPlayersGames();
-        List<PlayerGame> GetPlayersInGame(Guid GameId);
-        List<PlayerGame> GetPlayersInGameWinerTeam(Guid GameId);
-        List<PlayerGame> GetPlayersInGameLoserTeam(Guid GameId);
-        PlayerGame GetPlayerInGame(Guid GameId, Guid PlayerId);
-        PlayerGame AddPlayerInGame(PlayerGame PlayerGame);
-        bool DeletePlayerInGame(PlayerGame PlayerGame);
+        List<PlayerGame> GetPlayersInGame(Guid gameId);
+        List<PlayerPosition> GetPlayersInGameWinerTeam(Guid gameId);
+        List<PlayerPosition> GetPlayersInGameLoserTeam(Guid gameId);
+        PlayerGame GetPlayerInGame(Guid gameId, Guid playerId, Guid positionId);
+        PlayerGame AddPlayerInGame(PlayerGame playerGame);
+        bool DeletePlayerInGame(PlayerGame playerGame);
 
 
     }

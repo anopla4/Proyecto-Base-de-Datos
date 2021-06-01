@@ -13,8 +13,6 @@ namespace SB_backend.Interfaces
         List<PlayerChangeGame> GetPlayersChangesInGameWinerTeam(Guid GameId);
         List<PlayerChangeGame> GetPlayersChangesInGameLoserTeam(Guid GameId);
         PlayerChangeGame AddChangeInGame(PlayerChangeGame PlayerChangeGame);
-        PlayerChangeGame UpdateChangeInGameWinerTeam(PlayerChangeGame PlayerChangeGame);
-        PlayerChangeGame UpdateChangeInGameLoserTeam(PlayerChangeGame PlayerChangeGame);
         bool RemoveChangeInGame(PlayerChangeGame PlayerChangeGame);
     }
 }

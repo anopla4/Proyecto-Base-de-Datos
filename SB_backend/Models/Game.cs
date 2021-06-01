@@ -37,7 +37,7 @@ namespace SB_backend.Models
         [ForeignKey("PitcherLoserId")]
         public Player PitcherLoser { get; set; }
         public int InFavorCarrers { get; set; }
-        public int AgaintsCarrers { get; set; }
+        public int AgainstCarrers { get; set; }
 
     }
 }

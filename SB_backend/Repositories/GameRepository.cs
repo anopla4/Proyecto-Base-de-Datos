@@ -31,9 +31,15 @@ namespace SB_backend.Repositories
             if (game.WinerTeamId == game.LoserTeamId)
                 return null;
             Position pitcher = _context.Positions.SingleOrDefault(c => c.PositionName == "P");
-            if (game.PitcherWinerId !=  pitcher.Id)
+            List<Guid> positionsWinnerPitcher = _context.PlayerPosition
+                .Where(c => c.PlayerId == game.PitcherWinerId)
+                .Select(c=>c.PositionId).ToList();
+            List<Guid> positionsLoserPitcher = _context.PlayerPosition
+                .Where(c => c.PlayerId == game.PitcherLoserId)
+                .Select(c => c.PositionId).ToList();
+            if (!positionsWinnerPitcher.Contains(pitcher.Id))
                 return null;
-            if (game.PitcherLoserId != pitcher.Id)
+            if (!positionsLoserPitcher.Contains(pitcher.Id))
                 return null;
 
             if (!_context.TeamsSeriesPlayers.Any(c => c.SerieId == game.SerieId && c.TeamId == game.WinerTeamId && c.PlayerId == game.PitcherWinerId))
