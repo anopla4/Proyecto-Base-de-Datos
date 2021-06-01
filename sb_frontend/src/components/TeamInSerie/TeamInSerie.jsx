@@ -119,7 +119,7 @@ class TeamInSerie extends Component {
   handleCloseAddPlayer = () => {
     this.setState({ addPlayer: false });
   };
-  handleonDeleteDirector = (idD, index) => {
+  handleOnDeleteDirector = (idD, index) => {
     fetch(
       `https://localhost:44334/api/TeamSerieDirector/${idD}/${this.state.serie.id}/
       ${this.state.serie.initDate}/${this.state.serie.endDate}/${this.state.team.id}`,
@@ -144,7 +144,7 @@ class TeamInSerie extends Component {
     this.setState({ directors: n_directors });
   };
 
-  handleonDeletePlayer = (idP, index) => {
+  handleOnDeletePlayer = (idP, index) => {
     fetch(
       `https://localhost:44334/api/TeamSeriePlayer/${idP}/${this.state.serie.id}/
       ${this.state.serie.initDate}/${this.state.serie.endDate}/${this.state.team.id}`,
@@ -176,16 +176,19 @@ class TeamInSerie extends Component {
   onFormSubmit = (e) => {
     let formElements = e.target.elements;
     if (this.state.addDirector) {
+      console.log("AAAAAAAAAAAAAAAAAAAAAAAA");
+      console.log(this.state.team);
       const director = formElements.director;
       const directorId = director
         ? director.children[director.selectedIndex].id
         : "";
+      console.log(directorId);
       let item = {
         directorId: directorId,
         serieId: this.state.serie.id,
         serieInitDate: this.state.serie.initDate,
         serieEndDate: this.state.serie.endDate,
-        teamsSerieId: this.state.team.id,
+        teamSerieId: this.state.team.id,
       };
       fetch("https://localhost:44334/api/TeamSerieDirector", {
         mode: "cors",
@@ -264,7 +267,19 @@ class TeamInSerie extends Component {
         </h1>
         <Row>
           <Col>
-            <h5 style={{ display: "inline" }}>Directores: </h5>
+            <Row>
+              <Col>
+                <h5 style={{ display: "inline" }}>Directores: </h5>
+              </Col>
+              <Col md={3} className="mt-2 mb-3">
+                  <Add
+                    // className="mt-2"
+                    text="Agregar director"
+                    onClick={this.handleOnClickAddDirector}
+                  />
+              </Col>
+            </Row>
+            
             <Row className="mt-2 mb-3">
               <Col md={3}>
                 <ListGroup>
@@ -275,7 +290,7 @@ class TeamInSerie extends Component {
                         className="ml-3"
                         style={{ padding: "0px", float: "right" }}
                         onClick={() =>
-                          this.state.handleonDeleteDirector(dir.id, index)
+                          this.handleOnDeleteDirector(dir.id, index)
                         }
                         variant="danger"
                       >
@@ -286,13 +301,8 @@ class TeamInSerie extends Component {
                 </ListGroup>
               </Col>
 
-              <Col md={3} className="mt-2 mb-3">
-                <Add
-                  className="mt-2"
-                  text="Agregar director"
-                  onClick={this.handleOnClickAddDirector}
-                />
-              </Col>
+              
+              
             </Row>
             <Row className="mb-3">
               <Col>
@@ -303,7 +313,7 @@ class TeamInSerie extends Component {
             <Players
               playerGeneral={false}
               delete={true}
-              onDelete={this.handleonDeletePlayer}
+              onDelete={this.handleOnDeletePlayer}
               players={this.state.players}
             />
             <Add text="Agregar jugador" onClick={this.handleOnClickAdd} />

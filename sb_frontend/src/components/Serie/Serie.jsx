@@ -33,13 +33,9 @@ class Serie extends Component {
     endDate: "",
     standingsData: [],
     allstarteamsData: [],
-    // players:[],
     teams: [],
-    players: [
-      { name: "Alexander Malleta", team: "Industriales" },
-      { name: "Pedro Luis Lazo", team: "Pinar del Río" },
-    ],
     positions: [],
+    players:[],
     editTeam: false,
     addTeam: false,
     addPlayer: false,
@@ -155,7 +151,39 @@ class Serie extends Component {
         addTeam: false,
       });
     } else {
-      //TODO: Add request for POST/PATCH AllStarGames
+      const player = formElements.player;
+      const playerId = player ? player.children[player.selectedIndex].id : "";
+      const position = formElements.position;
+      const positionId = position
+        ? position.children[position.selectedIndex].id
+        : "";
+      let item = {
+        playerId: playerId,
+        positionId: positionId,
+        serieId: this.state.idSerie,
+        serieInitDate: this.state.serieInitDate,
+        serieEndDate: this.state.serieEndDate,
+      };
+      fetch("https://localhost:44334/api/StarPositionPlayerSerie", {
+        mode: "cors",
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        body: JSON.stringify(item),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw Error(response.statusText);
+          }
+          return response.json();
+        })
+        .catch(function (error) {
+          console.log(
+            "Hubo un problema con la petición Fetch:" + error.message
+          );
+        });
+      this.setState({
+        addPlayer: false,
+      });
     }
   };
 
@@ -186,8 +214,20 @@ class Serie extends Component {
       .catch(function (error) {
         console.log("Hubo un problema con la petición Fetch:" + error.message);
       });
-
-    //TODO: Add request for players
+       fetch(`https://localhost:44334/api/TeamSeriePlayer/${this.state.idSerie}/${this.state.initDate}/${this.state.endDate}`, 
+       { mode: "cors" })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ players: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
 
     this.setState({
       idSerie: this.props.location.state.serie.id,
@@ -218,7 +258,27 @@ class Serie extends Component {
         console.log("Hubo un problema con la petición Fetch:" + error.message);
         this.setState({ nothingInStanding: true });
       });
-    //TODO: Add request for GET AllStarTeam
+    fetch(
+      `https://localhost:44334/api/StarPositionPlayerSerie/${
+        this.state.idSerie
+      }/${this.formatDate(this.state.initDate)}/${this.formatDate(
+        this.state.endDate
+      )}`,
+      { mode: "cors" }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ allstarteamsData: response });
+      })
+      .catch((error) => {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+        this.setState({ nothingInStanding: true });
+      });
   }
 
   handleDeleteTeam = (idT, index) => {
@@ -250,6 +310,30 @@ class Serie extends Component {
     if (this.state.standingsData.length === 0) {
       this.setState({ nothingInStanding: true });
     }
+  };
+
+  handleDeletePlayer= (idPos, index) => {
+    fetch(
+      `https://localhost:44334/api/StarPositionPlayerSerie/${this.state.idSerie}/${this.formatDate(this.state.initDate)}/${this.formatDate(this.state.endDate)}/${idPos}`,
+      {
+        mode: "cors",
+        method: "DELETE",
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+
+    let n_allstarteams = [...this.state.allstarteamsData];
+    n_allstarteams.splice(index, 1);
+
+    this.setState({ allstarteamsData: n_allstarteams });
   };
 
   render() {
@@ -313,7 +397,7 @@ class Serie extends Component {
                               }
                               style={{ width: "7%" }}
                             >
-                              {/* <Image fluid src={item.team.img} alt="" /> */}
+                              <Image fluid src={`http://localhost:44334:${item.team.imgPath}`} alt="" />
                             </td>
                             <td
                               onClick={() =>
@@ -364,7 +448,7 @@ class Serie extends Component {
                               <Image
                                 fluid
                                 roundedCircle
-                                src={player.img}
+                                src={player.imgPath}
                                 alt=""
                                 className="custom-circle-image"
                               />
@@ -414,7 +498,11 @@ class Serie extends Component {
                       <Form.Group controlId="team">
                         <Form.Label>Equipo:</Form.Label>
                         <Form.Control as="select" custom>
-                          <option>{""}</option>
+                          <option>
+                            {this.state.editTeam
+                              ? this.state.editTeam.name
+                              : ""}
+                          </option>
                           {this.state.teams.map((team) => (
                             <option id={team.id}>{team.name}</option>
                           ))}
@@ -468,7 +556,6 @@ class Serie extends Component {
                         style={{ float: "left" }}
                         variant="primary"
                         type="submit"
-                        // onClick={this.onFormSubmit}
                       >
                         Aceptar
                       </Button>
@@ -496,7 +583,7 @@ class Serie extends Component {
                       <Form.Control as="select" custom>
                         <option>{""}</option>
                         {this.state.players.map((player) => (
-                          <option>
+                          <option id={player.id}>
                             {player.name} ({player.team})
                           </option>
                         ))}
@@ -507,7 +594,7 @@ class Serie extends Component {
                       <Form.Control as="select" custom>
                         <option>{""}</option>
                         {this.state.positions.map((pos) => (
-                          <option>{pos}</option>
+                          <option id={pos.id}>{pos}</option>
                         ))}
                       </Form.Control>
                     </Form.Group>

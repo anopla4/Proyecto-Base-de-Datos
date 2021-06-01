@@ -20,6 +20,7 @@ class Series extends Component {
     deleteRecord: false,
     edited: false,
     series: [],
+    allstarteams:[]
   };
 
   componentDidMount() {
@@ -32,6 +33,19 @@ class Series extends Component {
       })
       .then((response) => {
         this.setState({ series: response });
+      })
+      .catch(function (error) {
+        console.log("Hubo un problema con la petición Fetch:" + error.message);
+      });
+      fetch("https://localhost:44334/api/StarPositionPlayerSerie", { mode: "cors" })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({ allstarteams: response });
       })
       .catch(function (error) {
         console.log("Hubo un problema con la petición Fetch:" + error.message);
