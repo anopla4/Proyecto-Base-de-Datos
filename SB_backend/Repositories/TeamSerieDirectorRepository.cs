@@ -20,7 +20,7 @@ namespace SB_backend.Repositories
             Team team = _context.Teams.Find(teamSerieDirector.TeamSerieId);
             if (team == null)
                 return null;
-            Serie serie = _context.Series.Find(teamSerieDirector.SerieId);
+            Serie serie = _context.Series.Find(teamSerieDirector.SerieId, teamSerieDirector.SerieInitDate, teamSerieDirector.SerieEndDate);
             if (serie == null)
                 return null;
             Director director = _context.Directors.Find(teamSerieDirector.DirectorId);

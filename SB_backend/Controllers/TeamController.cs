@@ -59,7 +59,7 @@ namespace SB_backend.Controllers
 
             if (current_team != null)
             {
-                //System.IO.File.Delete(team.ImgPath);
+                System.IO.File.Delete(Path.Combine(Directory.GetCurrentDirectory(), current_team.ImgPath));
                 this.SaveFile(team);
                 team.Id = current_team.Id;
                 _teamRep.UpdateTeam(team);

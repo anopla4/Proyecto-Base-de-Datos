@@ -40,7 +40,7 @@ namespace SB_backend.Repositories
 
         public List<TeamSerie> GetStanding(Guid SerieId, DateTime initDate, DateTime endDate)
         {
-            return _context.TeamsSeries.Include(c => c.Team).Where(c => c.SerieId == SerieId && c.SerieInitDate == initDate && c.SerieEndDate == endDate).ToList();
+            return _context.TeamsSeries.Include(c => c.Team).Include(c=>c.Serie).Include(c=> c.Serie.CaracterSerie).Where(c => c.SerieId == SerieId && c.SerieInitDate == initDate && c.SerieEndDate == endDate).ToList();
         }
 
         public TeamSerie GetTeamSerie(Guid TeamId, Guid SerieId, DateTime initDate, DateTime endDate)
