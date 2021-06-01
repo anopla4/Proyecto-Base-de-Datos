@@ -10,7 +10,7 @@ using SB_backend.Models;
 namespace SB_backend.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20210601003834_1")]
+    [Migration("20210601224701_1")]
     partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,167 @@ namespace SB_backend.Migrations
                 .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClaimType");
+
+                    b.Property<string>("ClaimValue");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClaimType");
+
+                    b.Property<string>("ClaimValue");
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider");
+
+                    b.Property<string>("ProviderKey");
+
+                    b.Property<string>("ProviderDisplayName");
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId");
+
+                    b.Property<string>("RoleId");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId");
+
+                    b.Property<string>("LoginProvider");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("SB_backend.Authentication.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AccessFailedCount");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256);
+
+                    b.Property<bool>("EmailConfirmed");
+
+                    b.Property<bool>("LockoutEnabled");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("SecurityStamp");
+
+                    b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers");
+                });
 
             modelBuilder.Entity("SB_backend.Models.Caracter", b =>
                 {
@@ -55,7 +216,7 @@ namespace SB_backend.Migrations
                     b.Property<Guid>("GameId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("AgaintsCarrers");
+                    b.Property<int>("AgainstCarrers");
 
                     b.Property<DateTime>("GameDate")
                         .HasColumnType("date");
@@ -153,9 +314,11 @@ namespace SB_backend.Migrations
 
                     b.Property<Guid>("PlayerId");
 
-                    b.HasKey("GameId", "PlayerId");
+                    b.Property<Guid>("PositionId");
 
-                    b.HasIndex("PlayerId");
+                    b.HasKey("GameId", "PlayerId", "PositionId");
+
+                    b.HasIndex("PlayerId", "PositionId");
 
                     b.ToTable("PlayersGames");
                 });
@@ -186,16 +349,16 @@ namespace SB_backend.Migrations
                     b.ToTable("Positions");
 
                     b.HasData(
-                        new { Id = new Guid("57cbcda7-cbac-42b5-bc0e-c71eb8540e27"), PositionName = "C" },
-                        new { Id = new Guid("a8660d61-d848-4a78-a41a-ea9c35d3f033"), PositionName = "1B" },
-                        new { Id = new Guid("ca2cc279-8a1d-49d2-bdc0-61c2c553e216"), PositionName = "2B" },
-                        new { Id = new Guid("f46b6571-8827-4736-b19f-d642fb7bf908"), PositionName = "3B" },
-                        new { Id = new Guid("8e66be38-216d-4874-a8d1-26465e853000"), PositionName = "SS" },
-                        new { Id = new Guid("bdcd2534-1ba3-4bd0-9099-13c6a0a9de41"), PositionName = "P" },
-                        new { Id = new Guid("0156a2e6-b9fe-43d8-9f68-012251df9e92"), PositionName = "LF" },
-                        new { Id = new Guid("04a2cadc-4608-4a96-8f55-b4ceb793f51b"), PositionName = "RF" },
-                        new { Id = new Guid("c548fdc4-de7f-43c4-97fb-131e8234958b"), PositionName = "CF" },
-                        new { Id = new Guid("13505c5f-d380-4cd0-9d58-fca642491f81"), PositionName = "BD" }
+                        new { Id = new Guid("06c6d50d-f572-4efe-9dbd-6eeef6c4a1bb"), PositionName = "C" },
+                        new { Id = new Guid("1b65b402-6c75-4666-bcf9-70a339d9ca72"), PositionName = "1B" },
+                        new { Id = new Guid("23502d9c-7139-4643-a853-b2579bcb41af"), PositionName = "2B" },
+                        new { Id = new Guid("fc4b39e8-120c-4aae-866d-570f0cbc6103"), PositionName = "3B" },
+                        new { Id = new Guid("81075d5f-295c-4741-84e0-2c23fdfdd668"), PositionName = "SS" },
+                        new { Id = new Guid("9f4e4dc1-6f69-49ad-85d9-02677a44eb13"), PositionName = "P" },
+                        new { Id = new Guid("48c3288d-703e-4646-ba6e-f84acf8cf2da"), PositionName = "LF" },
+                        new { Id = new Guid("2f647bd2-93a6-4df0-84fa-c43b205ce25e"), PositionName = "RF" },
+                        new { Id = new Guid("4adc7f90-81f4-404f-b2f4-c196a8a12e9e"), PositionName = "CF" },
+                        new { Id = new Guid("435606e1-afff-4d31-b615-102e495a1437"), PositionName = "BD" }
                     );
                 });
 
@@ -338,6 +501,51 @@ namespace SB_backend.Migrations
                     b.ToTable("TeamsSeriesPlayers");
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("SB_backend.Authentication.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("SB_backend.Authentication.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SB_backend.Authentication.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("SB_backend.Authentication.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("SB_backend.Models.Game", b =>
                 {
                     b.HasOne("SB_backend.Models.Team", "LoserTeam")
@@ -399,9 +607,9 @@ namespace SB_backend.Migrations
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("SB_backend.Models.Player", "Player")
+                    b.HasOne("SB_backend.Models.PlayerPosition", "Player")
                         .WithMany()
-                        .HasForeignKey("PlayerId")
+                        .HasForeignKey("PlayerId", "PositionId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

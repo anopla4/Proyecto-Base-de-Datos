@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SB_backend.Migrations
@@ -7,6 +8,45 @@ namespace SB_backend.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "AspNetRoles",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    UserName = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
+                    Email = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(nullable: false),
+                    PasswordHash = table.Column<string>(nullable: true),
+                    SecurityStamp = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    AccessFailedCount = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Caracters",
                 columns: table => new
@@ -57,6 +97,112 @@ namespace SB_backend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Teams", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetRoleClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    RoleId = table.Column<string>(nullable: false),
+                    ClaimType = table.Column<string>(nullable: true),
+                    ClaimValue = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<string>(nullable: false),
+                    ClaimType = table.Column<string>(nullable: true),
+                    ClaimValue = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserLogins",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(nullable: false),
+                    ProviderKey = table.Column<string>(nullable: false),
+                    ProviderDisplayName = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(nullable: false),
+                    RoleId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserTokens",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Value = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -161,7 +307,7 @@ namespace SB_backend.Migrations
                     PitcherWinerId = table.Column<Guid>(nullable: false),
                     PitcherLoserId = table.Column<Guid>(nullable: false),
                     InFavorCarrers = table.Column<int>(nullable: false),
-                    AgaintsCarrers = table.Column<int>(nullable: false)
+                    AgainstCarrers = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -358,11 +504,12 @@ namespace SB_backend.Migrations
                 columns: table => new
                 {
                     GameId = table.Column<Guid>(nullable: false),
-                    PlayerId = table.Column<Guid>(nullable: false)
+                    PlayerId = table.Column<Guid>(nullable: false),
+                    PositionId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlayersGames", x => new { x.GameId, x.PlayerId });
+                    table.PrimaryKey("PK_PlayersGames", x => new { x.GameId, x.PlayerId, x.PositionId });
                     table.ForeignKey(
                         name: "FK_PlayersGames_Games_GameId",
                         column: x => x.GameId,
@@ -370,10 +517,10 @@ namespace SB_backend.Migrations
                         principalColumn: "GameId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PlayersGames_Players_PlayerId",
-                        column: x => x.PlayerId,
-                        principalTable: "Players",
-                        principalColumn: "Id",
+                        name: "FK_PlayersGames_PlayerPosition_PlayerId_PositionId",
+                        columns: x => new { x.PlayerId, x.PositionId },
+                        principalTable: "PlayerPosition",
+                        principalColumns: new[] { "PlayerId", "PositionId" },
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -382,17 +529,56 @@ namespace SB_backend.Migrations
                 columns: new[] { "Id", "PositionName" },
                 values: new object[,]
                 {
-                    { new Guid("57cbcda7-cbac-42b5-bc0e-c71eb8540e27"), "C" },
-                    { new Guid("a8660d61-d848-4a78-a41a-ea9c35d3f033"), "1B" },
-                    { new Guid("ca2cc279-8a1d-49d2-bdc0-61c2c553e216"), "2B" },
-                    { new Guid("f46b6571-8827-4736-b19f-d642fb7bf908"), "3B" },
-                    { new Guid("8e66be38-216d-4874-a8d1-26465e853000"), "SS" },
-                    { new Guid("bdcd2534-1ba3-4bd0-9099-13c6a0a9de41"), "P" },
-                    { new Guid("0156a2e6-b9fe-43d8-9f68-012251df9e92"), "LF" },
-                    { new Guid("04a2cadc-4608-4a96-8f55-b4ceb793f51b"), "RF" },
-                    { new Guid("c548fdc4-de7f-43c4-97fb-131e8234958b"), "CF" },
-                    { new Guid("13505c5f-d380-4cd0-9d58-fca642491f81"), "BD" }
+                    { new Guid("06c6d50d-f572-4efe-9dbd-6eeef6c4a1bb"), "C" },
+                    { new Guid("1b65b402-6c75-4666-bcf9-70a339d9ca72"), "1B" },
+                    { new Guid("23502d9c-7139-4643-a853-b2579bcb41af"), "2B" },
+                    { new Guid("fc4b39e8-120c-4aae-866d-570f0cbc6103"), "3B" },
+                    { new Guid("81075d5f-295c-4741-84e0-2c23fdfdd668"), "SS" },
+                    { new Guid("9f4e4dc1-6f69-49ad-85d9-02677a44eb13"), "P" },
+                    { new Guid("48c3288d-703e-4646-ba6e-f84acf8cf2da"), "LF" },
+                    { new Guid("2f647bd2-93a6-4df0-84fa-c43b205ce25e"), "RF" },
+                    { new Guid("4adc7f90-81f4-404f-b2f4-c196a8a12e9e"), "CF" },
+                    { new Guid("435606e1-afff-4d31-b615-102e495a1437"), "BD" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetRoleClaims_RoleId",
+                table: "AspNetRoleClaims",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "AspNetRoles",
+                column: "NormalizedName",
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserClaims_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserLogins_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserRoles_RoleId",
+                table: "AspNetUserRoles",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "EmailIndex",
+                table: "AspNetUsers",
+                column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "UserNameIndex",
+                table: "AspNetUsers",
+                column: "NormalizedUserName",
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Games_LoserTeamId",
@@ -440,9 +626,9 @@ namespace SB_backend.Migrations
                 columns: new[] { "PlayerIdOut", "PositionIdOut" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PlayersGames_PlayerId",
+                name: "IX_PlayersGames_PlayerId_PositionId",
                 table: "PlayersGames",
-                column: "PlayerId");
+                columns: new[] { "PlayerId", "PositionId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Series_CaracterId",
@@ -493,6 +679,21 @@ namespace SB_backend.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AspNetRoleClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserLogins");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserRoles");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
                 name: "PlayersChangesGames");
 
             migrationBuilder.DropTable(
@@ -509,6 +710,12 @@ namespace SB_backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "TeamsSeriesPlayers");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Games");

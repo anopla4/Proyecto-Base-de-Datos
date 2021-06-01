@@ -8,9 +8,10 @@ namespace SB_backend.Interfaces
 {
     public interface IStarPositionPlayerSerieRepository
     {
-        List<StarPositionPlayerSerie> GetStarPositionPlayersSeries();
+        List<List<PlayerPosition>> GetStarPositionPlayersSeries();
         List<StarPositionPlayerSerie> GetAllStarsTeam(Guid SerieId, DateTime SerieInitDate, DateTime SerieEndDate);
-        StarPositionPlayerSerie GetStarPositionPlayerSerie(Guid SerieId, DateTime SerieInitDate, DateTime SerieEndDate, Guid PlayerPositionId);
+        StarPositionPlayerSerie GetStarPositionPlayerSerie(Guid SerieId, DateTime SerieInitDate, DateTime SerieEndDate, Guid PositionId);
+
         StarPositionPlayerSerie AddStarPositionPlayerSerie(StarPositionPlayerSerie starPositionPlayerSerie);
         StarPositionPlayerSerie UpdateStarPositionPlayerSerie(StarPositionPlayerSerie starPositionPlayerSerie);
         bool RemoveStarPositionPlayer(StarPositionPlayerSerie starPositionPlayerSerie);

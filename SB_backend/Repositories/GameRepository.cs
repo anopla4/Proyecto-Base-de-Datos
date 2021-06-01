@@ -113,7 +113,7 @@ namespace SB_backend.Repositories
             currentGame.PitcherWinerId = game.PitcherWinerId;
             currentGame.PitcherLoserId = game.PitcherLoserId;
             currentGame.InFavorCarrers = game.InFavorCarrers;
-            currentGame.AgaintsCarrers = game.AgaintsCarrers;
+            currentGame.AgainstCarrers = game.AgainstCarrers;
             _context.Games.Update(currentGame);
             _context.SaveChanges();
             return currentGame;

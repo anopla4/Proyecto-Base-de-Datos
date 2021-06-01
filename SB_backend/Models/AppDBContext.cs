@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using SB_backend.Authentication;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,17 +8,19 @@ using System.Threading.Tasks;
 
 namespace SB_backend.Models
 {
-    public class AppDBContext : DbContext
+    public class AppDBContext : IdentityDbContext<ApplicationUser>
     {
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
         {
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {   //DateBuilder
             //modelBuilder.Entity<Date>()
             //    .HasKey(c => new { c.Day, c.Hour });
             //PlayerBuilder
-           
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<PlayerPosition>()
                 .HasKey(c => new { c.PlayerId, c.PositionId});
             modelBuilder.Entity<Player>()

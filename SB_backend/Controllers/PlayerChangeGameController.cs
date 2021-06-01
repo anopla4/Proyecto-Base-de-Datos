@@ -45,7 +45,7 @@ namespace SB_backend.Controllers
         [HttpDelete("{GameId}/{PlayerInId}/{PositionIdIn}/{PlayerOutId}/{PositionIdOut}/")]
         public IActionResult RemoveChange(Guid GameId, Guid PlayerInId, Guid PositionIdIn, Guid PlayerOutId, Guid PositionIdOut)
         {
-            var rem = _pchRep.RemoveChangeInGame(Guid GameId, Guid PlayerInId, Guid PositionIdIn, Guid PlayerOutId, Guid PositionIdOut);
+            var rem = _pchRep.RemoveChangeInGame(GameId, PlayerInId, PositionIdIn, PlayerOutId, PositionIdOut);
             if (rem)
                 return Ok();
             return NotFound("Not change Found");
