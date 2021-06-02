@@ -54,6 +54,11 @@ const navigation = (props) => {
           <Nav.Item>
             <Nav.Link href="/login">Iniciar sesión</Nav.Link>
           </Nav.Item>
+          {/* {this.props.webMaster && (
+            <Nav.Item>
+              <Nav.Link href="/login">Manejar usuarios</Nav.Link>
+            </Nav.Item>
+          )} */}
         </Nav>
         {/* <Form inline className="ml-auto" navbarScroll>
           <FormControl type="text" placeholder="Search" className="mr-sm-2" />

@@ -71,7 +71,6 @@ class DirectorsGeneral extends Component {
   onFormSubmit = (e) => {
     let formElements = e.target.elements;
     const name = formElements.name.value;
-    // const name = "Anglada";
     var formdata = new FormData();
     formdata.append("name", name);
     formdata.append("img", this.state.file, this.state.file.name);
@@ -80,6 +79,8 @@ class DirectorsGeneral extends Component {
       method: this.state.editDirector ? "PATCH" : "POST",
       body: formdata,
       mode: "cors",
+      headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token },
+
     };
 
     let postUrl =
@@ -128,6 +129,7 @@ class DirectorsGeneral extends Component {
   }
 
   render() {
+    console.log(localStorage.getItem("loggedUser"));
     return (
       <Container className="list-unstyled">
         <h1 className="mb-5 my-style-header">Directores de béisbol</h1>

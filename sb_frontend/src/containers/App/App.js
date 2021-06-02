@@ -21,9 +21,15 @@ import GameForm from "../../components/GameForm/GameForm";
 import Login from "../../components/Login/Login";
 
 class App extends Component {
+  logginUserCallback= (username, password, jwt_token) => {
+    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    localStorage.setItem("loggedUser", JSON.stringify({username: username, password: password, jwt_token: jwt_token}));
+  }
+
   render() {
     return (
       <BrowserRouter>
+        {localStorage.getItem("loggedUser")}
         <Layout>
           <Switch>
             <Route path="/" exact component={Home} />
@@ -41,7 +47,7 @@ class App extends Component {
             <Route path="/serieForm" component={SerieForm} />
             <Route path="/playerForm" component={PlayerForm} />
             <Route path="/gameForm" component={GameForm} />
-            <Route path="/login" component={Login} />
+            <Route path="/login" component={() => <Login onLoginCallback={this.logginUserCallback}/>} />
           </Switch>
         </Layout>
       </BrowserRouter>
