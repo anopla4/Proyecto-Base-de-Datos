@@ -38,9 +38,9 @@ class Login extends Component {
   render() {
     return (
       <Container alignSelf="center" className="mt-5">
-      
+      <h3>Iniciar sesión</h3>
         <Col className="center">
-          <Form>
+          <Form style={{width:"30%"}}>
             <Form.Group controlId="username">
               <Form.Label>Nombre de Usuario</Form.Label>
               <Form.Control

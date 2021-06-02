@@ -21,6 +21,7 @@ class PlayersGeneral extends Component {
     this.props.history.push({ pathname: "/playerForm", state: { player } });
   };
 
+
   componentDidMount() {
     fetch("https://localhost:44334/api/Player", { mode: "cors" })
       .then((response) => {
