@@ -219,6 +219,7 @@ class Teams extends Component {
                             ? this.state.fileTmpURL
                             : `https://localhost:44334/${this.state.teamEdit.imgPath}`
                         }
+                        style={{width:"100px"}}
                       />
                       <Form.File
                         label="Logo del equipo"

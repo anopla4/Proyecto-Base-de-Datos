@@ -131,7 +131,6 @@ class DirectorsGeneral extends Component {
   }
 
   render() {
-    console.log(localStorage.getItem("loggedUser"));
     return (
       <Container className="list-unstyled">
         <h1 className="mb-5 my-style-header">Directores de béisbol</h1>

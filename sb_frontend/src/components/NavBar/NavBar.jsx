@@ -10,6 +10,8 @@ import {
   NavDropdown,
 } from "react-bootstrap";
 import logo from "../../static/logo.png";
+import isLoggedIn from "../utils";
+
 
 const navigation = (props) => {
   return (
@@ -51,8 +53,13 @@ const navigation = (props) => {
           </NavItem>
         </Nav>
         <Nav className="ml-auto">
+        <Nav.Item>
+        {isLoggedIn() && <Nav.Link>{JSON.parse(localStorage.getItem("loggedUser")).username}</Nav.Link>}
+        
+        </Nav.Item>
+        
           <Nav.Item>
-            {localStorage.getItem("loggedUser") ? <Nav.Link href="/home" onClick={()=>localStorage.removeItem("loggedUser")}>Cerrar sesión</Nav.Link> :<Nav.Link href="/login">Iniciar sesión</Nav.Link>}
+            {localStorage.getItem("loggedUser") ? <Nav.Link onClick={()=>localStorage.removeItem("loggedUser")}>Cerrar sesión</Nav.Link> :<Nav.Link href="/login">Iniciar sesión</Nav.Link>}
           </Nav.Item>
         </Nav>
       </Navbar.Collapse>

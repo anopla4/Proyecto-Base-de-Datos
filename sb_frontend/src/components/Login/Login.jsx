@@ -1,5 +1,8 @@
 import React, { Component } from "react";
-import { Form, Button, Col, Container } from "react-bootstrap";
+import { Form, Button,Toast, Col, Container } from "react-bootstrap";
+import isLoggedIn from "../utils";
+
+
 class Login extends Component {
   state = {
     username: undefined,
@@ -29,11 +32,13 @@ class Login extends Component {
       .catch(function (error) {
         console.log("Hubo un problema con la petición Fetch:" + error.message);
       });
+      
   }
 
   render() {
     return (
       <Container alignSelf="center" className="mt-5">
+      
         <Col className="center">
           <Form>
             <Form.Group controlId="username">
@@ -53,9 +58,6 @@ class Login extends Component {
                 onChange={(e) => {this.setState({password:e.target.value})}}
               />
             </Form.Group>
-            <Form.Group controlId="formBasicCheckbox">
-          <Form.Check type="checkbox" label="Check me out" />
-        </Form.Group>
             <Button 
               variant="primary"
               style={{ float: "right" }}
