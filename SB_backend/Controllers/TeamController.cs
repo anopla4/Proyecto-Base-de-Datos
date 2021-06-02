@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SB_backend.Interfaces;
@@ -29,6 +30,7 @@ namespace SB_backend.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public IActionResult AddTeam([FromForm]Team team)
         {
             this.SaveFile(team);
@@ -39,6 +41,7 @@ namespace SB_backend.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult RemoveTeam(Guid Id)
         {
             var team = _teamRep.getTeam(Id);
@@ -53,6 +56,7 @@ namespace SB_backend.Controllers
         }
 
         [HttpPatch("{id}")]
+        [Authorize]
         public IActionResult UpdateTeam(Guid Id, [FromForm]Team team)
         {
             var current_team = _teamRep.getTeam(Id);

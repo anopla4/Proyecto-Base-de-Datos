@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SB_backend.Interfaces;
 using SB_backend.Models;
 using System;
@@ -50,6 +51,7 @@ namespace SB_backend.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult AddPlayer([FromForm]Player player)
         {
             var file = player.Img;
@@ -73,6 +75,7 @@ namespace SB_backend.Controllers
         }
 
         [HttpDelete("{id}/{PositionId}")]
+        [Authorize]
         public IActionResult RemovePlayer(Guid Id, Guid PositionId,Player player)
         {
             var flag = _plrep.RemovePlayer(player);
@@ -86,6 +89,7 @@ namespace SB_backend.Controllers
         }
 
         [HttpPatch("{id}/{PositionId}")]
+        [Authorize]
         public IActionResult UpdatePlayer(Guid Id, Guid PositionId,Player player)
         {
             var current_player = _plrep.GetPlayer(Id);

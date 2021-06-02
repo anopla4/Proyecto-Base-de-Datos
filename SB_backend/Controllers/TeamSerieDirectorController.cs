@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SB_backend.Interfaces;
@@ -48,6 +49,7 @@ namespace SB_backend.Controllers
             return Ok(directors);
         }
         [HttpPost]
+        [Authorize]
         public IActionResult AddTeamSerieDirector(TeamSerieDirector tsd)
         {
             var teamSerieDirectorAux = _tsdRep.AddTeamSerieDirector(tsd);
@@ -58,6 +60,7 @@ namespace SB_backend.Controllers
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + tsd.DirectorId + tsd.SerieId, tsd);
         }
         [HttpDelete("{DirectorId}/{SerieId}/{initDate}/{endDate}/{teamId}")]
+        [Authorize]
         public IActionResult RemoveTeamSerieDirector(Guid DirectorId, Guid SerieId, DateTime initDate, DateTime endDate, Guid teamId)
         {
             TeamSerieDirector tsd = _tsdRep.GetTeamSerieDirector(teamId, SerieId, initDate, endDate, DirectorId);
@@ -70,6 +73,7 @@ namespace SB_backend.Controllers
             return NotFound($"Not Director {DirectorId} in Serie {SerieId}");
         }
         [HttpPatch("{DirectorId}/{SerieId}/{initDate}/{endDate}/{teamId}")]
+        [Authorize]
         public IActionResult UpdateTeamSerieDirector(Guid DirectorId, Guid SerieId, DateTime initDate, DateTime endDate, Guid teamId, TeamSerieDirector tsd)
         {
             tsd.DirectorId = DirectorId;

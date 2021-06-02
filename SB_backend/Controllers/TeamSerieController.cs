@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SB_backend.Interfaces;
@@ -54,6 +55,7 @@ namespace SB_backend.Controllers
             return Ok(series);
         }
         [HttpPost]
+        [Authorize]
         public IActionResult AddTeamSerie(TeamSerie teamSerie)
         {
             var teamSerieAux = _tsRep.AddTeamSerie(teamSerie);
@@ -64,6 +66,7 @@ namespace SB_backend.Controllers
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + teamSerie.TeamId + "/" +teamSerie.SerieId + "/" + teamSerie.SerieInitDate + "/" + teamSerie.SerieEndDate, teamSerie);
         }
         [HttpDelete("{TeamId}/{SerieId}/{initDate}/{endDate}")]
+        [Authorize]
         public IActionResult RemoveTeamSerie(Guid TeamId, Guid SerieId, DateTime initDate, DateTime endDate)
         {
             TeamSerie teamSerie = _tsRep.GetTeamSerie(TeamId, SerieId, initDate, endDate);
@@ -77,6 +80,7 @@ namespace SB_backend.Controllers
         }
 
         [HttpPatch("{TeamId}/{SerieId}/{initDate}/{endDate}")]
+        [Authorize]
         public IActionResult UpdateTeamSerie(Guid TeamId,Guid SerieId,DateTime initDate, DateTime endDate,TeamSerie teamSerie)
         {
             teamSerie.TeamId = TeamId;

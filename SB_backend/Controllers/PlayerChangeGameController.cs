@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SB_backend.Interfaces;
@@ -35,6 +36,7 @@ namespace SB_backend.Controllers
             return Ok(changes);
         }
         [HttpPost]
+        [Authorize]
         public IActionResult AddChange(PlayerChangeGame change)
         {
             var changeA = _pchRep.AddChangeInGame(change);
@@ -43,6 +45,7 @@ namespace SB_backend.Controllers
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + change.GameId + "/" + change.PlayerIdIn + "/" + change.PositionIdIn, change);
         }
         [HttpDelete("{GameId}/{PlayerInId}/{PositionIdIn}/{PlayerOutId}/{PositionIdOut}/")]
+        [Authorize]
         public IActionResult RemoveChange(Guid GameId, Guid PlayerInId, Guid PositionIdIn, Guid PlayerOutId, Guid PositionIdOut)
         {
             var rem = _pchRep.RemoveChangeInGame(GameId, PlayerInId, PositionIdIn, PlayerOutId, PositionIdOut);

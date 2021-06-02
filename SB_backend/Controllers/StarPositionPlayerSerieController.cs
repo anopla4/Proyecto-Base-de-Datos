@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SB_backend.Interfaces;
@@ -20,6 +21,7 @@ namespace SB_backend.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult GetAllStarsTeamsSeries()
         {
             return Ok(_spRep.GetStarPositionPlayersSeries());
@@ -33,6 +35,7 @@ namespace SB_backend.Controllers
             return NotFound($"Not AllStarTeam for Serie with Id = {SerieId}");
         }
         [HttpPost]
+        [Authorize]
         public IActionResult AddStarPositionPlayerSerie(StarPositionPlayerSerie starPositionPlayerSerie)
         {
             var startPPS = _spRep.AddStarPositionPlayerSerie(starPositionPlayerSerie);
@@ -41,6 +44,7 @@ namespace SB_backend.Controllers
             return BadRequest($"Not added StartPositionPlayer");
         }
         [HttpGet("{SerieId}/{InitDate}/{EndDate}/{PositionId}")]
+        [Authorize]
         public IActionResult GetStarPlayerOfPositionInSerie(Guid SerieId, DateTime InitDate, DateTime EndDate, Guid PositionId)
         {
             var player = _spRep.GetStarPositionPlayerSerie(SerieId,InitDate,EndDate, PositionId);
@@ -49,6 +53,7 @@ namespace SB_backend.Controllers
             return NotFound($"Not Player in AllStartTeam Of Serie {SerieId} in position {PositionId}");
         }
         [HttpPatch("{SerieId}/{InitDate}/{EndDate}/{PositionId}")]
+        [Authorize]
         public IActionResult UpdateStarTeamSerie(Guid SerieId, DateTime InitDate, DateTime EndDate,Guid PositionId,StarPositionPlayerSerie starPositionPlayerSerie)
         {
             var player = _spRep.UpdateStarPositionPlayerSerie(starPositionPlayerSerie);
@@ -58,6 +63,7 @@ namespace SB_backend.Controllers
         }
 
         [HttpDelete("{SerieId}/{InitDate}/{EndDate}/{PositionId}")]
+        [Authorize]
         public IActionResult RemoveStarPositionPlayerSerie(Guid SerieId, DateTime InitDate, DateTime EndDate, Guid PositionId, StarPositionPlayerSerie starPositionPlayerSerie)
         {
             var flag = _spRep.RemoveStarPositionPlayer(starPositionPlayerSerie);

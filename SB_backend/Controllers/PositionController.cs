@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SB_backend.Interfaces;
@@ -22,6 +23,7 @@ namespace SB_backend.Controllers
             return Ok(_posRep.GetPositions());
         }
         [HttpPost]
+        [Authorize]
         public IActionResult AddPosition(Position position)
         {
             _posRep.AddPosition(position);
@@ -29,6 +31,7 @@ namespace SB_backend.Controllers
         }
 
         [HttpDelete("{Id}")]
+        [Authorize]
         public IActionResult RemovePosition(Guid Id)
         {
             var position = _posRep.GetPosition(Id);
@@ -43,6 +46,7 @@ namespace SB_backend.Controllers
         }
 
         [HttpPatch("{id}")]
+        [Authorize]
         public IActionResult UpdateCaracter(Guid Id, Position position)
         {
             var current_position = _posRep.GetPosition(Id);

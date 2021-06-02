@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SB_backend.Interfaces;
@@ -35,12 +36,14 @@ namespace SB_backend.Controllers
             return NotFound($"Not serie with Id = {Id}");
         }
         [HttpPost]
+        [Authorize]
         public IActionResult AddSerie(Serie serie)
         {
             serie = _serRep.AddSerie(serie);
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + serie.Id, serie);
         }
         [HttpPatch("{Id}/{initDate}/{endDate}")]
+        [Authorize]
         public IActionResult UpdateSerie(Guid Id,DateTime initDate,DateTime endDate,Serie serie)
         {
             var current_serie = _serRep.GetSerie(Id,initDate,endDate);
@@ -56,6 +59,7 @@ namespace SB_backend.Controllers
         }
 
         [HttpDelete("{Id}/{initDate}/{endDate}")]
+        [Authorize]
         public IActionResult RemoveSerie(Guid Id, DateTime initDate, DateTime endDate)
         {
             var flag = _serRep.RemoveSerie(Id, initDate, endDate);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SB_backend.Interfaces;
@@ -72,6 +73,7 @@ namespace SB_backend.Controllers
             return Ok(pitchers);
         }
         [HttpPost]
+        [Authorize]
         public IActionResult AddTeamSeriePlayer(TeamSeriePlayer tsp)
         {
             var teamSeriePlayerAux = _tspRep.AddTeamSeriePlayer(tsp);
@@ -82,6 +84,7 @@ namespace SB_backend.Controllers
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + tsp.PlayerId + "/" + tsp.SerieId + "/" + tsp.SerieInitDate + "/" + tsp.SerieEndDate, tsp);
         }
         [HttpDelete("{PlayerId}/{SerieId}/{InitDate}/{EndDate}")]
+        [Authorize]
         public IActionResult RemoveTeamSeriePlayer(Guid PlayerId,Guid SerieId, DateTime InitDate, DateTime EndDate, TeamSeriePlayer tsp)
         {
             var tspR = _tspRep.RemoveTeamSeriePlayer(tsp);
@@ -92,6 +95,7 @@ namespace SB_backend.Controllers
             return NotFound($"Not Player {PlayerId} in Serie {SerieId}");
         }
         [HttpPatch("{PlayerId}/{SerieId}/{InitDate}/{EndDate}")]
+        [Authorize]
         public IActionResult UpdateTeamSeriePlayer(Guid PlayerId, Guid SerieId, DateTime InitDate, DateTime EndDate, TeamSeriePlayer tsp)
         {
             var tspUpd = _tspRep.UpdateTeamSeriePlayer(tsp);

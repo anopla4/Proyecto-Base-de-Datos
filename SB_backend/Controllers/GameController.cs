@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SB_backend.Interfaces;
@@ -40,6 +41,7 @@ namespace SB_backend.Controllers
             return NotFound($"Not game with Id = {Id}");
         }
         [HttpPost]
+        [Authorize]
         public IActionResult AddGame(Game game)
         {
             var gameA = _gRep.AddGame(game);
@@ -48,6 +50,7 @@ namespace SB_backend.Controllers
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + gameA.GameId, gameA);
         }
         [HttpPatch("{Id}")]
+        [Authorize]
         public IActionResult UpdateGame(Guid Id,Game game)
         {
                 var gameU = _gRep.UpdateGame(game);
@@ -56,6 +59,7 @@ namespace SB_backend.Controllers
             return Ok(gameU);
         }
         [HttpDelete("{Id}")]
+        [Authorize]
         public IActionResult RemoveGame(Guid Id, Game game)
         {
             var del = _gRep.RemoveGame(game);

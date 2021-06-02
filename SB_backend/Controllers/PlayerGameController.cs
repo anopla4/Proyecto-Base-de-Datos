@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SB_backend.Interfaces;
@@ -40,6 +41,7 @@ namespace SB_backend.Controllers
             return Ok(lineup);
         }
         [HttpPost]
+        [Authorize]
         public IActionResult AddPlayerInGame(PlayerGame playerGame)
         {
             var playerGameA = _pgRep.AddPlayerInGame(playerGame);
@@ -48,6 +50,7 @@ namespace SB_backend.Controllers
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + playerGameA.GameId + "/" + playerGameA.PlayerId, playerGameA);
         }
         [HttpDelete("{GameId}/{PlayerId}/{PositionId}")]
+        [Authorize]
         public IActionResult RemovePlayerInGame(Guid GameId, Guid PlayerId,Guid PositionId)
         {
             var playerGame = _pgRep.GetPlayerInGame(GameId, PlayerId,PositionId);

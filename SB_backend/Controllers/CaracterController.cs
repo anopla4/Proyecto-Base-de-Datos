@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SB_backend.Interfaces;
@@ -38,6 +39,7 @@ namespace SB_backend.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult AddCaracter(Caracter caracter)
         {
             _caractRep.AddCaracter(caracter);
@@ -45,6 +47,7 @@ namespace SB_backend.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult RemoveCaracter(Guid Id,Caracter caracter)
         {
             var flag = _caractRep.RemoveCaracter(caracter);
@@ -59,6 +62,7 @@ namespace SB_backend.Controllers
         }
 
         [HttpPatch("{id}")]
+        [Authorize]
         public IActionResult UpdateCaracter(Guid Id, Caracter caracter)
         {
             var current_caracter_Upd = _caractRep.UpdateCaracter(caracter);

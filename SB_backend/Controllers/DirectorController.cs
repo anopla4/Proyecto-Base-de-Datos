@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SB_backend.Interfaces;
@@ -37,6 +38,7 @@ namespace SB_backend.Controllers
             return NotFound($"Not Director with Id = {Id}");
         }
         [HttpPost]
+        [Authorize]
         public IActionResult AddDirector([FromForm]Director director)
         {
             this.SaveFile(director);
@@ -44,6 +46,7 @@ namespace SB_backend.Controllers
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + director.Id, director);
         }
         [HttpPatch("{Id}")]
+        [Authorize]
         public IActionResult UpdateDirector(Guid Id, [FromForm]Director director)
         {
             var current_director = _dirRep.GetDirector(Id);
@@ -61,6 +64,7 @@ namespace SB_backend.Controllers
         }
 
         [HttpDelete("{Id}")]
+        [Authorize]
         public IActionResult RemoveDirector(Guid Id)
         {
             var flag = _dirRep.RemoveDirector(Id);
@@ -77,7 +81,7 @@ namespace SB_backend.Controllers
             var file = director.Img;
             var folderName = Path.Combine("Resources", "Images");
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-            if (file.Length > 0)
+            if (file != null && file.Length > 0)
             {
                 var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
                 var fullPath = Path.Combine(pathToSave, fileName);
