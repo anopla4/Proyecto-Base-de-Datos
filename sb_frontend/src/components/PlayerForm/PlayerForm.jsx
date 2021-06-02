@@ -63,8 +63,8 @@ class PlayerForm extends Component {
   }
 
   componentDidMount() {
-    if (this.props.location.state.serie) {
-      this.setState({ edit: true });
+    if (this.props.location.state.player) {
+      this.setState({ edit: true, playerEdit: this.props.location.state.player, selectedPositions:this.props.location.state.player.positions });
     }
   }
 
@@ -99,8 +99,10 @@ class PlayerForm extends Component {
       age,
       year_Experience,
       deffAverage,
+      average,
     };
-    console.log(player.era);
+
+
     var formdata = new FormData();
     formdata.append("name", player.name);
     formdata.append("age", player.age);
@@ -108,19 +110,18 @@ class PlayerForm extends Component {
     formdata.append("year_Experience", player.year_Experience);
     formdata.append("deffAverage", player.deffAverage);
     if (player.era)
-      formdata.append("era", player.era)
+      formdata.append("era", player.era);
     if (player.hand)
-      formdata.append("hand", player.hand)
+      formdata.append("hand", player.hand);
     if (player.average)
-      formdata.append("average", player.average)
+      formdata.append("average", player.average);
     formdata.append("img", this.state.file, this.state.file.name);
     for (let i = 0; i < player.positions.length; i++) {
       formdata.append(`positions[${i}].id`, player.positions[i].id);
       formdata.append(`positions[${i}].positionName`, player.positions[i].positionName);
       
     }
-
-
+    console.log(this.state.playerEdit.id);
     let postUrl =
       "https://localhost:44334/api/Player" +
       (this.state.edit ? `/${this.state.playerEdit.id}` : "");
@@ -159,6 +160,9 @@ class PlayerForm extends Component {
       ...this.props.location.state.player,
     };
     console.log(this.state.selectedPositions);
+    console.log(era);
+    console.log(hand);
+    console.log("Aquiiiiiiiiiiiiiiiiiii");
     return (
       <Container alignSelf="center" className="mt-4">
         <h1 className="mb-5 my-style-header">Jugador</h1>
@@ -198,7 +202,7 @@ class PlayerForm extends Component {
                     as="select"
                     custom
                   >
-                    <option>{""}</option>
+                    <option  id={current_Team?current_Team.id:-1}>{current_Team?current_Team.name: ""}</option>
                     {this.state.teams.map((team) => (
                       <option id={team.id}>{team.name}</option>
                     ))}
@@ -252,7 +256,7 @@ class PlayerForm extends Component {
                 <Form.Group controlId="hand">
                   <Form.Label>Mano:</Form.Label>
                   <Form.Control
-                    defaultValue={hand ? hand : ""}
+                    defaultValue={hand ? hand : undefined}
                     as="select"
                     custom
                     disabled={
@@ -283,7 +287,7 @@ class PlayerForm extends Component {
                 <Form.Group controlId="era">
                   <Form.Label>Promedio de carreras limpias:</Form.Label>
                   <Form.Control
-                    defaultValue={era ? era : ""}
+                    defaultValue={era ? era : undefined}
                     type="numeric"
                     name="era"
                     disabled={
@@ -296,7 +300,7 @@ class PlayerForm extends Component {
                 <Form.Group controlId="average">
                   <Form.Label>Average:</Form.Label>
                   <Form.Control
-                    defaultValue={average ? average : ""}
+                    defaultValue={average ? average : undefined}
                     type="numeric"
                     name="average"
                     disabled={
@@ -322,6 +326,7 @@ class PlayerForm extends Component {
               className="mt-3 ml-3"
               variant="primary"
               type="submit"
+              // onClick = {this.onFormSubmit}
             >
               Aceptar
             </Button>

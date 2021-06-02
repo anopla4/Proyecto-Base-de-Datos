@@ -49,7 +49,7 @@ class Players extends Component {
                   <DeleteEdit
                     delete={this.props.delete}
                     edit={this.props.edit}
-                    onEdit={() => this.props.onEdit(player.id)}
+                    onEdit={() => this.props.onEdit(player)}
                     onDelete={() => this.props.onDelete(player.id, index)}
                     space="2"
                     size="sm"
