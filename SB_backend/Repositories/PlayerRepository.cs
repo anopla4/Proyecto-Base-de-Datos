@@ -16,13 +16,16 @@ namespace SB_backend.Repositories
         {
             _playerContext = playerContext;
         }
-        public Player AddPlayer(Player player)
+        public Player AddPlayer(Player player, List<Position> positions)
         {
             player.Id = Guid.NewGuid();
             if (player.Current_TeamId != null && !_playerContext.Teams.Any(c => c.Id == player.Current_TeamId))
                 return null;
             player.Current_Team = _playerContext.Teams.Find(player.Current_TeamId);
             _playerContext.Players.Add(player);
+
+            foreach(var position in positions)
+                _playerContext.PlayerPosition.Add(new PlayerPosition() { PlayerId = player.Id, PositionId = position.Id });
             _playerContext.SaveChanges();
             return player;
         }
@@ -44,6 +47,30 @@ namespace SB_backend.Repositories
         {
             return _playerContext.Players.Include(c => c.Current_Team).ToList();
         }
+
+        public List<DTOPlayer> GetPlayersWithPositions()
+        {
+            var players = _playerContext.Players.Include(c => c.Current_Team).ToList();
+            List<DTOPlayer> res = new List<DTOPlayer>();
+            foreach (var player in players)
+                res.Add(new DTOPlayer()
+                {
+                    Id = player.Id,
+                    Name = player.Name,
+                    Current_Team = player.Current_Team,
+                    Age = player.Age,
+                    Year_Experience = player.Year_Experience,
+                    DeffAverage = player.DeffAverage,
+                    ERA = player.ERA,
+                    Average = player.Average,
+                    Hand = player.Hand,
+                    ImgPath = player.ImgPath,
+                    Positions = this.GetPlayerPositions(player.Id),
+                    Teams = _playerContext.TeamsSeriesPlayers.Include(c => c.Team).Where(c => c.PlayerId == player.Id).Select(c => c.Team.Name).Distinct().ToList()
+                });
+            return res;
+        }
+
 
         public List<Player> GetPitchers()
         {
@@ -75,7 +102,7 @@ namespace SB_backend.Repositories
             return false;
         }
 
-        public Player UpdatePlayer(Player player)
+        public Player UpdatePlayer(Player player, List<Position> positions)
         {
             var curr_player = _playerContext.Players.Include(c => c.Current_Team).SingleOrDefault(c => c.Id == player.Id);
 
@@ -85,6 +112,7 @@ namespace SB_backend.Repositories
                 curr_player.Year_Experience = player.Year_Experience;
                 curr_player.Current_Team = player.Current_Team;
                 curr_player.Current_TeamId = player.Current_TeamId;
+                curr_player.Current_Team = _playerContext.Teams.Find(player.Current_TeamId);
                 curr_player.Average = player.Average;
                 curr_player.DeffAverage = player.DeffAverage;
                 curr_player.ImgPath = player.ImgPath;
@@ -94,8 +122,13 @@ namespace SB_backend.Repositories
                 else
                     curr_player.ERA = null;
                 _playerContext.Update(curr_player);
-                _playerContext.SaveChanges();
+
+                foreach (var position in _playerContext.PlayerPosition.Where(c => c.PlayerId == player.Id))
+                    _playerContext.PlayerPosition.Remove(position);
+                foreach (var position in positions)
+                    _playerContext.PlayerPosition.Add(new PlayerPosition() { PlayerId = player.Id, PositionId = position.Id });
             }
+            _playerContext.SaveChanges();
             return curr_player;
         }
     }

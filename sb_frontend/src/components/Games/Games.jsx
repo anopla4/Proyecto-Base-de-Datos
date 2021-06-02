@@ -82,20 +82,14 @@ class Games extends Component {
                   </Row>
                   <Row>
                     <Col>
-                      {new Date(game.gameDate).toLocaleString().split(",")[0]} (
-                      {game.gameTime})
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
                       <Image
                         rounded
                         fluid
-                        src={`https://localhost:44334/${game.winnerTeam.imgPath}`}
+                        src={`https://localhost:44334/${game.winerTeam.imgPath}`}
                       />
                     </Col>
                     <Col className="my-score" style={{ textAlign: "center" }}>
-                      {game.runs_in_favor} - {game.runs_against}
+                      {game.inFavorCarrers} - {game.againstCarrers}
                     </Col>
                     <Col>
                       <Image
@@ -110,23 +104,23 @@ class Games extends Component {
                   <Container>
                     <p style={{ display: "inline" }}>
                       <h className="my-header-list-group-item">Fecha: </h>{" "}
-                      {game.date} ({game.time}).
+                      {new Date(game.gameDate).toLocaleString().split(",")[0]} ({game.gameTime}).
                     </p>
                   </Container>
-                  <Container>
+                  <Row>
                     <p style={{ display: "inline" }}>
                       <Container className="bold">Lanzador ganador: </Container>{" "}
-                      {game.pitcherWinner.name}.
+                      {game.pitcherWiner.name}.
                     </p>
-                  </Container>
-                  <Container>
+                  </Row>
+                  <Row>
                     <p style={{ display: "inline" }}>
                       <Container className="bold">
                         Lanzador perdedor:{" "}
                       </Container>{" "}
                       {game.pitcherLoser.name}.
                     </p>
-                  </Container>
+                  </Row>
                   <Container className="my-link">
                     <Card.Link
                       href="/game"

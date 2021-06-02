@@ -50,7 +50,7 @@ namespace SB_backend.Repositories
 
         public List<Serie> GetSeries()
         {
-            return _context.Series.Include(c => c.CaracterSerie).ToList();
+            return _context.Series.Include(c => c.CaracterSerie).Include(c=>c.Loser).Include(c=>c.Winer).ToList();
         }
 
         public bool RemoveSerie(Guid Id, DateTime initDate, DateTime endDate)

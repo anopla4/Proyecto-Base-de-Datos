@@ -21,7 +21,6 @@ namespace SB_backend.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public IActionResult GetAllStarsTeamsSeries()
         {
             return Ok(_spRep.GetStarPositionPlayersSeries());

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SB_backend.Interfaces;
 using SB_backend.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http.Headers;
 
@@ -21,7 +22,7 @@ namespace SB_backend.Controllers
         [HttpGet]
         public IActionResult GetPlayers()
         {
-            return Ok(_plrep.GetPlayers());
+            return Ok(_plrep.GetPlayersWithPositions());
         }
         [HttpGet("{playerId}/Positions")]
         public IActionResult GetPlayerPositions(Guid playerId)
@@ -52,7 +53,49 @@ namespace SB_backend.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult AddPlayer([FromForm]Player player)
+        public IActionResult AddPlayer([FromForm]Player player, [FromForm]List<Position> positions)
+        {
+            this.SaveFile(player);
+            Player p = _plrep.AddPlayer(player, positions);
+            if (p == null)
+                return BadRequest("Not Player Created");
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + player.Id, player);
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize]
+        public IActionResult RemovePlayer(Guid Id)
+        {
+            var player = _plrep.GetPlayer(Id);
+            var flag = _plrep.RemovePlayer(player);
+
+            if (flag)
+            {
+                return Ok();
+            }
+
+            return NotFound($"Not player with id = {Id}");
+        }
+
+        [HttpPatch("{id}")]
+        //[Authorize]
+        public IActionResult UpdatePlayer(Guid id, [FromForm]Player player, [FromForm]List<Position> positions)
+        {
+            var current_player = _plrep.GetPlayer(id);
+
+            if (current_player != null)
+            {
+                System.IO.File.Delete(Path.Combine(Directory.GetCurrentDirectory(), current_player.ImgPath));
+                this.SaveFile(player);
+                player.Id = current_player.Id;
+                _plrep.UpdatePlayer(player, positions);
+                return Ok(player);
+            }
+
+            return NotFound($"Not player with id = {player.Id}");
+        }
+
+        void SaveFile(Player player)
         {
             var file = player.Img;
             var folderName = Path.Combine("Resources", "Images");
@@ -67,41 +110,8 @@ namespace SB_backend.Controllers
                     file.CopyTo(stream);
                 }
                 player.ImgPath = dbPath;
+
             }
-            Player p = _plrep.AddPlayer(player);
-            if (p == null)
-                return BadRequest("Not Player Created");
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + player.Id, player);
-        }
-
-        [HttpDelete("{id}/{PositionId}")]
-        [Authorize]
-        public IActionResult RemovePlayer(Guid Id, Guid PositionId,Player player)
-        {
-            var flag = _plrep.RemovePlayer(player);
-
-            if (flag)
-            {
-                return Ok();
-            }
-
-            return NotFound($"Not player with id = {Id} and posId = {PositionId}");
-        }
-
-        [HttpPatch("{id}/{PositionId}")]
-        [Authorize]
-        public IActionResult UpdatePlayer(Guid Id, Guid PositionId,Player player)
-        {
-            var current_player = _plrep.GetPlayer(Id);
-
-            if (current_player != null)
-            {
-                player.Id = current_player.Id;
-                _plrep.UpdatePlayer(player);
-                return Ok(player);
-            }
-
-            return NotFound($"Not player with id = {Id} and posId = {PositionId}");
         }
     }
 }

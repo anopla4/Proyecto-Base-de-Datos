@@ -79,7 +79,7 @@ class Players extends Component {
                 </Row>
                 <Row className="set-size">
                   <Col md={2}>{player.age}</Col>
-                  {this.props.playerGeneral && <Col>{player.current_Team.name}</Col>}
+                  {this.props.playerGeneral && <Col>{ player.current_Team ? player.current_Team.name : ""}</Col>}
                   {this.props.playerGeneral && (
                     <Col>{player.teams.join(", ")}.</Col>
                   )}

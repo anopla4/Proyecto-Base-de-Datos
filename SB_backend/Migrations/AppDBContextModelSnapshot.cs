@@ -191,6 +191,10 @@ namespace SB_backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Caracters");
+
+                    b.HasData(
+                        new { Id = new Guid("274f1ee4-3564-4b9c-8f9c-75bbfc20d4fc"), Caracter_Name = "Nacional" }
+                    );
                 });
 
             modelBuilder.Entity("SB_backend.Models.Director", b =>
@@ -207,6 +211,25 @@ namespace SB_backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Directors");
+
+                    b.HasData(
+                        new { Id = new Guid("9aeff7f0-6843-4637-b8d8-fced1a49d32b"), Name = "Manuel Vigoa Amore" },
+                        new { Id = new Guid("1a2fa462-a320-43dd-9903-41177f50f8dd"), Name = "Guillermo Rolando Carmona Casanova" },
+                        new { Id = new Guid("e6d4c869-7fa4-4eb2-8d4d-f5eb6567e5a7"), Name = "Yorelvis Charles Martinez" },
+                        new { Id = new Guid("534abec3-505b-4525-b94c-68e3bdb0390a"), Name = "Pablo Alberto Civil Espinosa" },
+                        new { Id = new Guid("c4ad1b19-e3c4-4bf0-a3a2-2cd75800a4b6"), Name = "Alain Alvarez Moya" },
+                        new { Id = new Guid("31c778f7-e1c6-44c4-ba5c-bb6f37acb64b"), Name = "Michael Gonazalez Ventura" },
+                        new { Id = new Guid("84e072e7-11b9-48db-9d14-5d18df733e24"), Name = "Miguel Borroto Gonzales" },
+                        new { Id = new Guid("6e6343ad-530a-4140-9607-72782aae74c4"), Name = "Armando Jesus Ferrer Ruiz" },
+                        new { Id = new Guid("66e76481-6af7-440b-9321-4c274d21f54c"), Name = "Carlos Manuel Marti Santos" },
+                        new { Id = new Guid("c732f890-05c8-42f8-9cad-1e46d52ff6ec"), Name = "Alexander Urquiola Hernandez" },
+                        new { Id = new Guid("bc35b109-4b68-46c4-b83a-ac26d2734b7c"), Name = "Agustin Lescaille Lopez" },
+                        new { Id = new Guid("5abc5ecc-e439-434c-af9b-c791d051fb8c"), Name = "Eriberto Rosales Hernandez" },
+                        new { Id = new Guid("cd118d72-8543-42aa-ad6c-5df2a39a9e62"), Name = "Fransisco Martinez Sanchez" },
+                        new { Id = new Guid("c68c20a4-80e6-4a26-8420-32d0f023ffa1"), Name = "Eriel Sanchez Leon" },
+                        new { Id = new Guid("a47471c0-2c48-4956-a6f0-0193752eb0be"), Name = "Jose Luis Rodriguez Pantoja" },
+                        new { Id = new Guid("d7ea6570-a782-4236-bf39-4f852e2ffc34"), Name = "Jose Antonio Garcia Uña" }
+                    );
                 });
 
             modelBuilder.Entity("SB_backend.Models.Game", b =>
@@ -251,6 +274,10 @@ namespace SB_backend.Migrations
                     b.HasIndex("SerieId", "SerieInitDate", "SerieEndDate");
 
                     b.ToTable("Games");
+
+                    b.HasData(
+                        new { GameId = new Guid("9c9cdf30-6ea5-4f95-a736-273052cdf3a4"), AgainstCarrers = 8, GameDate = new DateTime(2020, 9, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), GameTime = "14:00", InFavorCarrers = 15, LoserTeamId = new Guid("1c6f9b78-d8d2-4ba8-909f-6db4629f1f08"), PitcherLoserId = new Guid("714420d1-2804-47f8-aaf1-79a522623274"), PitcherWinerId = new Guid("488af061-69e1-42bf-91ee-603271758d8c"), SerieEndDate = new DateTime(2021, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), SerieId = new Guid("6e6343fd-530b-4140-9607-727828a774c4"), SerieInitDate = new DateTime(2020, 9, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), WinerTeamId = new Guid("5d503b90-135b-4fe9-bb6f-70fd85d422e1") }
+                    );
                 });
 
             modelBuilder.Entity("SB_backend.Models.Player", b =>
@@ -283,6 +310,36 @@ namespace SB_backend.Migrations
                     b.HasIndex("Current_TeamId");
 
                     b.ToTable("Players");
+
+                    b.HasData(
+                        new { Id = new Guid("492ce38b-3d50-4ad1-b62f-04bbbe8b9f19"), Age = 29, DeffAverage = 0, Name = "Frank Madan Montejo", Year_Experience = 12 },
+                        new { Id = new Guid("7c1eed91-70ea-4e1d-8d04-8ce6bb1f832b"), Age = 19, DeffAverage = 0, Name = "Luis Fonseca Garcia", Year_Experience = 2 },
+                        new { Id = new Guid("dc37be22-bb87-4dee-9d22-e1dd80639ebc"), Age = 37, DeffAverage = 0, Name = "Yudier Rodriguez Leon", Year_Experience = 13 },
+                        new { Id = new Guid("205e50cc-6792-4d42-a09f-1a6f7925723f"), Age = 34, DeffAverage = 0, Name = "Yoen Socarras Suarez", Year_Experience = 15 },
+                        new { Id = new Guid("009797dc-f53f-45c3-bba9-bb16951f0691"), Age = 24, DeffAverage = 0, Name = "Yankiel Mauri Gutierrez", Year_Experience = 6 },
+                        new { Id = new Guid("60e597ae-52d5-4bcb-ad70-5108c9f4152c"), Age = 35, DeffAverage = 0, Name = "Alberto Bicet Labrada", Year_Experience = 15 },
+                        new { Id = new Guid("d7b43556-3ab5-4912-b197-6bcaf52f445c"), Age = 26, DeffAverage = 0, Name = "Adriel Echavarria Sanchez", Year_Experience = 7 },
+                        new { Id = new Guid("f1e68897-9783-48d7-b9df-b1638ec2c480"), Age = 21, DeffAverage = 0, Name = "Leonardo Montero Alfonso", Year_Experience = 1 },
+                        new { Id = new Guid("b222b771-1c84-46e0-9651-1c0edb1ed8e0"), Age = 27, DeffAverage = 0, Name = "Yoan Moreno Rodriguez", Year_Experience = 7 },
+                        new { Id = new Guid("fa073b24-5a15-4f46-ae88-ff75df54fbea"), Age = 31, DeffAverage = 0, Name = "Osvaldo Vazquez Torres", Year_Experience = 12 },
+                        new { Id = new Guid("f7c39bc3-ca0b-4a2a-a851-210f3061810b"), Age = 39, DeffAverage = 0, Name = "Yordanis Samon Matamoros", Year_Experience = 18 },
+                        new { Id = new Guid("0ca7d240-608c-46c0-ae3b-560441996ce0"), Age = 22, DeffAverage = 0, Name = "Miguel Antonio Gonzalez Puentes", Year_Experience = 1 },
+                        new { Id = new Guid("d8e175e8-caf8-4a0f-995d-bd28ab2287d1"), Age = 36, DeffAverage = 0, Name = "Yosvani Alarcon Tardio", Year_Experience = 16 },
+                        new { Id = new Guid("6c84051a-5390-4e68-b3d1-adcae4d053c6"), Age = 29, DeffAverage = 0, Name = "Rafael Viñales Alvarez", Year_Experience = 10 },
+                        new { Id = new Guid("e5bbc503-cf80-4348-a63a-b47a38c0adee"), Age = 22, DeffAverage = 0, Name = "Cesar Prieto Echevarria", Year_Experience = 4 },
+                        new { Id = new Guid("80d98e21-f989-4db7-b4f0-9f84088a9424"), Age = 31, DeffAverage = 0, Name = "Yasniel Gonzalez Vega", Year_Experience = 11 },
+                        new { Id = new Guid("b0b73904-816d-4ec8-957a-e1c479dd0a44"), Age = 24, DeffAverage = 0, Name = "Geyser Cepeda Lima", Year_Experience = 4 },
+                        new { Id = new Guid("c71dbf8a-a499-4753-8177-8bb613fa77f2"), Age = 37, DeffAverage = 0, Name = "Dennis Laza Spencer", Year_Experience = 12 },
+                        new { Id = new Guid("49ca16f2-ab20-478e-a09d-47371337c577"), Age = 41, DeffAverage = 0, Name = "Frederich Cepeda Cruz", Year_Experience = 24 },
+                        new { Id = new Guid("488af061-69e1-42bf-91ee-603271758d8c"), Age = 23, DeffAverage = 0, Name = "Yosimar Cousin De La Rosa", Year_Experience = 6 },
+                        new { Id = new Guid("50ceec15-5eed-4dee-8903-ad7b8b9436a4"), Age = 33, DeffAverage = 0, Name = "Rodolfo Soris Yera", Year_Experience = 12 },
+                        new { Id = new Guid("4536f820-d112-448e-8a52-cb4134e2f824"), Age = 26, DeffAverage = 0, Name = "Ruben Rodriguez Fonseca", Year_Experience = 4 },
+                        new { Id = new Guid("96638775-f065-4dfb-91e9-5e5f66437c11"), Age = 24, DeffAverage = 0, Name = "Yoidel Castaneda Donny", Year_Experience = 3 },
+                        new { Id = new Guid("84930b33-5018-4357-94ce-a3a6de2ea301"), Age = 36, DeffAverage = 0, Name = "Luis Angel Gomez Gamez", Year_Experience = 15 },
+                        new { Id = new Guid("e53c8e44-4792-4b8c-aa57-b04e961abefb"), Age = 24, DeffAverage = 0, Name = "Carlos Enrique Vera Barreda", Year_Experience = 3 },
+                        new { Id = new Guid("714420d1-2804-47f8-aaf1-79a522623274"), Age = 35, DeffAverage = 0, Name = "Noelvis Entenza Gonzalez", Year_Experience = 4 },
+                        new { Id = new Guid("3b925682-371c-4d5b-ae8a-c5aef7ee0d17"), Age = 30, DeffAverage = 0, Name = "Yaniel Blanco Portal", Year_Experience = 9 }
+                    );
                 });
 
             modelBuilder.Entity("SB_backend.Models.PlayerChangeGame", b =>
@@ -332,6 +389,11 @@ namespace SB_backend.Migrations
                     b.HasIndex("PositionId");
 
                     b.ToTable("PlayerPosition");
+
+                    b.HasData(
+                        new { PlayerId = new Guid("488af061-69e1-42bf-91ee-603271758d8c"), PositionId = new Guid("bdcd2534-1ba3-4bd0-9099-13c6a0a9de41") },
+                        new { PlayerId = new Guid("714420d1-2804-47f8-aaf1-79a522623274"), PositionId = new Guid("bdcd2534-1ba3-4bd0-9099-13c6a0a9de41") }
+                    );
                 });
 
             modelBuilder.Entity("SB_backend.Models.Position", b =>
@@ -347,16 +409,16 @@ namespace SB_backend.Migrations
                     b.ToTable("Positions");
 
                     b.HasData(
-                        new { Id = new Guid("06c6d50d-f572-4efe-9dbd-6eeef6c4a1bb"), PositionName = "C" },
-                        new { Id = new Guid("1b65b402-6c75-4666-bcf9-70a339d9ca72"), PositionName = "1B" },
-                        new { Id = new Guid("23502d9c-7139-4643-a853-b2579bcb41af"), PositionName = "2B" },
-                        new { Id = new Guid("fc4b39e8-120c-4aae-866d-570f0cbc6103"), PositionName = "3B" },
-                        new { Id = new Guid("81075d5f-295c-4741-84e0-2c23fdfdd668"), PositionName = "SS" },
-                        new { Id = new Guid("9f4e4dc1-6f69-49ad-85d9-02677a44eb13"), PositionName = "P" },
-                        new { Id = new Guid("48c3288d-703e-4646-ba6e-f84acf8cf2da"), PositionName = "LF" },
-                        new { Id = new Guid("2f647bd2-93a6-4df0-84fa-c43b205ce25e"), PositionName = "RF" },
-                        new { Id = new Guid("4adc7f90-81f4-404f-b2f4-c196a8a12e9e"), PositionName = "CF" },
-                        new { Id = new Guid("435606e1-afff-4d31-b615-102e495a1437"), PositionName = "BD" }
+                        new { Id = new Guid("57cbcda7-cbac-42b5-bc0e-c71eb8540e27"), PositionName = "C" },
+                        new { Id = new Guid("a8660d61-d848-4a78-a41a-ea9c35d3f033"), PositionName = "1B" },
+                        new { Id = new Guid("ca2cc279-8a1d-49d2-bdc0-61c2c553e216"), PositionName = "2B" },
+                        new { Id = new Guid("f46b6571-8827-4736-b19f-d642fb7bf908"), PositionName = "3B" },
+                        new { Id = new Guid("8e66be38-216d-4874-a8d1-26465e853000"), PositionName = "SS" },
+                        new { Id = new Guid("bdcd2534-1ba3-4bd0-9099-13c6a0a9de41"), PositionName = "P" },
+                        new { Id = new Guid("0156a2e6-b9fe-43d8-9f68-012251df9e92"), PositionName = "LF" },
+                        new { Id = new Guid("04a2cadc-4608-4a96-8f55-b4ceb793f51b"), PositionName = "RF" },
+                        new { Id = new Guid("c548fdc4-de7f-43c4-97fb-131e8234958b"), PositionName = "CF" },
+                        new { Id = new Guid("13505c5f-d380-4cd0-9d58-fca642491f81"), PositionName = "BD" }
                     );
                 });
 
@@ -392,6 +454,11 @@ namespace SB_backend.Migrations
                     b.HasIndex("WinerId");
 
                     b.ToTable("Series");
+
+                    b.HasData(
+                        new { Id = new Guid("6e6343fd-530b-4140-9607-727828a774c4"), InitDate = new DateTime(2020, 9, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), EndDate = new DateTime(2021, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), CaracterId = new Guid("274f1ee4-3564-4b9c-8f9c-75bbfc20d4fc"), LoserId = new Guid("86894ece-e6ad-4135-b45b-000ca20bc242"), Name = "60 Serie Nacional", NumberOfGames = 90, NumberOfTeams = 16, WinerId = new Guid("58cad299-e5e7-419b-93d7-154d084b2543") },
+                        new { Id = new Guid("6a6345fd-431b-2120-9527-72782abf84c4"), InitDate = new DateTime(2019, 8, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), EndDate = new DateTime(2020, 1, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), CaracterId = new Guid("274f1ee4-3564-4b9c-8f9c-75bbfc20d4fc"), LoserId = new Guid("86894ece-e6ad-4135-b45b-000ca20bc242"), Name = "59 Serie Nacional", NumberOfGames = 90, NumberOfTeams = 16, WinerId = new Guid("5d503b90-135b-4fe9-bb6f-70fd85d422e1") }
+                    );
                 });
 
             modelBuilder.Entity("SB_backend.Models.StarPositionPlayerSerie", b =>
@@ -432,6 +499,24 @@ namespace SB_backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Teams");
+
+                    b.HasData(
+                        new { Id = new Guid("8b0cdf30-6ea5-4f95-a736-273052cdf3a1"), Color = "rojo", Initials = "ART", Name = "Artemisa" },
+                        new { Id = new Guid("185adf42-a57e-4ec8-8e22-25f62aa85a17"), Color = "verde", Initials = "PRI", Name = "Pinar del Río" },
+                        new { Id = new Guid("6a472570-f244-4828-acc4-53bf7f862712"), Color = "rojo", Initials = "MAY", Name = "Mayabeque" },
+                        new { Id = new Guid("b6e6b08c-9b2b-45eb-978b-c22d1f06142f"), Color = "azul", Initials = "IND", Name = "Industriales" },
+                        new { Id = new Guid("5d503b90-135b-4fe9-bb6f-70fd85d422e1"), Color = "rojo,amarillo", Initials = "MTZ", Name = "Matanzas" },
+                        new { Id = new Guid("a6da048a-7794-44de-8c55-0b0fc599d1cb"), Color = "verde,gris", Initials = "CFG", Name = "Cienfuegos" },
+                        new { Id = new Guid("0b8257f3-4916-42a1-93bc-d3cab4013318"), Color = "azul,blanco", Initials = "IJV", Name = "Isla dela Juventud" },
+                        new { Id = new Guid("75e36e7e-6b97-4044-bfc4-437e193d074f"), Color = "naranja", Initials = "VCL", Name = "Villa Clara" },
+                        new { Id = new Guid("ce405e0a-91a7-417f-9da4-74b0b75acc3c"), Color = "azul,naranja", Initials = "SSP", Name = "SanctiSpiritus" },
+                        new { Id = new Guid("0c9f56f4-2634-42ae-a762-dad72ffff441"), Color = "azul,rojo", Initials = "CAV", Name = "Ciego de Ávila" },
+                        new { Id = new Guid("1c6f9b78-d8d2-4ba8-909f-6db4629f1f08"), Color = "azul,rojo", Initials = "CMG", Name = "Camagüey" },
+                        new { Id = new Guid("58cad299-e5e7-419b-93d7-154d084b2543"), Color = "azul,rojo", Initials = "GRM", Name = "Granma" },
+                        new { Id = new Guid("6c489cf8-0c95-4d6d-8046-37f3f3e47621"), Color = "azul,blanco", Initials = "HLG", Name = "Holguín" },
+                        new { Id = new Guid("88dc4e79-8f31-410c-b724-982a3abb68f1"), Color = "rojo", Initials = "SCU", Name = "Santiago de Cuba" },
+                        new { Id = new Guid("86894ece-e6ad-4135-b45b-000ca20bc242"), Color = "rojo", Initials = "GTM", Name = "Guantanamo" }
+                    );
                 });
 
             modelBuilder.Entity("SB_backend.Models.TeamSerie", b =>
@@ -455,6 +540,11 @@ namespace SB_backend.Migrations
                     b.HasIndex("SerieId", "SerieInitDate", "SerieEndDate");
 
                     b.ToTable("TeamsSeries");
+
+                    b.HasData(
+                        new { TeamId = new Guid("5d503b90-135b-4fe9-bb6f-70fd85d422e1"), SerieId = new Guid("6e6343fd-530b-4140-9607-727828a774c4"), SerieInitDate = new DateTime(2020, 9, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), SerieEndDate = new DateTime(2021, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), FinalPosition = 2, LostGames = 31, WonGames = 44 },
+                        new { TeamId = new Guid("1c6f9b78-d8d2-4ba8-909f-6db4629f1f08"), SerieId = new Guid("6e6343fd-530b-4140-9607-727828a774c4"), SerieInitDate = new DateTime(2020, 9, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), SerieEndDate = new DateTime(2021, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), FinalPosition = 9, LostGames = 34, WonGames = 41 }
+                    );
                 });
 
             modelBuilder.Entity("SB_backend.Models.TeamSerieDirector", b =>
@@ -497,6 +587,11 @@ namespace SB_backend.Migrations
                     b.HasIndex("SerieId", "SerieInitDate", "SerieEndDate");
 
                     b.ToTable("TeamsSeriesPlayers");
+
+                    b.HasData(
+                        new { PlayerId = new Guid("488af061-69e1-42bf-91ee-603271758d8c"), SerieId = new Guid("6e6343fd-530b-4140-9607-727828a774c4"), SerieInitDate = new DateTime(2020, 9, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), SerieEndDate = new DateTime(2021, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), TeamId = new Guid("5d503b90-135b-4fe9-bb6f-70fd85d422e1") },
+                        new { PlayerId = new Guid("714420d1-2804-47f8-aaf1-79a522623274"), SerieId = new Guid("6e6343fd-530b-4140-9607-727828a774c4"), SerieInitDate = new DateTime(2020, 9, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), SerieEndDate = new DateTime(2021, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), TeamId = new Guid("1c6f9b78-d8d2-4ba8-909f-6db4629f1f08") }
+                    );
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

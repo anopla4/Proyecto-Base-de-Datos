@@ -29,11 +29,7 @@ class GameForm extends Component {
       this.setState({ edit: true, game: this.props.location.state.game });
     }
     fetch(
-      `https://localhost:44334/api/TeamSerie/Standing/${
-        this.state.serieId
-      }/${this.formatDate(this.state.serieInitDate)}/${this.formatDate(
-        this.state.serieEndDate
-      )}`,
+      `https://localhost:44334/api/Team`,
       {
         mode: "cors",
       }
@@ -161,25 +157,15 @@ class GameForm extends Component {
                 <Form.Group style={{ width: "100%" }} controlId="serie">
                   <Form.Label>Serie:</Form.Label>
                   <Form.Control
-                    defaultValue={
-                      serie
-                        ? serie.name +
-                          " (" +
-                          serie.initDate +
-                          " - " +
-                          serie.endDate +
-                          ")"
-                        : ""
-                    }
                     as="select"
                     custom
                   >
-                    <option id={serie.id}>
+                    {serie && <option id={serie.id }>
                       {serie.name} (
                       {new Date(serie.initDate).toLocaleString().split(",")[0]}{" "}
                       - {new Date(serie.endDate).toLocaleString().split(",")[0]}
-                      )
-                    </option>
+                      ) : ""
+                    </option>}
                     {this.state.series.map((serie) => (
                       <option id={serie.id}>
                         {serie.name} (
@@ -232,11 +218,10 @@ class GameForm extends Component {
                 >
                   <Form.Label>Lanzador ganador:</Form.Label>
                   <Form.Control
-                    defaultValue={pitcherWiner ? pitcherWiner.name : ""}
                     as="select"
                     custom
                   >
-                    <option id={pitcherWiner.id}>{pitcherWiner.name}</option>
+                    {pitcherWiner && <option id={pitcherWiner.id}>{pitcherWiner.name}</option>}
                     {this.state.pitchers.map((pitcher) => (
                       <option id={pitcher.id}>{pitcher.name}</option>
                     ))}
@@ -247,11 +232,10 @@ class GameForm extends Component {
                 <Form.Group style={{ width: "100%" }} controlId="loser_pitcher">
                   <Form.Label>Lanzador perdedor:</Form.Label>
                   <Form.Control
-                    defaultValue={pitcherLoser ? pitcherLoser.name : ""}
                     as="select"
                     custom
                   >
-                    <option id={pitcherLoser.id}>{pitcherLoser.name}</option>
+                   { pitcherLoser &&<option id={pitcherLoser.id }>{pitcherLoser.name}</option>}
                     {this.state.pitchers.map((pitcher) => (
                       <option id={pitcher.id}>{pitcher.name}</option>
                     ))}
@@ -286,11 +270,10 @@ class GameForm extends Component {
                 <Form.Group style={{ width: "100%" }} controlId="winner">
                   <Form.Label>Ganador:</Form.Label>
                   <Form.Control
-                    defaultValue={winerTeam ? winerTeam.name : ""}
                     as="select"
                     custom
                   >
-                    <option id={winerTeam.id}>{winerTeam.anme}</option>
+                    {winerTeam && <option id={winerTeam.id }>{winerTeam.anme}</option>}
                     {this.state.teams.map((team) => (
                       <option id={team.id}>{team.name}</option>
                     ))}
@@ -301,11 +284,10 @@ class GameForm extends Component {
                 <Form.Group style={{ width: "100%" }} controlId="loser">
                   <Form.Label>Perdedor:</Form.Label>
                   <Form.Control
-                    defaultValue={loserTeam ? loserTeam.name : ""}
                     as="select"
                     custom
                   >
-                    <option id={loserTeam.id}>{loserTeam.name}</option>
+                    {loserTeam && <option id={loserTeam.id }>{loserTeam.name}</option>}
                     {this.state.teams.map((team) => (
                       <option id={team.id}>{team.name}</option>
                     ))}

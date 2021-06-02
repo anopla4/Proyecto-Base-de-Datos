@@ -233,7 +233,7 @@ class Series extends Component {
                     )
                   }
                 >
-                  {serie.winner && serie.winner.name}
+                  {serie.winer && serie.winer.name}
                 </td>
                 <td
                   onClick={() =>
