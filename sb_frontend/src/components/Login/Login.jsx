@@ -34,8 +34,6 @@ class Login extends Component {
   render() {
     return (
       <Container alignSelf="center" className="mt-5">
-        {this.state.username}
-        {this.state.password}
         <Col className="center">
           <Form>
             <Form.Group controlId="username">

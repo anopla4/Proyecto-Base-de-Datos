@@ -131,7 +131,7 @@ class Serie extends Component {
           };
       fetch(postUrl, {
         mode: "cors",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json","Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token },
         method: this.state.editTeam ? "PATCH" : "POST",
         body: JSON.stringify(teamSerie),
       })
@@ -166,7 +166,7 @@ class Serie extends Component {
       };
       fetch("https://localhost:44334/api/StarPositionPlayerSerie", {
         mode: "cors",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json","Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token },
         method: "POST",
         body: JSON.stringify(item),
       })
@@ -293,6 +293,7 @@ class Serie extends Component {
       {
         mode: "cors",
         method: "DELETE",
+        headers:{"Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token}
       }
     )
       .then((response) => {
@@ -324,6 +325,7 @@ class Serie extends Component {
       {
         mode: "cors",
         method: "DELETE",
+        headers:{"Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token}
       }
     )
       .then((response) => {

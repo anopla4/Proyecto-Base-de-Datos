@@ -15,6 +15,7 @@ import "./TeamInSerie.css";
 import Players from "../../components/Players/Players";
 import Add from "../../components/Add/Add";
 import { TrashFill } from "react-bootstrap-icons";
+import isLoggedIn from "../utils";
 
 class TeamInSerie extends Component {
   state = {
@@ -123,7 +124,7 @@ class TeamInSerie extends Component {
     fetch(
       `https://localhost:44334/api/TeamSerieDirector/${idD}/${this.state.serie.id}/
       ${this.state.serie.initDate}/${this.state.serie.endDate}/${this.state.team.id}`,
-      { mode: "cors", method: "DELETE" }
+      { mode: "cors", method: "DELETE",headers:{"Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token} }
     )
       .then((response) => {
         if (!response.ok) {
@@ -148,7 +149,7 @@ class TeamInSerie extends Component {
     fetch(
       `https://localhost:44334/api/TeamSeriePlayer/${idP}/${this.state.serie.id}/
       ${this.state.serie.initDate}/${this.state.serie.endDate}/${this.state.team.id}`,
-      { mode: "cors", method: "DELETE" }
+      { mode: "cors", method: "DELETE",headers:{"Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token} }
     )
       .then((response) => {
         if (!response.ok) {
@@ -192,7 +193,7 @@ class TeamInSerie extends Component {
       };
       fetch("https://localhost:44334/api/TeamSerieDirector", {
         mode: "cors",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json","Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token },
         method: "POST",
         body: JSON.stringify(item),
       })
@@ -222,7 +223,7 @@ class TeamInSerie extends Component {
       };
       fetch("https://localhost:44334/api/TeamSeriePlayer", {
         mode: "cors",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token},
         method: "POST",
         body: JSON.stringify(item),
       })
@@ -286,16 +287,19 @@ class TeamInSerie extends Component {
                   {this.state.directors.map((dir, index) => (
                     <ListGroupItem>
                       {dir.name}
-                      <Button
-                        className="ml-3"
-                        style={{ padding: "0px", float: "right" }}
-                        onClick={() =>
-                          this.handleOnDeleteDirector(dir.id, index)
-                        }
-                        variant="danger"
-                      >
-                        <TrashFill style={{ width: "100%" }} />
-                      </Button>
+                      {
+                        isLoggedIn() &&
+                        <Button
+                          className="ml-3"
+                          style={{ padding: "0px", float: "right" }}
+                          onClick={() =>
+                            this.handleOnDeleteDirector(dir.id, index)
+                          }
+                          variant="danger"
+                        >
+                          <TrashFill style={{ width: "100%" }} />
+                        </Button>
+                      }
                     </ListGroupItem>
                   ))}
                 </ListGroup>

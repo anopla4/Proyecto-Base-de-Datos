@@ -199,7 +199,7 @@ class Game extends Component {
 
     fetch("https://localhost:44334/api/PlayerGame", {
       mode: "cors",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json","Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token },
       method: "POST",
       body: JSON.stringify(playerGame),
     })
@@ -234,7 +234,7 @@ class Game extends Component {
 
     fetch("https://localhost:44334/api/PlayerChangeGame", {
       mode: "cors",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json","Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token },
       method: "POST",
       body: JSON.stringify(playerChangeGame),
     })
@@ -256,6 +256,7 @@ class Game extends Component {
       {
         mode: "cors",
         method: "DELETE",
+        headers:{"Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token}
       }
     )
       .then((response) => {
@@ -284,6 +285,7 @@ class Game extends Component {
       {
         mode: "cors",
         method: "DELETE",
+        headers:{"Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token}
       }
     )
       .then((response) => {

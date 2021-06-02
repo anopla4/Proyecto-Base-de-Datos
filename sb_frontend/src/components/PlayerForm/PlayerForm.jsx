@@ -119,7 +119,7 @@ class PlayerForm extends Component {
       (this.state.edit ? `/${this.state.playerEdit.id}` : "");
     fetch(postUrl, {
       mode: "cors",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json","Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token },
       method: this.state.edit ? "PATCH" : "POST",
       body: JSON.stringify(player),
     })

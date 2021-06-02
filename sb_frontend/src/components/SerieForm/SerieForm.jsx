@@ -68,7 +68,7 @@ class SerieForm extends Component {
         : "");
     fetch(postUrl, {
       mode: "cors",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json","Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token },
       method: this.state.edit ? "PATCH" : "POST",
       body: JSON.stringify(serie),
     })
@@ -92,7 +92,7 @@ class SerieForm extends Component {
     };
     fetch("https://localhost:44334/api/Caracter", {
       mode: "cors",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json","Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token },
       method: "POST",
       body: JSON.stringify(caracter),
     })

@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { Container, Button } from "react-bootstrap";
 import { TrashFill, PencilSquare } from "react-bootstrap-icons";
+import isLoggedIn from "../utils";
 
 class DeleteEdit extends Component {
   render() {
-    return (
+    return ( isLoggedIn() &&
       <Container style={{ margin: "0px", padding: "2px" }}>
         {this.props.edit && (
           <Button

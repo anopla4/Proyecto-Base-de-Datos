@@ -22,14 +22,12 @@ import Login from "../../components/Login/Login";
 
 class App extends Component {
   logginUserCallback= (username, password, jwt_token) => {
-    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     localStorage.setItem("loggedUser", JSON.stringify({username: username, password: password, jwt_token: jwt_token}));
   }
 
   render() {
     return (
       <BrowserRouter>
-        {localStorage.getItem("loggedUser")}
         <Layout>
           <Switch>
             <Route path="/" exact component={Home} />

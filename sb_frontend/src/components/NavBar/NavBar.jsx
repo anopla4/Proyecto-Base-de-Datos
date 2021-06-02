@@ -52,18 +52,9 @@ const navigation = (props) => {
         </Nav>
         <Nav className="ml-auto">
           <Nav.Item>
-            <Nav.Link href="/login">Iniciar sesión</Nav.Link>
+            {localStorage.getItem("loggedUser") ? <Nav.Link href="/home" onClick={()=>localStorage.removeItem("loggedUser")}>Cerrar sesión</Nav.Link> :<Nav.Link href="/login">Iniciar sesión</Nav.Link>}
           </Nav.Item>
-          {/* {this.props.webMaster && (
-            <Nav.Item>
-              <Nav.Link href="/login">Manejar usuarios</Nav.Link>
-            </Nav.Item>
-          )} */}
         </Nav>
-        {/* <Form inline className="ml-auto" navbarScroll>
-          <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-          <Button variant="outline-info">Search</Button>
-        </Form> */}
       </Navbar.Collapse>
     </Navbar>
   );

@@ -41,6 +41,7 @@ class Games extends Component {
     fetch(`https://localhost:44334/api/Serie/${idG}`, {
       mode: "cors",
       method: "DELETE",
+      headers:{"Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token}
     })
       .then((response) => {
         if (!response.ok) {

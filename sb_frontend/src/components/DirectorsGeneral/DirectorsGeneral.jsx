@@ -15,6 +15,7 @@ import Add from "../../components/Add/Add";
 
 class DirectorsGeneral extends Component {
   state = {
+    logged: localStorage.getItem("loggedUser"),
     addDirector: false,
     editDirector: false,
     itemEdit: {},
@@ -43,6 +44,7 @@ class DirectorsGeneral extends Component {
     fetch(`https://localhost:44334/api/Director/${id}`, {
       mode: "cors",
       method: "DELETE",
+      headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token },
     })
       .then((response) => {
         if (!response.ok) {
@@ -144,7 +146,7 @@ class DirectorsGeneral extends Component {
             />
             <Add text="Agregar director" onClick={this.handleAddClick} />
           </Col>
-          {(this.state.addDirector || this.state.editDirector) && (
+          {this.state.logged && (this.state.addDirector || this.state.editDirector) && (
             <Col md={3}>
               <Navbar fixed="right">
                 <Nav.Item>

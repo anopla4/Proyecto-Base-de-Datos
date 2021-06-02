@@ -58,6 +58,7 @@ class Series extends Component {
       {
         mode: "cors",
         method: "DELETE",
+        headers:{"Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token}
       }
     )
       .then((response) => {

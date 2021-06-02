@@ -3,6 +3,7 @@ import { Card, Container, Col, Row, Image } from "react-bootstrap";
 import "../../containers/App/App.css";
 import "./Directors.css";
 import DeleteEdit from "../../components/DeleteEdit/DeleteEdit";
+import isLoggedIn from "../utils";
 
 class Directors extends Component {
   render() {

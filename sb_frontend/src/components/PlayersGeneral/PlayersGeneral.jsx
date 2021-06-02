@@ -41,6 +41,7 @@ class PlayersGeneral extends Component {
     fetch(`https://localhost:44334/api/Player/${id}`, {
       mode: "cors",
       method: "DELETE",
+      headers:{"Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token}
     })
       .then((response) => {
         if (!response.ok) {
@@ -75,7 +76,7 @@ class PlayersGeneral extends Component {
       (this.state.editTeam ? `/${this.state.teamEdit.id}` : "");
     fetch(postUrl, {
       mode: "cors",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" ,"Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token},
       method: this.state.editTeam ? "PATCH" : "POST",
       body: JSON.stringify(team),
     })

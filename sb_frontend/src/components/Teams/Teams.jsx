@@ -82,6 +82,7 @@ class Teams extends Component {
     fetch(`https://localhost:44334/api/Team/${id}`, {
       mode: "cors",
       method: "DELETE",
+      headers:{"Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token}
     })
       .then((response) => {
         if (!response.ok) {
@@ -122,6 +123,7 @@ class Teams extends Component {
       method: this.state.editTeam ? "PATCH" : "POST",
       body: formdata,
       mode: "cors",
+      headers:{"Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token}
     };
 
     fetch(
