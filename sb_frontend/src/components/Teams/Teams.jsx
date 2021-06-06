@@ -82,7 +82,10 @@ class Teams extends Component {
     fetch(`https://localhost:44334/api/Team/${id}`, {
       mode: "cors",
       method: "DELETE",
-      headers:{"Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token}
+      headers: {
+        Authorization:
+          "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token,
+      },
     })
       .then((response) => {
         if (!response.ok) {
@@ -123,7 +126,10 @@ class Teams extends Component {
       method: this.state.editTeam ? "PATCH" : "POST",
       body: formdata,
       mode: "cors",
-      headers:{"Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token}
+      headers: {
+        Authorization:
+          "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token,
+      },
     };
 
     fetch(
@@ -219,7 +225,7 @@ class Teams extends Component {
                             ? this.state.fileTmpURL
                             : `https://localhost:44334/${this.state.teamEdit.imgPath}`
                         }
-                        style={{width:"100px"}}
+                        style={{ width: "100px" }}
                       />
                       <Form.File
                         label="Logo del equipo"
@@ -240,17 +246,11 @@ class Teams extends Component {
                     <Form.Group controlId="color">
                       <Form.Label>Color:</Form.Label>
                       <Form.Control
-                        as="select"
+                        type="text"
                         defaultValue={
                           this.state.editTeam ? this.state.teamEdit.color : ""
                         }
-                        custom
-                      >
-                        <option>{""}</option>
-                        {this.state.colors.map((col) => (
-                          <option>{col}</option>
-                        ))}
-                      </Form.Control>
+                      />
                     </Form.Group>
                     <Button
                       className="mr-2"
