@@ -97,9 +97,10 @@ namespace SB_backend.Repositories
             var currentGame = _context.Games.SingleOrDefault(c => c.GameId == game.GameId && c.SerieId == game.SerieId && c.SerieInitDate == game.SerieInitDate);
             if (currentGame == null)
                 return false;
-            foreach (var change in _context.PlayersChangesGames.Include(c=>c.Game).Where(c => c.GameId == game.GameId && c.Game.SerieId == game.SerieId && c.Game.SerieInitDate == game.SerieInitDate))
+            foreach (var change in _context.PlayersChangesGames.Include(c=>c.Game).Where(c => c.GameId == game.GameId))
                 _context.PlayersChangesGames.Remove(change);
-
+            foreach (var playerGame in _context.PlayersGames.Include(c => c.Game).Where(c => c.GameId == game.GameId))
+                _context.PlayersGames.Remove(playerGame);
             _context.Games.Remove(currentGame);
             _context.SaveChanges();
             return true;

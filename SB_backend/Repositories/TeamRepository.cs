@@ -11,7 +11,6 @@ namespace SB_backend.Repositories
     public class TeamRepository : ITeamRepository
     {
         private AppDBContext _teamContext;
-
         public TeamRepository(AppDBContext teamContext)
         {
             _teamContext = teamContext;
@@ -43,9 +42,15 @@ namespace SB_backend.Repositories
                 foreach (var teamSerie in _teamContext.TeamsSeries.Where(x => x.TeamId == curr_team.Id))
                     _teamContext.TeamsSeries.Remove(teamSerie);
                 foreach (var serie in _teamContext.Series.Where(x => x.WinerId == curr_team.Id || x.LoserId == curr_team.Id))
-                    _teamContext.Series.Remove(serie);
-                foreach (var change in _teamContext.PlayersChangesGames.Include(c=>c.Game).Where(x => x.Game.WinerTeamId == curr_team.Id || x.Game.LoserTeamId == curr_team.Id))
+                {
+                    if (serie.WinerId == curr_team.Id) serie.WinerId = null;
+                    if (serie.LoserId== curr_team.Id) serie.LoserId = null;
+                    _teamContext.Series.Update(serie);
+                }
+                foreach (var change in _teamContext.PlayersChangesGames.Include(c => c.Game).Where(x => x.Game.WinerTeamId == curr_team.Id || x.Game.LoserTeamId == curr_team.Id))
                     _teamContext.PlayersChangesGames.Remove(change);
+                foreach (var playerGame in _teamContext.PlayersGames.Include(c => c.Game).Where(x => x.Game.WinerTeamId == curr_team.Id || x.Game.LoserTeamId == curr_team.Id))
+                    _teamContext.PlayersGames.Remove(playerGame);
                 foreach (var game in _teamContext.Games.Where(x => x.WinerTeamId == curr_team.Id || x.LoserTeamId == curr_team.Id))
                     _teamContext.Games.Remove(game);
                 foreach (var tsp in _teamContext.TeamsSeriesPlayers.Where(x => x.TeamId == curr_team.Id))

@@ -10,7 +10,7 @@ using SB_backend.Models;
 namespace SB_backend.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20210602052910_1")]
+    [Migration("20210606063723_1")]
     partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -730,13 +730,11 @@ namespace SB_backend.Migrations
 
                     b.HasOne("SB_backend.Models.Team", "Loser")
                         .WithMany()
-                        .HasForeignKey("LoserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("LoserId");
 
                     b.HasOne("SB_backend.Models.Team", "Winer")
                         .WithMany()
-                        .HasForeignKey("WinerId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("WinerId");
                 });
 
             modelBuilder.Entity("SB_backend.Models.StarPositionPlayerSerie", b =>

@@ -728,13 +728,11 @@ namespace SB_backend.Migrations
 
                     b.HasOne("SB_backend.Models.Team", "Loser")
                         .WithMany()
-                        .HasForeignKey("LoserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("LoserId");
 
                     b.HasOne("SB_backend.Models.Team", "Winer")
                         .WithMany()
-                        .HasForeignKey("WinerId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("WinerId");
                 });
 
             modelBuilder.Entity("SB_backend.Models.StarPositionPlayerSerie", b =>

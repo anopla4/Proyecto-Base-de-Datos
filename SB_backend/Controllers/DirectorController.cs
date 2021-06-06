@@ -53,7 +53,8 @@ namespace SB_backend.Controllers
 
             if (current_director != null)
             {
-                //System.IO.File.Delete(team.ImgPath);
+                if (current_director.ImgPath != null)
+                    System.IO.File.Delete(Path.Combine(Directory.GetCurrentDirectory(), current_director.ImgPath));
                 this.SaveFile(director);
                 director.Id = current_director.Id;
                 _dirRep.UpdateDirector(director);

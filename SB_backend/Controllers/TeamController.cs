@@ -19,8 +19,7 @@ namespace SB_backend.Controllers
         private ITeamRepository _teamRep;
         public TeamController(ITeamRepository repo)
         {
-            _teamRep = repo;
-        }
+            _teamRep = repo;        }
 
         [HttpGet]
         public IActionResult getTeams()
@@ -63,7 +62,8 @@ namespace SB_backend.Controllers
 
             if (current_team != null)
             {
-                System.IO.File.Delete(Path.Combine(Directory.GetCurrentDirectory(), current_team.ImgPath));
+                if(current_team.ImgPath != null)
+                    System.IO.File.Delete(Path.Combine(Directory.GetCurrentDirectory(), current_team.ImgPath));
                 this.SaveFile(team);
                 team.Id = current_team.Id;
                 _teamRep.UpdateTeam(team);

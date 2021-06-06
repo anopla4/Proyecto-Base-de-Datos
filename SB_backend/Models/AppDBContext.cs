@@ -35,12 +35,10 @@ namespace SB_backend.Models
                 .HasKey(c => new { c.Id, c.InitDate, c.EndDate });
             modelBuilder.Entity<Serie>()
                 .HasOne(c => c.Winer)
-                .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
+                .WithMany();
             modelBuilder.Entity<Serie>()
                 .HasOne(c => c.Loser)
-                .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
+                .WithMany();
             modelBuilder.Entity<Serie>()
                 .HasData(
                 new Serie { Id = new Guid("6e6343fd-530b-4140-9607-727828a774c4"), CaracterId = new Guid("274f1ee4-3564-4b9c-8f9c-75bbfc20d4fc"), InitDate = new DateTime(2020, 9, 12), EndDate = new DateTime(2021, 4, 4), WinerId = new Guid("58cad299-e5e7-419b-93d7-154d084b2543"), LoserId = new Guid("86894ece-e6ad-4135-b45b-000ca20bc242"), NumberOfTeams = 16, NumberOfGames = 90, Name = "60 Serie Nacional" },
