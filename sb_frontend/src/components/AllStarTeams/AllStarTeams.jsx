@@ -19,7 +19,7 @@ class AllStarTeams extends Component {
     series: [],
   };
 
-  componentDidMount() {
+  componentWillMount() {
     fetch("https://localhost:44334/api/StarPositionPlayerSerie", {
       mode: "cors",
     })
@@ -35,21 +35,21 @@ class AllStarTeams extends Component {
       .catch(function (error) {
         console.log("Hubo un problema con la petición Fetch:" + error.message);
       });
-    fetch("https://localhost:44334/api/StarPositionPlayerSerie", {
-      mode: "cors",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw Error(response.statusText);
-        }
-        return response.json();
-      })
-      .then((response) => {
-        this.setState({ allstarteams: response });
-      })
-      .catch(function (error) {
-        console.log("Hubo un problema con la petición Fetch:" + error.message);
-      });
+    // fetch("https://localhost:44334/api/StarPositionPlayerSerie", {
+    //   mode: "cors",
+    // })
+    //   .then((response) => {
+    //     if (!response.ok) {
+    //       throw Error(response.statusText);
+    //     }
+    //     return response.json();
+    //   })
+    //   .then((response) => {
+    //     this.setState({ allstarteams: response });
+    //   })
+    //   .catch(function (error) {
+    //     console.log("Hubo un problema con la petición Fetch:" + error.message);
+    //   });
   }
 
   render() {
@@ -70,13 +70,13 @@ class AllStarTeams extends Component {
                     </Card.Title>
                     <Card.Subtitle style={{ color: "midnightblue" }}>
                       {
-                        new Date(team.serie.serieInitDate)
+                        new Date(team.serie.initDate)
                           .toLocaleString()
                           .split(",")[0]
                       }
                       -
                       {
-                        new Date(team.serie.serieEndDate)
+                        new Date(team.serie.endDate)
                           .toLocaleString()
                           .split(",")[0]
                       }
@@ -97,10 +97,10 @@ class AllStarTeams extends Component {
               <Accordion.Collapse eventKey={team.serie.id}>
                 <Card.Body>
                   <Table>
-                    {team.map((player) => (
+                    {team.players.map((player) => (
                       <tr>
-                        <td>{player.name}</td>
-                        <td>{player.position}</td>
+                        <td>{player.player.name}</td>
+                        <td>{player.position.positionName}</td>
                       </tr>
                     ))}
                   </Table>

@@ -52,14 +52,28 @@ namespace SB_backend.Repositories
             return starPosPlayer;
         }
 
-        public List<List<PlayerPosition>> GetStarPositionPlayersSeries()
+        public List<DTOStarTeam> GetStarPositionPlayersSeries()
         {
 
-            var all = _context.StarPositionPlayersSeries;
-            List<List<PlayerPosition>> res = new List<List<PlayerPosition>>();
+            var all = _context.StarPositionPlayersSeries.Include(c => c.Serie)
+                .Include(c => c.Player)
+                        .ThenInclude(d => d.Position)
+                .Include(c => c.Player)
+                        .ThenInclude(d => d.Player);
+            List<DTOStarTeam> res = new List<DTOStarTeam>();
             foreach (var item in all.Select(c => c.Serie).ToList())
             {
-                res.Add(all.Where(c => c.SerieId == item.Id).Include(c=>c.Player).Include(c=>c.Player.Position).Include(c=>c.Player.Player).Select(c=> c.Player).ToList());
+                var a = all.Where(c => c.SerieId == item.Id)
+                    .Include(c => c.Player)
+                    .Include(c => c.Player.Position)
+                    .Include(c => c.Player.Player);
+                var n = new DTOStarTeam()
+                {
+                    Serie = item,
+                    Players = all.Where(c => c.SerieId == item.Id)
+                    .Select(c => c.Player).ToList()
+                };
+                res.Add(n);
             }
             return res;
         }
