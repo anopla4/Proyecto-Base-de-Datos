@@ -64,9 +64,13 @@ namespace SB_backend.Controllers
             {
                 var current_director = _dirRep.GetDirector(Id);
 
-                if (current_director.ImgPath != null)
-                    System.IO.File.Delete(Path.Combine(Directory.GetCurrentDirectory(), current_director.ImgPath));
-                this.SaveFile(director);
+                if(director.Img != null)
+                {
+                    if (current_director.ImgPath != null)
+                        System.IO.File.Delete(Path.Combine(Directory.GetCurrentDirectory(), current_director.ImgPath));
+                    this.SaveFile(director);
+                }
+                
                 director.Id = current_director.Id;
                 _dirRep.UpdateDirector(director);
                 return Ok(director);

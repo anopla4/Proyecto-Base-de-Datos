@@ -85,9 +85,12 @@ namespace SB_backend.Controllers
 
             if (current_player != null)
             {
-                if(current_player.ImgPath != null)
-                    System.IO.File.Delete(Path.Combine(Directory.GetCurrentDirectory(), current_player.ImgPath));
-                this.SaveFile(player);
+                if (player.Img != null) {
+                    if (current_player.ImgPath != null)
+                        System.IO.File.Delete(Path.Combine(Directory.GetCurrentDirectory(), current_player.ImgPath));
+                    this.SaveFile(player);
+                }
+                
                 player.Id = current_player.Id;
                 _plrep.UpdatePlayer(player, positions);
                 return Ok(player);

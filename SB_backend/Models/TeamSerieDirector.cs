@@ -21,7 +21,6 @@ namespace SB_backend.Models
         [ForeignKey("SerieId,SerieInitDate,SerieEndDate")]
         public Serie Serie { get; set; }
         [ForeignKey("TeamSerie")]
-        [Required]
         public Guid TeamSerieId { get; set; }
         public Team TeamSerie { get; set; }
     }

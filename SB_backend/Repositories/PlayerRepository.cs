@@ -118,7 +118,8 @@ namespace SB_backend.Repositories
                 curr_player.Current_Team = _playerContext.Teams.Find(player.Current_TeamId);
                 curr_player.Average = player.Average;
                 curr_player.DeffAverage = player.DeffAverage;
-                curr_player.ImgPath = player.ImgPath;
+                if(player.ImgPath != null)
+                    curr_player.ImgPath = player.ImgPath;
                 Position pitcher = _playerContext.Positions.SingleOrDefault(c => c.PositionName == "P");
                 if (_playerContext.PlayerPosition.Any(c => c.PlayerId == player.Id && c.PositionId == pitcher.Id))
                     curr_player.ERA = player.ERA;

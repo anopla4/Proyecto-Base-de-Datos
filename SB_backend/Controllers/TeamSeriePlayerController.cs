@@ -56,7 +56,7 @@ namespace SB_backend.Controllers
                 return NotFound($"Not Players in Serie with ID = {SerieId}");
             return Ok(players);
         }
-        [HttpGet("{TeamId}")]
+        [HttpGet("Team/{TeamId}")]
         public IActionResult GetTeamPlayers(Guid TeamId)
         {
             var players = _tspRep.GetTeamPlayers(TeamId);
@@ -85,13 +85,12 @@ namespace SB_backend.Controllers
         }
         [HttpDelete("{PlayerId}/{SerieId}/{InitDate}/{EndDate}")]
         [Authorize]
-        public IActionResult RemoveTeamSeriePlayer(Guid PlayerId,Guid SerieId, DateTime InitDate, DateTime EndDate, TeamSeriePlayer tsp)
+        public IActionResult RemoveTeamSeriePlayer(Guid PlayerId,Guid SerieId, DateTime InitDate, DateTime EndDate)
         {
-            var tspR = _tspRep.RemoveTeamSeriePlayer(tsp);
-            if(tspR)
-            {
+            var tspR = _tspRep.GetTeamSeriePlayer(SerieId, InitDate, EndDate, PlayerId);
+            var deleted = _tspRep.RemoveTeamSeriePlayer(tspR);
+            if(deleted)
                 return Ok();
-            }
             return NotFound($"Not Player {PlayerId} in Serie {SerieId}");
         }
         [HttpPatch("{PlayerId}/{SerieId}/{InitDate}/{EndDate}")]

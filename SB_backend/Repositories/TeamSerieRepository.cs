@@ -23,7 +23,6 @@ namespace SB_backend.Repositories
             Serie serie = _context.Series.Find(teamSerie.SerieId,teamSerie.SerieInitDate,teamSerie.SerieEndDate);
             if (serie == null)
                 throw new KeyNotFoundException("No se encuentra la serie especificado");
-            //serie.NumberOfTeams += 1;
             if (teamSerie.FinalPosition > serie.NumberOfTeams)
                 throw new FormatException("No es válida la posición del equipo.");
             if (_context.TeamsSeries.Any(c => c.FinalPosition == teamSerie.FinalPosition && c.SerieId == teamSerie.SerieId && c.SerieInitDate == teamSerie.SerieInitDate && c.SerieEndDate == teamSerie.SerieEndDate))
@@ -93,10 +92,21 @@ namespace SB_backend.Repositories
             var current_teamSerie = _context.TeamsSeries.Find(teamSerie.TeamId, teamSerie.SerieId, teamSerie.SerieInitDate, teamSerie.SerieEndDate);
             if (current_teamSerie != null)
             {
+                Serie serie = _context.Series.Find(teamSerie.SerieId, teamSerie.SerieInitDate, teamSerie.SerieEndDate);
+                if (serie == null)
+                    throw new KeyNotFoundException("No se encuentra la serie especificado");
+                if (teamSerie.FinalPosition > serie.NumberOfTeams)
+                    throw new FormatException("No es válida la posición del equipo.");
+                if (_context.TeamsSeries.Any(c => c.FinalPosition == teamSerie.FinalPosition && c.SerieId == teamSerie.SerieId && c.SerieInitDate == teamSerie.SerieInitDate && c.SerieEndDate == teamSerie.SerieEndDate))
+                    throw new FormatException("No es válida la posición del equipo.");
+                if (teamSerie.FinalPosition == 1)
+                    serie.WinerId = teamSerie.TeamId;
+                if (teamSerie.FinalPosition == serie.NumberOfTeams)
+                    serie.LoserId = teamSerie.TeamId;
                 current_teamSerie.FinalPosition = teamSerie.FinalPosition;
                 current_teamSerie.WonGames = teamSerie.WonGames;
                 current_teamSerie.LostGames = teamSerie.LostGames;
-                _context.TeamsSeries.Update(current_teamSerie);
+                 _context.TeamsSeries.Update(current_teamSerie);
                 _context.SaveChanges();
                 return teamSerie;
             }

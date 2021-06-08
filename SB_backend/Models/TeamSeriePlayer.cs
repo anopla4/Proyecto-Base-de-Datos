@@ -20,7 +20,6 @@ namespace SB_backend.Models
         public Guid TeamId { get; set; }
 
         [ForeignKey("TeamId")]
-        [Required]
         public Team Team{ get; set; }
     }
 }
