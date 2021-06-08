@@ -78,7 +78,7 @@ namespace SB_backend.Controllers
         }
 
         [HttpPatch("{id}")]
-        //[Authorize]
+        [Authorize]
         public IActionResult UpdatePlayer(Guid id, [FromForm]Player player, [FromForm]List<Position> positions)
         {
             var current_player = _plrep.GetPlayer(id);
