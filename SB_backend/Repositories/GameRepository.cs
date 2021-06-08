@@ -58,11 +58,13 @@ namespace SB_backend.Repositories
             PlayerGame winnerPitcherplayerGame = new PlayerGame();
             winnerPitcherplayerGame.GameId = game.GameId;
             winnerPitcherplayerGame.PlayerId = game.PitcherWinerId;
+            winnerPitcherplayerGame.PositionId = pitcher.Id;
             _context.PlayersGames.Add(winnerPitcherplayerGame);
 
             PlayerGame loserPitcherplayerGame = new PlayerGame();
             loserPitcherplayerGame.GameId = game.GameId;
             loserPitcherplayerGame.PlayerId = game.PitcherLoserId;
+            loserPitcherplayerGame.PositionId = pitcher.Id;
             _context.PlayersGames.Add(loserPitcherplayerGame);
 
 

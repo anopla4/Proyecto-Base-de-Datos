@@ -108,8 +108,9 @@ namespace SB_backend.Repositories
         public Player UpdatePlayer(Player player, List<Position> positions)
         {
             var curr_player = _playerContext.Players.Include(c => c.Current_Team).SingleOrDefault(c => c.Id == player.Id);
-
-            if (curr_player != null)
+            if (curr_player == null)
+                throw new KeyNotFoundException("No se encuentra el jugador especificado");
+            else
             {
                 curr_player.Age = player.Age;
                 curr_player.Year_Experience = player.Year_Experience;
@@ -118,13 +119,16 @@ namespace SB_backend.Repositories
                 curr_player.Current_Team = _playerContext.Teams.Find(player.Current_TeamId);
                 curr_player.Average = player.Average;
                 curr_player.DeffAverage = player.DeffAverage;
-                if(player.ImgPath != null)
+                curr_player.ERA = null;
+                curr_player.Hand = null;
+
+                if (player.ImgPath != null)
                     curr_player.ImgPath = player.ImgPath;
                 Position pitcher = _playerContext.Positions.SingleOrDefault(c => c.PositionName == "P");
-                if (_playerContext.PlayerPosition.Any(c => c.PlayerId == player.Id && c.PositionId == pitcher.Id))
+                if (player.ERA != null)
                     curr_player.ERA = player.ERA;
-                else
-                    curr_player.ERA = null;
+                if (player.Hand != null)
+                    curr_player.Hand = player.Hand;
                 _playerContext.Update(curr_player);
 
                 foreach (var position in _playerContext.PlayerPosition.Where(c => c.PlayerId == player.Id))
@@ -133,9 +137,8 @@ namespace SB_backend.Repositories
                     _playerContext.PlayerPosition.Add(new PlayerPosition() { PlayerId = player.Id, PositionId = position.Id });
 
                 _playerContext.SaveChanges();
+                return curr_player;
             }
-            throw new KeyNotFoundException("No se encuentra el jugador especificado");
-
         }
     }
 }

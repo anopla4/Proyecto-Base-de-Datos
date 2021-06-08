@@ -28,12 +28,9 @@ class GameForm extends Component {
     if (this.props.location.state.game) {
       this.setState({ edit: true, game: this.props.location.state.game });
     }
-    fetch(
-      `https://localhost:44334/api/Team`,
-      {
-        mode: "cors",
-      }
-    )
+    fetch(`https://localhost:44334/api/Team`, {
+      mode: "cors",
+    })
       .then((response) => {
         if (!response.ok) {
           throw Error(response.statusText);
@@ -76,43 +73,62 @@ class GameForm extends Component {
 
   onFormSubmit = (e) => {
     let formElements = e.target.elements;
-    const name = formElements.name.value;
-    const initDate = this.state.edit
-      ? this.props.location.state.serie.initDate
-      : this.formatDate(new Date(formElements.initDate.value));
-    const endDate = this.state.edit
-      ? this.props.location.state.serie.endDate
-      : this.formatDate(new Date(formElements.endDate.value));
     const serie = formElements.serie;
     const serieId = serie.children[serie.selectedIndex].id;
+    console.log(
+      this.formatDate(
+        new Date(this.state.series.find((c) => c.id === serieId).endDate)
+      )
+    );
+    const serieInitDate = this.state.edit
+      ? this.props.location.state.serie.initDate
+      : this.formatDate(
+          new Date(this.state.series.find((c) => c.id === serieId).initDate)
+        );
+    const serieEndDate = this.state.edit
+      ? this.props.location.state.serie.endDate
+      : this.formatDate(
+          new Date(this.state.series.find((c) => c.id === serieId).endDate)
+        );
+    const gameDate = this.state.edit
+      ? this.props.location.state.game.gameDate
+      : formElements.gameDate.value;
+    const gameTime = this.state.edit
+      ? this.props.location.state.game.gameTime
+      : formElements.gameTime.value;
     const winner = formElements.winner;
     const winerTeamId = winner.children[winner.selectedIndex].id;
     const loser = formElements.loser;
     const loserTeamId = loser.children[loser.selectedIndex].id;
     const winner_pitcher = formElements.winner_pitcher;
-    const winerPitcherId =
+    const pitcherWinerId =
       winner_pitcher.children[winner_pitcher.selectedIndex].id;
     const loser_pitcher = formElements.loser_pitcher;
-    const loserPitcherId =
+    const pitcherLoserId =
       loser_pitcher.children[loser_pitcher.selectedIndex].id;
     const AgaintsCarrers = formElements.runs_against.value;
     const inFavorCarrers = formElements.runs_in_favor.value;
 
     let game = {
-      name,
-      initDate,
-      endDate,
+      serieInitDate,
+      serieEndDate,
       serieId,
       winerTeamId,
       loserTeamId,
-      winerPitcherId,
-      loserPitcherId,
+      gameDate,
+      gameTime,
+      pitcherWinerId,
+      pitcherLoserId,
       AgaintsCarrers,
       inFavorCarrers,
     };
     fetch("https://localhost:44334/api/Game", {
       mode: "cors",
-      headers: { "Content-Type": "application/json","Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization:
+          "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token,
+      },
       method: this.state.edit ? "PATCH" : "POST",
       body: JSON.stringify(game),
     })
@@ -156,16 +172,20 @@ class GameForm extends Component {
               <Col>
                 <Form.Group style={{ width: "100%" }} controlId="serie">
                   <Form.Label>Serie:</Form.Label>
-                  <Form.Control
-                    as="select"
-                    custom
-                  >
-                    {serie && <option id={serie.id }>
-                      {serie.name} (
-                      {new Date(serie.initDate).toLocaleString().split(",")[0]}{" "}
-                      - {new Date(serie.endDate).toLocaleString().split(",")[0]}
-                      ) : ""
-                    </option>}
+                  <Form.Control as="select" custom>
+                    {serie && (
+                      <option id={serie.id}>
+                        {serie.name} (
+                        {
+                          new Date(serie.initDate)
+                            .toLocaleString()
+                            .split(",")[0]
+                        }{" "}
+                        -{" "}
+                        {new Date(serie.endDate).toLocaleString().split(",")[0]}
+                        ) : ""
+                      </option>
+                    )}
                     {this.state.series.map((serie) => (
                       <option id={serie.id}>
                         {serie.name} (
@@ -217,11 +237,10 @@ class GameForm extends Component {
                   controlId="winner_pitcher"
                 >
                   <Form.Label>Lanzador ganador:</Form.Label>
-                  <Form.Control
-                    as="select"
-                    custom
-                  >
-                    {pitcherWiner && <option id={pitcherWiner.id}>{pitcherWiner.name}</option>}
+                  <Form.Control as="select" custom>
+                    {pitcherWiner && (
+                      <option id={pitcherWiner.id}>{pitcherWiner.name}</option>
+                    )}
                     {this.state.pitchers.map((pitcher) => (
                       <option id={pitcher.id}>{pitcher.name}</option>
                     ))}
@@ -231,11 +250,10 @@ class GameForm extends Component {
               <Col>
                 <Form.Group style={{ width: "100%" }} controlId="loser_pitcher">
                   <Form.Label>Lanzador perdedor:</Form.Label>
-                  <Form.Control
-                    as="select"
-                    custom
-                  >
-                   { pitcherLoser &&<option id={pitcherLoser.id }>{pitcherLoser.name}</option>}
+                  <Form.Control as="select" custom>
+                    {pitcherLoser && (
+                      <option id={pitcherLoser.id}>{pitcherLoser.name}</option>
+                    )}
                     {this.state.pitchers.map((pitcher) => (
                       <option id={pitcher.id}>{pitcher.name}</option>
                     ))}
@@ -269,11 +287,10 @@ class GameForm extends Component {
               <Col>
                 <Form.Group style={{ width: "100%" }} controlId="winner">
                   <Form.Label>Ganador:</Form.Label>
-                  <Form.Control
-                    as="select"
-                    custom
-                  >
-                    {winerTeam && <option id={winerTeam.id }>{winerTeam.anme}</option>}
+                  <Form.Control as="select" custom>
+                    {winerTeam && (
+                      <option id={winerTeam.id}>{winerTeam.anme}</option>
+                    )}
                     {this.state.teams.map((team) => (
                       <option id={team.id}>{team.name}</option>
                     ))}
@@ -283,11 +300,10 @@ class GameForm extends Component {
               <Col>
                 <Form.Group style={{ width: "100%" }} controlId="loser">
                   <Form.Label>Perdedor:</Form.Label>
-                  <Form.Control
-                    as="select"
-                    custom
-                  >
-                    {loserTeam && <option id={loserTeam.id }>{loserTeam.name}</option>}
+                  <Form.Control as="select" custom>
+                    {loserTeam && (
+                      <option id={loserTeam.id}>{loserTeam.name}</option>
+                    )}
                     {this.state.teams.map((team) => (
                       <option id={team.id}>{team.name}</option>
                     ))}
