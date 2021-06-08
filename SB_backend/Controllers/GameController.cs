@@ -27,10 +27,16 @@ namespace SB_backend.Controllers
         [HttpGet("{SerieId}/{InitDate}/{EndDate}")]
         public IActionResult GetGames(Guid SerieId, DateTime InitDate, DateTime EndDate)
         {
-            var games = _gRep.GetGames(SerieId, InitDate, EndDate);
-            if (games != null)
+            try
+            {
+                var games = _gRep.GetGames(SerieId, InitDate, EndDate);
                 return Ok(games);
-            return NotFound($"Not Games In Serie {SerieId}");
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
+
         }
         [HttpGet("{Id}")]
         public IActionResult GetGame(Guid Id)

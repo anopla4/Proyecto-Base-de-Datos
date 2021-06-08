@@ -28,51 +28,60 @@ namespace SB_backend.Controllers
         [HttpGet("{Id}")]
         public IActionResult GetCaracter(Guid Id)
         {
-            var caracter = _caractRep.GetCaracter(Id);
-
-            if (caracter != null)
-            {
+            try 
+            { 
+                var caracter = _caractRep.GetCaracter(Id);
                 return Ok(caracter);
             }
-
-            return NotFound($"Not caracter with id = {Id}");
+            catch(Exception e)
+            {
+                return NotFound(e.Message);
+            }
+                
         }
 
         [HttpPost]
         [Authorize]
         public IActionResult AddCaracter(Caracter caracter)
         {
-            _caractRep.AddCaracter(caracter);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + caracter.Id, caracter);
+            try
+            {
+                _caractRep.AddCaracter(caracter);
+                return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + caracter.Id, caracter);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         [Authorize]
-        public IActionResult RemoveCaracter(Guid Id,Caracter caracter)
+        public IActionResult RemoveCaracter(Guid Id, Caracter caracter)
         {
-            var flag = _caractRep.RemoveCaracter(caracter);
-
-            if (flag)
+            try
             {
-                
+                var flag = _caractRep.RemoveCaracter(caracter);
                 return Ok();
             }
-
-            return NotFound($"Not caracter with id = {Id}");
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
-
         [HttpPatch("{id}")]
         [Authorize]
         public IActionResult UpdateCaracter(Guid Id, Caracter caracter)
         {
-            var current_caracter_Upd = _caractRep.UpdateCaracter(caracter);
-
-            if (current_caracter_Upd != null)
+            try
             {
+                var current_caracter_Upd = _caractRep.UpdateCaracter(caracter);
                 return Ok(caracter);
             }
-
-            return NotFound($"Not caracter with id = {Id}");
+            catch(Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
     }
 }

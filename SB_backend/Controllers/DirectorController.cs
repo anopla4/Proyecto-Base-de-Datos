@@ -30,29 +30,40 @@ namespace SB_backend.Controllers
         [HttpGet("{Id}")]
         public IActionResult GetDirector(Guid Id)
         {
-            var director = _dirRep.GetDirector(Id);
-            if (director != null)
+            try
             {
+                var director = _dirRep.GetDirector(Id);
                 return Ok(director);
             }
-            return NotFound($"Not Director with Id = {Id}");
+            catch(Exception e)
+            {
+                return NotFound(e.Message);
+            }    
         }
         [HttpPost]
         [Authorize]
-        public IActionResult AddDirector([FromForm]Director director)
+        public IActionResult AddDirector([FromForm] Director director)
         {
-            this.SaveFile(director);
-            director = _dirRep.AddDirector(director);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + director.Id, director);
+            try 
+            {
+                this.SaveFile(director);
+                director = _dirRep.AddDirector(director);
+                return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + director.Id, director);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
         }
         [HttpPatch("{Id}")]
         [Authorize]
         public IActionResult UpdateDirector(Guid Id, [FromForm]Director director)
         {
-            var current_director = _dirRep.GetDirector(Id);
-
-            if (current_director != null)
+            try
             {
+                var current_director = _dirRep.GetDirector(Id);
+
                 if (current_director.ImgPath != null)
                     System.IO.File.Delete(Path.Combine(Directory.GetCurrentDirectory(), current_director.ImgPath));
                 this.SaveFile(director);
@@ -60,22 +71,27 @@ namespace SB_backend.Controllers
                 _dirRep.UpdateDirector(director);
                 return Ok(director);
             }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
 
-            return NotFound($"Not Director with id = {Id}");
         }
 
         [HttpDelete("{Id}")]
         [Authorize]
         public IActionResult RemoveDirector(Guid Id)
         {
-            var flag = _dirRep.RemoveDirector(Id);
-
-            if (flag)
+            try
             {
+                var flag = _dirRep.RemoveDirector(Id);
                 return Ok();
             }
+            catch (Exception e)
 
-            return NotFound($"Not Serie with id = {Id}");
+            {
+                return NotFound(e.Message);
+            }
         }
         void SaveFile(Director director)
         {
