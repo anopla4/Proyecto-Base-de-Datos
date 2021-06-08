@@ -131,7 +131,12 @@ class Serie extends Component {
           };
       fetch(postUrl, {
         mode: "cors",
-        headers: { "Content-Type": "application/json","Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            JSON.parse(localStorage.getItem("loggedUser")).jwt_token,
+        },
         method: this.state.editTeam ? "PATCH" : "POST",
         body: JSON.stringify(teamSerie),
       })
@@ -166,7 +171,12 @@ class Serie extends Component {
       };
       fetch("https://localhost:44334/api/StarPositionPlayerSerie", {
         mode: "cors",
-        headers: { "Content-Type": "application/json","Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " +
+            JSON.parse(localStorage.getItem("loggedUser")).jwt_token,
+        },
         method: "POST",
         body: JSON.stringify(item),
       })
@@ -293,7 +303,11 @@ class Serie extends Component {
       {
         mode: "cors",
         method: "DELETE",
-        headers:{"Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token}
+        headers: {
+          Authorization:
+            "Bearer " +
+            JSON.parse(localStorage.getItem("loggedUser")).jwt_token,
+        },
       }
     )
       .then((response) => {
@@ -325,7 +339,11 @@ class Serie extends Component {
       {
         mode: "cors",
         method: "DELETE",
-        headers:{"Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token}
+        headers: {
+          Authorization:
+            "Bearer " +
+            JSON.parse(localStorage.getItem("loggedUser")).jwt_token,
+        },
       }
     )
       .then((response) => {
@@ -349,20 +367,7 @@ class Serie extends Component {
     return (
       <Container>
         <h1 className="mb-5 my-style-header">{name}</h1>
-        {this.state.nothingInStanding && (
-          <Row className="mb-3">
-            <Col md={3} style={{ alignItems: "right" }}>
-              <Toast>
-                <Toast.Header>
-                  <strong className="mr-auto">Atención!</strong>
-                </Toast.Header>
-                <Toast.Body>
-                  No se ha agregado la tabla de posiciones de la serie.
-                </Toast.Body>
-              </Toast>
-            </Col>
-          </Row>
-        )}
+
         <Row>
           <Col>
             <Card>

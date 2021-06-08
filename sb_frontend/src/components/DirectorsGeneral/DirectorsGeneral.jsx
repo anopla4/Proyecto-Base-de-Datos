@@ -44,7 +44,10 @@ class DirectorsGeneral extends Component {
     fetch(`https://localhost:44334/api/Director/${id}`, {
       mode: "cors",
       method: "DELETE",
-      headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token },
+      headers: {
+        Authorization:
+          "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token,
+      },
     })
       .then((response) => {
         if (!response.ok) {
@@ -75,14 +78,17 @@ class DirectorsGeneral extends Component {
     const name = formElements.name.value;
     var formdata = new FormData();
     formdata.append("name", name);
-    formdata.append("img", this.state.file, this.state.file.name);
+    if (this.state.file)
+      formdata.append("img", this.state.file, this.state.file.name);
 
     var requestOptions = {
       method: this.state.editDirector ? "PATCH" : "POST",
       body: formdata,
       mode: "cors",
-      headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token },
-
+      headers: {
+        Authorization:
+          "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token,
+      },
     };
 
     let postUrl =
@@ -145,56 +151,57 @@ class DirectorsGeneral extends Component {
             />
             <Add text="Agregar director" onClick={this.handleAddClick} />
           </Col>
-          {this.state.logged && (this.state.addDirector || this.state.editDirector) && (
-            <Col md={3}>
-              <Navbar fixed="right">
-                <Nav.Item>
-                  <Form onSubmit={this.onFormSubmit}>
-                    <Form.Group controlId="name">
-                      <Form.Label>Nombre:</Form.Label>
-                      <Form.Control
-                        type="text"
-                        defaultValue={
-                          this.state.editDirector
-                            ? this.state.itemEdit.name
-                            : ""
-                        }
-                      />
-                    </Form.Group>
-                    <Form.Group controlId="img">
-                      <Image
-                        src={
-                          this.state.fileTmpURL
-                            ? this.state.fileTmpURL
-                            : `https://localhost:44334/${this.state.itemEdit.imgPath}`
-                        }
-                      />
-                      <Form.File
-                        label="Foto del director"
-                        onChange={(e) => this.setFile(e)}
-                      />
-                    </Form.Group>
-                    <Button
-                      className="mr-2"
-                      style={{ float: "left" }}
-                      variant="primary"
-                      type="submit"
-                      // onClick={this.onFormSubmit}
-                    >
-                      Aceptar
-                    </Button>
-                    <Button
-                      style={{ float: "right" }}
-                      onClick={this.handleCloseAdd}
-                      variant="secondary"
-                    >
-                      Cancelar
-                    </Button>
-                  </Form>
-                </Nav.Item>
-              </Navbar>
-            </Col>
-          )}
+          {this.state.logged &&
+            (this.state.addDirector || this.state.editDirector) && (
+              <Col md={3}>
+                <Navbar fixed="right">
+                  <Nav.Item>
+                    <Form onSubmit={this.onFormSubmit}>
+                      <Form.Group controlId="name">
+                        <Form.Label>Nombre:</Form.Label>
+                        <Form.Control
+                          type="text"
+                          defaultValue={
+                            this.state.editDirector
+                              ? this.state.itemEdit.name
+                              : ""
+                          }
+                        />
+                      </Form.Group>
+                      <Form.Group controlId="img">
+                        <Image
+                          src={
+                            this.state.fileTmpURL
+                              ? this.state.fileTmpURL
+                              : `https://localhost:44334/${this.state.itemEdit.imgPath}`
+                          }
+                        />
+                        <Form.File
+                          label="Foto del director"
+                          onChange={(e) => this.setFile(e)}
+                        />
+                      </Form.Group>
+                      <Button
+                        className="mr-2"
+                        style={{ float: "left" }}
+                        variant="primary"
+                        type="submit"
+                        // onClick={this.onFormSubmit}
+                      >
+                        Aceptar
+                      </Button>
+                      <Button
+                        style={{ float: "right" }}
+                        onClick={this.handleCloseAdd}
+                        variant="secondary"
+                      >
+                        Cancelar
+                      </Button>
+                    </Form>
+                  </Nav.Item>
+                </Navbar>
+              </Col>
+            )}
         </Row>
       </Container>
     );

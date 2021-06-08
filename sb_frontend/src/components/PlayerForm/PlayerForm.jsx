@@ -64,7 +64,11 @@ class PlayerForm extends Component {
 
   componentDidMount() {
     if (this.props.location.state.player) {
-      this.setState({ edit: true, playerEdit: this.props.location.state.player, selectedPositions:this.props.location.state.player.positions });
+      this.setState({
+        edit: true,
+        playerEdit: this.props.location.state.player,
+        selectedPositions: this.props.location.state.player.positions,
+      });
     }
   }
 
@@ -102,24 +106,23 @@ class PlayerForm extends Component {
       average,
     };
 
-
     var formdata = new FormData();
     formdata.append("name", player.name);
     formdata.append("age", player.age);
     formdata.append("current_TeamId", player.current_TeamId);
     formdata.append("year_Experience", player.year_Experience);
     formdata.append("deffAverage", player.deffAverage);
-    if (player.era)
-      formdata.append("era", player.era);
-    if (player.hand)
-      formdata.append("hand", player.hand);
-    if (player.average)
-      formdata.append("average", player.average);
-    formdata.append("img", this.state.file, this.state.file.name);
+    if (player.era) formdata.append("era", player.era);
+    if (player.hand) formdata.append("hand", player.hand);
+    if (player.average) formdata.append("average", player.average);
+    if (this.state.file)
+      formdata.append("img", this.state.file, this.state.file.name);
     for (let i = 0; i < player.positions.length; i++) {
       formdata.append(`positions[${i}].id`, player.positions[i].id);
-      formdata.append(`positions[${i}].positionName`, player.positions[i].positionName);
-      
+      formdata.append(
+        `positions[${i}].positionName`,
+        player.positions[i].positionName
+      );
     }
     console.log(this.state.playerEdit.id);
     let postUrl =
@@ -127,7 +130,10 @@ class PlayerForm extends Component {
       (this.state.edit ? `/${this.state.playerEdit.id}` : "");
     fetch(postUrl, {
       mode: "cors",
-      headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token },
+      headers: {
+        Authorization:
+          "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token,
+      },
       method: this.state.edit ? "PATCH" : "POST",
       body: formdata,
     })
@@ -187,9 +193,13 @@ class PlayerForm extends Component {
                         ? this.state.fileTmpURL
                         : `https://localhost:44334/${this.state.playerEdit.imgPath}`
                     }
-                    style={{width:"100px"}}
+                    style={{ width: "100px" }}
                   />
-                  <Form.File onChange={this.setFile} id="img" label="Imagen del jugador" />
+                  <Form.File
+                    onChange={this.setFile}
+                    id="img"
+                    label="Imagen del jugador"
+                  />
                 </Form.Group>
               </Col>
             </Row>
@@ -202,7 +212,9 @@ class PlayerForm extends Component {
                     as="select"
                     custom
                   >
-                    <option  id={current_Team?current_Team.id:-1}>{current_Team?current_Team.name: ""}</option>
+                    <option id={current_Team ? current_Team.id : -1}>
+                      {current_Team ? current_Team.name : ""}
+                    </option>
                     {this.state.teams.map((team) => (
                       <option id={team.id}>{team.name}</option>
                     ))}

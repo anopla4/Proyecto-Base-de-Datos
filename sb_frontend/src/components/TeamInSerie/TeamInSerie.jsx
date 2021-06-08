@@ -122,9 +122,21 @@ class TeamInSerie extends Component {
   };
   handleOnDeleteDirector = (idD, index) => {
     fetch(
-      `https://localhost:44334/api/TeamSerieDirector/${idD}/${this.state.serie.id}/
-      ${this.state.serie.initDate}/${this.state.serie.endDate}/${this.state.team.id}`,
-      { mode: "cors", method: "DELETE",headers:{"Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token} }
+      `https://localhost:44334/api/TeamSerieDirector/${idD}/${
+        this.state.serie.id
+      }/
+      ${this.formatDate(this.state.serie.initDate)}/${this.formatDate(
+        this.state.serie.endDate
+      )}/${this.state.team.id}`,
+      {
+        mode: "cors",
+        method: "DELETE",
+        headers: {
+          Authorization:
+            "Bearer " +
+            JSON.parse(localStorage.getItem("loggedUser")).jwt_token,
+        },
+      }
     )
       .then((response) => {
         if (!response.ok) {
@@ -147,9 +159,20 @@ class TeamInSerie extends Component {
 
   handleOnDeletePlayer = (idP, index) => {
     fetch(
-      `https://localhost:44334/api/TeamSeriePlayer/${idP}/${this.state.serie.id}/
-      ${this.state.serie.initDate}/${this.state.serie.endDate}/${this.state.team.id}`,
-      { mode: "cors", method: "DELETE",headers:{"Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token} }
+      `https://localhost:44334/api/TeamSeriePlayer/${idP}/${
+        this.state.serie.id
+      }/${this.formatDate(this.state.serie.initDate)}/${this.formatDate(
+        this.state.serie.endDate
+      )}`,
+      {
+        mode: "cors",
+        method: "DELETE",
+        headers: {
+          Authorization:
+            "Bearer " +
+            JSON.parse(localStorage.getItem("loggedUser")).jwt_token,
+        },
+      }
     )
       .then((response) => {
         if (!response.ok) {
@@ -177,71 +200,83 @@ class TeamInSerie extends Component {
   onFormSubmit = (e) => {
     let formElements = e.target.elements;
     if (this.state.addDirector) {
-      console.log("AAAAAAAAAAAAAAAAAAAAAAAA");
-      console.log(this.state.team);
       const director = formElements.director;
-      const directorId = director
-        ? director.children[director.selectedIndex].id
-        : "";
-      console.log(directorId);
-      let item = {
-        directorId: directorId,
-        serieId: this.state.serie.id,
-        serieInitDate: this.state.serie.initDate,
-        serieEndDate: this.state.serie.endDate,
-        teamSerieId: this.state.team.id,
-      };
-      fetch("https://localhost:44334/api/TeamSerieDirector", {
-        mode: "cors",
-        headers: { "Content-Type": "application/json","Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token },
-        method: "POST",
-        body: JSON.stringify(item),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw Error(response.statusText);
-          }
-          return response.json();
+      if (director) {
+        const directorId = director.children[director.selectedIndex].id;
+        console.log(directorId);
+        let item = {
+          directorId: directorId,
+          serieId: this.state.serie.id,
+          serieInitDate: this.state.serie.initDate,
+          serieEndDate: this.state.serie.endDate,
+          teamSerieId: this.state.team.id,
+        };
+        fetch("https://localhost:44334/api/TeamSerieDirector", {
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization:
+              "Bearer " +
+              JSON.parse(localStorage.getItem("loggedUser")).jwt_token,
+          },
+          method: "POST",
+          body: JSON.stringify(item),
         })
-        .catch(function (error) {
-          console.log(
-            "Hubo un problema con la petición Fetch:" + error.message
-          );
+          .then((response) => {
+            if (!response.ok) {
+              throw Error(response.statusText);
+            }
+            return response.json();
+          })
+          .catch(function (error) {
+            console.log(
+              "Hubo un problema con la petición Fetch:" + error.message
+            );
+          });
+        this.setState({
+          addDirector: false,
         });
-      this.setState({
-        addDirector: false,
-      });
+      }
     } else {
       const player = formElements.player;
-      const playerId = player ? player.children[player.selectedIndex].id : "";
-      let item = {
-        playerId: playerId,
-        serieId: this.state.serie.id,
-        serieInitDate: this.state.serie.initDate,
-        serieEndDate: this.state.serie.endDate,
-        teamsSerieId: this.state.team.id,
-      };
-      fetch("https://localhost:44334/api/TeamSeriePlayer", {
-        mode: "cors",
-        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token},
-        method: "POST",
-        body: JSON.stringify(item),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw Error(response.statusText);
-          }
-          return response.json();
+      if (player) {
+        const playerId = player.children[player.selectedIndex].id;
+        console.log("aaaaaaaaaaaaaaaa");
+        let item = {
+          playerId: playerId,
+          serieId: this.state.serie.id,
+          serieInitDate: this.state.serie.initDate,
+          serieEndDate: this.state.serie.endDate,
+          teamId: this.state.team.id,
+        };
+        console.log(item);
+        fetch("https://localhost:44334/api/TeamSeriePlayer", {
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization:
+              "Bearer " +
+              JSON.parse(localStorage.getItem("loggedUser")).jwt_token,
+          },
+          method: "POST",
+          body: JSON.stringify(item),
         })
-        .catch(function (error) {
-          console.log(
-            "Hubo un problema con la petición Fetch:" + error.message
-          );
+          .then((response) => {
+            if (!response.ok) {
+              throw Error(response.statusText);
+            }
+            return response.json();
+          })
+          .catch(function (error) {
+            console.log(
+              "Hubo un problema con la petición Fetch:" + error.message
+            );
+          });
+        this.setState({
+          addPlayer: false,
+          addDirector: false,
         });
-      this.setState({
-        addPlayer: false,
-        addDirector: false,
-      });
+      }
     }
   };
 
@@ -287,8 +322,7 @@ class TeamInSerie extends Component {
                   {this.state.directors.map((dir, index) => (
                     <ListGroupItem>
                       {dir.name}
-                      {
-                        isLoggedIn() &&
+                      {isLoggedIn() && (
                         <Button
                           className="ml-3"
                           style={{ padding: "0px", float: "right" }}
@@ -299,7 +333,7 @@ class TeamInSerie extends Component {
                         >
                           <TrashFill style={{ width: "100%" }} />
                         </Button>
-                      }
+                      )}
                     </ListGroupItem>
                   ))}
                 </ListGroup>
@@ -339,11 +373,7 @@ class TeamInSerie extends Component {
                           ></Image>
                         )}
                       </Form.Label>
-                      <Form.Control
-                        onChange={this.handleOnChange}
-                        as="select"
-                        custom
-                      >
+                      <Form.Control as="select" custom>
                         <option>{""}</option>
                         {this.state.allPlayers.map((player) => (
                           <option id={player.id}>{player.name}</option>
@@ -389,11 +419,7 @@ class TeamInSerie extends Component {
                           <Image src={this.playerImg}></Image>
                         )}
                       </Form.Label> */}
-                      <Form.Control
-                        onChange={this.handleSelectChange}
-                        as="select"
-                        custom
-                      >
+                      <Form.Control as="select" custom>
                         <option>{""}</option>
                         {this.state.allDirectors.map((dir) => (
                           <option id={dir.id}>{dir.name}</option>

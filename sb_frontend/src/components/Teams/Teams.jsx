@@ -120,8 +120,8 @@ class Teams extends Component {
     formdata.append("name", name);
     formdata.append("initials", initials);
     formdata.append("color", color);
-    formdata.append("img", this.state.file, this.state.file.name);
-
+    if (this.state.file)
+      formdata.append("img", this.state.file, this.state.file.name);
     var requestOptions = {
       method: this.state.editTeam ? "PATCH" : "POST",
       body: formdata,

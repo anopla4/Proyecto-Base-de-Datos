@@ -23,15 +23,11 @@ class Players extends Component {
                   />
                 </Col>
                 <Col>
-                  <h6
-                    className="header"
-                    onClick={() => this.props.onClick(player.id)}
-                  >
-                    {player.name}
-                  </h6>
+                  <h6 className="header">{player.name}</h6>
                   <p style={{ display: "inline" }}>
                     <h className="header-posiciones">Posiciones: </h>
-                    {player.positions.map((pos) => pos.positionName).join(", ")}.
+                    {player.positions.map((pos) => pos.positionName).join(", ")}
+                    .
                   </p>
                 </Col>
 
@@ -79,7 +75,11 @@ class Players extends Component {
                 </Row>
                 <Row className="set-size">
                   <Col md={2}>{player.age}</Col>
-                  {this.props.playerGeneral && <Col>{ player.current_Team ? player.current_Team.name : ""}</Col>}
+                  {this.props.playerGeneral && (
+                    <Col>
+                      {player.current_Team ? player.current_Team.name : ""}
+                    </Col>
+                  )}
                   {this.props.playerGeneral && (
                     <Col>{player.teams.join(", ")}.</Col>
                   )}

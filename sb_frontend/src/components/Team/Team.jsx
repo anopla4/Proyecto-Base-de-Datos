@@ -59,9 +59,12 @@ class Team extends Component {
       .catch(function (error) {
         console.log("Hubo un problema con la petición Fetch:" + error.message);
       });
-    fetch(`https://localhost:44334/api/TeamSeriePlayer/${this.state.team.id}`, {
-      mode: "cors",
-    })
+    fetch(
+      `https://localhost:44334/api/TeamSeriePlayer/Team/${this.state.team.id}`,
+      {
+        mode: "cors",
+      }
+    )
       .then((response) => {
         if (!response.ok) {
           throw Error(response.statusText);
