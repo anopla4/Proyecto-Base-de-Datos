@@ -83,10 +83,11 @@ namespace SB_backend.Controllers
 
         [HttpDelete("{SerieId}/{InitDate}/{EndDate}/{PositionId}")]
         [Authorize]
-        public IActionResult RemoveStarPositionPlayerSerie(Guid SerieId, DateTime InitDate, DateTime EndDate, Guid PositionId, StarPositionPlayerSerie starPositionPlayerSerie)
+        public IActionResult RemoveStarPositionPlayerSerie(Guid SerieId, DateTime InitDate, DateTime EndDate, Guid PositionId)
         {
             try
             {
+                var starPositionPlayerSerie = _spRep.GetStarPositionPlayerSerie(SerieId, InitDate, EndDate, PositionId);
                 var flag = _spRep.RemoveStarPositionPlayer(starPositionPlayerSerie);
                 return Ok();
             }

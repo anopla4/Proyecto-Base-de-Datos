@@ -40,12 +40,13 @@ namespace SB_backend.Repositories
             {
                 throw new Exception("No se ha ingresado el equipo todos estrellas correspondiente a la serie especificada");
             }
-            return _context.StarPositionPlayersSeries.Include(c => c.Player).Include(c => c.Player.Position).Where(c => c.SerieId == SerieId && c.SerieInitDate == SerieInitDate && c.SerieEndDate == SerieEndDate).ToList();
+            return _context.StarPositionPlayersSeries.Include(c => c.Player).Include(c => c.Player.Position).Include(c => c.Player.Player)
+                .Include(c=>c.Serie).Where(c => c.SerieId == SerieId && c.SerieInitDate == SerieInitDate && c.SerieEndDate == SerieEndDate).ToList();
         }
 
         public StarPositionPlayerSerie GetStarPositionPlayerSerie(Guid SerieId, DateTime SerieInitDate, DateTime SerieEndDate, Guid PositionId)
         {
-            var starPosPlayer = _context.StarPositionPlayersSeries.Include(c => c.Player).Include(c => c.Player.Position).Include(c => c.Serie).SingleOrDefault(c => c.SerieId == SerieId && c.SerieInitDate == SerieInitDate && c.SerieEndDate == SerieEndDate && c.PositionId == PositionId);
+            var starPosPlayer = _context.StarPositionPlayersSeries.Include(c => c.Player).Include(c => c.Player.Player).Include(d => d.Player.Position).Include(c => c.Serie).SingleOrDefault(c => c.SerieId == SerieId && c.SerieInitDate == SerieInitDate && c.SerieEndDate == SerieEndDate && c.PositionId == PositionId);
             if (starPosPlayer == null)
                 throw new Exception("No se ha ingresado el jugador de esta posición en el equipo todos estrellas correspondiente a la serie especificada");
             return starPosPlayer;
@@ -54,11 +55,11 @@ namespace SB_backend.Repositories
         public List<List<PlayerPosition>> GetStarPositionPlayersSeries()
         {
 
-            var all = _context.StarPositionPlayersSeries.ToList();
+            var all = _context.StarPositionPlayersSeries;
             List<List<PlayerPosition>> res = new List<List<PlayerPosition>>();
             foreach (var item in all.Select(c => c.Serie).ToList())
             {
-                res.Add(all.Where(c => c.SerieId == item.Id).Select(c=> c.Player).ToList());
+                res.Add(all.Where(c => c.SerieId == item.Id).Include(c=>c.Player).Include(c=>c.Player.Position).Include(c=>c.Player.Player).Select(c=> c.Player).ToList());
             }
             return res;
         }
