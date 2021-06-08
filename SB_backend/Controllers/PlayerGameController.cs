@@ -27,37 +27,57 @@ namespace SB_backend.Controllers
         [HttpGet("{GameId}/WinerTeam")]
         public IActionResult GetGamePlayersWinerTeam(Guid GameId)
         {
-            var lineup = _pgRep.GetPlayersInGameWinerTeam(GameId);
-            if (lineup == null)
-                return NotFound($"Not Lineup in Game {GameId}");
-            return Ok(lineup);
+            try
+            {
+                var lineup = _pgRep.GetPlayersInGameWinerTeam(GameId);
+                return Ok(lineup);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         [HttpGet("{GameId}/LoserTeam")]
         public IActionResult GetGamePlayersLoserTeam(Guid GameId)
         {
-            var lineup = _pgRep.GetPlayersInGameLoserTeam(GameId);
-            if (lineup == null)
-                return NotFound($"Not Lineup in Game {GameId}");
-            return Ok(lineup);
+            try
+            {
+                var lineup = _pgRep.GetPlayersInGameLoserTeam(GameId);
+                return Ok(lineup);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         [HttpPost]
         [Authorize]
         public IActionResult AddPlayerInGame(PlayerGame playerGame)
         {
-            var playerGameA = _pgRep.AddPlayerInGame(playerGame);
-            if (playerGameA == null)
-                return BadRequest("Not created object");
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + playerGameA.GameId + "/" + playerGameA.PlayerId, playerGameA);
+            try
+            {
+                var playerGameA = _pgRep.AddPlayerInGame(playerGame);
+                return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + playerGameA.GameId + "/" + playerGameA.PlayerId, playerGameA);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         [HttpDelete("{GameId}/{PlayerId}/{PositionId}")]
         [Authorize]
         public IActionResult RemovePlayerInGame(Guid GameId, Guid PlayerId,Guid PositionId)
         {
-            var playerGame = _pgRep.GetPlayerInGame(GameId, PlayerId,PositionId);
-            var playerGameR = _pgRep.DeletePlayerInGame(playerGame);
-            if (!playerGameR)
-                return NotFound("Object Not Found");
-            return Ok();
+            try
+            {
+                var playerGame = _pgRep.GetPlayerInGame(GameId, PlayerId, PositionId);
+                var playerGameR = _pgRep.DeletePlayerInGame(playerGame);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
     }
 }

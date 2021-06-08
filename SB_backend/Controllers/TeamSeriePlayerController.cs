@@ -27,82 +27,124 @@ namespace SB_backend.Controllers
         [HttpGet("{PlayerId}/{SerieId}/{InitDate}/{EndDate}")]
         public IActionResult GetTeamSeriePlayer(Guid PlayerId, Guid SerieId, DateTime InitDate, DateTime EndDate)
         {
-            var tsp = _tspRep.GetTeamSeriePlayer(SerieId, InitDate, EndDate, PlayerId);
-            if (tsp != null)
+            try
+            {
+                var tsp = _tspRep.GetTeamSeriePlayer(SerieId, InitDate, EndDate, PlayerId);
                 return Ok(tsp);
-            return NotFound($"Not Player {PlayerId} in Serie {SerieId}");
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         [HttpGet("{PlayerId}")]
         public IActionResult GetPlayerTeams(Guid PlayerId)
         {
-            var teams = _tspRep.GetPlayerTeams(PlayerId);
-            if (teams == null)
-                return NotFound($"Not player with Id = {PlayerId}");
-            return Ok(teams);
+            try
+            {
+                var teams = _tspRep.GetPlayerTeams(PlayerId);
+                return Ok(teams);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         [HttpGet("Players/{TeamId}/{SerieId}/{InitDate}/{EndDate}")]
         public IActionResult GetPlayersOfTeamInSerie(Guid SerieId, DateTime InitDate, DateTime EndDate, Guid TeamId)
         {
-            var players = _tspRep.GetPlayersOfTeamInSerie(TeamId, SerieId, InitDate, EndDate);
-            if (players != null)
+            try
+            {
+                var players = _tspRep.GetPlayersOfTeamInSerie(TeamId, SerieId, InitDate, EndDate);
                 return Ok(players);
-            return NotFound("Not team {TeamId} in serie {SerieId}");
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         [HttpGet("{SerieId}/{InitDate}/{EndDate}")]
         public IActionResult GetPlayersInSerie(Guid SerieId, DateTime InitDate, DateTime EndDate)
         {
-            var players = _tspRep.GetPlayersInSerie(SerieId, InitDate, EndDate);
-            if (players == null)
-                return NotFound($"Not Players in Serie with ID = {SerieId}");
-            return Ok(players);
+            try
+            {
+                var players = _tspRep.GetPlayersInSerie(SerieId, InitDate, EndDate);
+                return Ok(players);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         [HttpGet("Team/{TeamId}")]
         public IActionResult GetTeamPlayers(Guid TeamId)
         {
-            var players = _tspRep.GetTeamPlayers(TeamId);
-            if (players == null)
-                return NotFound($"Not team with Id {TeamId}");
-            return Ok(players);
+            try
+            {
+                var players = _tspRep.GetTeamPlayers(TeamId);
+                return Ok(players);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         [HttpGet("{TeamId}/{SerieId}/{InitDate}/{EndDate}/Pitchers")]
         public IActionResult GetPitchersOfTeamInSerie(Guid TeamId, Guid SerieId, DateTime InitDate, DateTime EndDate)
         {
-            var pitchers = _tspRep.GetPitchersTeamInSerie(TeamId, SerieId, InitDate, EndDate);
-            if (pitchers == null)
-                return NotFound("Not Pitchers Found");
-            return Ok(pitchers);
+            try
+            {
+                var pitchers = _tspRep.GetPitchersTeamInSerie(TeamId, SerieId, InitDate, EndDate);
+                return Ok(pitchers);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         [HttpPost]
         [Authorize]
         public IActionResult AddTeamSeriePlayer(TeamSeriePlayer tsp)
         {
-            var teamSeriePlayerAux = _tspRep.AddTeamSeriePlayer(tsp);
-            if (teamSeriePlayerAux == null)
+            try
             {
-                return NotFound($"PlayerId or SerieId are not valid");
+                var teamSeriePlayerAux = _tspRep.AddTeamSeriePlayer(tsp);
+                return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + tsp.PlayerId + "/" + tsp.SerieId + "/" + tsp.SerieInitDate + "/" + tsp.SerieEndDate, tsp);
             }
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + tsp.PlayerId + "/" + tsp.SerieId + "/" + tsp.SerieInitDate + "/" + tsp.SerieEndDate, tsp);
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         [HttpDelete("{PlayerId}/{SerieId}/{InitDate}/{EndDate}")]
         [Authorize]
         public IActionResult RemoveTeamSeriePlayer(Guid PlayerId,Guid SerieId, DateTime InitDate, DateTime EndDate)
         {
-            var tspR = _tspRep.GetTeamSeriePlayer(SerieId, InitDate, EndDate, PlayerId);
-            var deleted = _tspRep.RemoveTeamSeriePlayer(tspR);
-            if(deleted)
+            try
+            {
+                var tspR = _tspRep.GetTeamSeriePlayer(SerieId, InitDate, EndDate, PlayerId);
+                var deleted = _tspRep.RemoveTeamSeriePlayer(tspR);
                 return Ok();
-            return NotFound($"Not Player {PlayerId} in Serie {SerieId}");
+                
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         [HttpPatch("{PlayerId}/{SerieId}/{InitDate}/{EndDate}")]
         [Authorize]
         public IActionResult UpdateTeamSeriePlayer(Guid PlayerId, Guid SerieId, DateTime InitDate, DateTime EndDate, TeamSeriePlayer tsp)
         {
-            var tspUpd = _tspRep.UpdateTeamSeriePlayer(tsp);
-            if (tspUpd != null)
+            try
             {
+                var tspUpd = _tspRep.UpdateTeamSeriePlayer(tsp);
                 return Ok(tspUpd);
             }
-            return NotFound($"Not Player {PlayerId} in Serie {SerieId}");
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
     }
 }

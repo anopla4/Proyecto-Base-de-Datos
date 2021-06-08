@@ -41,37 +41,57 @@ namespace SB_backend.Controllers
         [HttpGet("{Id}")]
         public IActionResult GetGame(Guid Id)
         {
-            var game = _gRep.GetGame(Id);
-            if (game != null)
+            try
+            {
+                var game = _gRep.GetGame(Id);
                 return Ok(game);
-            return NotFound($"Not game with Id = {Id}");
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         [HttpPost]
         [Authorize]
         public IActionResult AddGame(Game game)
         {
-            var gameA = _gRep.AddGame(game);
-            if (gameA == null)
-                return BadRequest("Not Added");
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + gameA.GameId, gameA);
+            try
+            {
+                var gameA = _gRep.AddGame(game);
+                return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + gameA.GameId, gameA);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         [HttpPatch("{Id}")]
         [Authorize]
         public IActionResult UpdateGame(Guid Id,Game game)
         {
+            try
+            {
                 var gameU = _gRep.UpdateGame(game);
-                if (gameU == null)
-                    return NotFound($"Not Game with Id = {Id}");
-            return Ok(gameU);
+                return Ok(gameU);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         [HttpDelete("{Id}")]
         [Authorize]
         public IActionResult RemoveGame(Guid Id, Game game)
         {
-            var del = _gRep.RemoveGame(game);
-            if (!del)
-                return NotFound($"Not Game with Id = {Id}");
-            return Ok();
+            try
+            {
+                var del = _gRep.RemoveGame(game);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
     }
 }

@@ -28,47 +28,72 @@ namespace SB_backend.Controllers
         [HttpGet("{SerieId}/{InitDate}/{EndDate}")]
         public IActionResult GetAllStarTeamSerie(Guid SerieId, DateTime InitDate, DateTime EndDate)
         {
-            var allStartTeam = _spRep.GetAllStarsTeam(SerieId, InitDate, EndDate);
-            if (allStartTeam != null)
+            try
+            {
+                var allStartTeam = _spRep.GetAllStarsTeam(SerieId, InitDate, EndDate);
                 return Ok(allStartTeam);
-            return NotFound($"Not AllStarTeam for Serie with Id = {SerieId}");
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         [HttpPost]
         [Authorize]
         public IActionResult AddStarPositionPlayerSerie(StarPositionPlayerSerie starPositionPlayerSerie)
         {
-            var startPPS = _spRep.AddStarPositionPlayerSerie(starPositionPlayerSerie);
-            if(startPPS != null)
+            try
+            {
+                var startPPS = _spRep.AddStarPositionPlayerSerie(starPositionPlayerSerie);
                 return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + startPPS.SerieId + "/" + startPPS.SerieInitDate + "/" + startPPS.SerieEndDate + "/" + startPPS.PositionId, startPPS);
-            return BadRequest($"Not added StartPositionPlayer");
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         [HttpGet("{SerieId}/{InitDate}/{EndDate}/{PositionId}")]
         [Authorize]
         public IActionResult GetStarPlayerOfPositionInSerie(Guid SerieId, DateTime InitDate, DateTime EndDate, Guid PositionId)
         {
-            var player = _spRep.GetStarPositionPlayerSerie(SerieId,InitDate,EndDate, PositionId);
-            if (player != null)
+            try
+            {
+                var player = _spRep.GetStarPositionPlayerSerie(SerieId, InitDate, EndDate, PositionId);
                 return Ok(player);
-            return NotFound($"Not Player in AllStartTeam Of Serie {SerieId} in position {PositionId}");
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         [HttpPatch("{SerieId}/{InitDate}/{EndDate}/{PositionId}")]
         [Authorize]
         public IActionResult UpdateStarTeamSerie(Guid SerieId, DateTime InitDate, DateTime EndDate,Guid PositionId,StarPositionPlayerSerie starPositionPlayerSerie)
         {
-            var player = _spRep.UpdateStarPositionPlayerSerie(starPositionPlayerSerie);
-            if (player != null)
+            try
+            {
+                var player = _spRep.UpdateStarPositionPlayerSerie(starPositionPlayerSerie);
                 return Ok(player);
-            return NotFound($"Not Player in AllStartTeam Of Serie {SerieId} in position {PositionId}");
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         [HttpDelete("{SerieId}/{InitDate}/{EndDate}/{PositionId}")]
         [Authorize]
         public IActionResult RemoveStarPositionPlayerSerie(Guid SerieId, DateTime InitDate, DateTime EndDate, Guid PositionId, StarPositionPlayerSerie starPositionPlayerSerie)
         {
-            var flag = _spRep.RemoveStarPositionPlayer(starPositionPlayerSerie);
-            if (flag)
+            try
+            {
+                var flag = _spRep.RemoveStarPositionPlayer(starPositionPlayerSerie);
                 return Ok();
-            return NotFound($"Object Not Found");
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
     }
 }

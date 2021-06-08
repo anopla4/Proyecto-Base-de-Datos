@@ -27,72 +27,91 @@ namespace SB_backend.Controllers
         [HttpGet("Standing/{SerieId}/{initDate}/{endDate}")]
         public IActionResult GetStanding(Guid SerieId, DateTime initDate, DateTime endDate)
         {
-            List<TeamSerie> serie = _tsRep.GetStanding(SerieId, initDate, endDate);
-            if (serie.Count == 0)
+            try
             {
-                return NotFound($"Not Standing to serie {SerieId}");
+                List<TeamSerie> serie = _tsRep.GetStanding(SerieId, initDate, endDate);
+                return Ok(serie);
             }
-            return Ok(serie);
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         [HttpGet("{TeamId}/{SerieId}/{initDate}/{endDate}")]
         public IActionResult GetTeamSerie(Guid TeamId, Guid SerieId, DateTime initDate, DateTime endDate)
         {
-            TeamSerie teamSerie = _tsRep.GetTeamSerie(TeamId, SerieId, initDate, endDate);
-            if (teamSerie == null)
+            try
             {
-                return NotFound($"Not TeamSerie with ids = {TeamId},{SerieId},{initDate},{endDate}");
+                TeamSerie teamSerie = _tsRep.GetTeamSerie(TeamId, SerieId, initDate, endDate);
+                return Ok(teamSerie);
             }
-            return Ok(teamSerie);
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         [HttpGet("TeamWonSeries/{TeamId}")]
         public IActionResult GetTeamWonSeries(Guid TeamId)
         {
-            var series = _tsRep.GetTeamWonSeries(TeamId);
-            if (series == null)
+            try
             {
-                return NotFound($"Not Team in TeamsSeries with Id = {TeamId}");
+                var series = _tsRep.GetTeamWonSeries(TeamId);
+                return Ok(series);
             }
-            return Ok(series);
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         [HttpPost]
         [Authorize]
         public IActionResult AddTeamSerie(TeamSerie teamSerie)
         {
-            var teamSerieAux = _tsRep.AddTeamSerie(teamSerie);
-            if (teamSerieAux == null)
+            try
             {
-                return NotFound($"TeamId or SerieId are not valid");
+                var teamSerieAux = _tsRep.AddTeamSerie(teamSerie);
+                return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + teamSerie.TeamId + "/" + teamSerie.SerieId + "/" + teamSerie.SerieInitDate + "/" + teamSerie.SerieEndDate, teamSerie);
             }
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + teamSerie.TeamId + "/" +teamSerie.SerieId + "/" + teamSerie.SerieInitDate + "/" + teamSerie.SerieEndDate, teamSerie);
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         [HttpDelete("{TeamId}/{SerieId}/{initDate}/{endDate}")]
         [Authorize]
         public IActionResult RemoveTeamSerie(Guid TeamId, Guid SerieId, DateTime initDate, DateTime endDate)
         {
-            TeamSerie teamSerie = _tsRep.GetTeamSerie(TeamId, SerieId, initDate, endDate);
-
-            var flag = _tsRep.RemoveTeamSerie(teamSerie);
-            if (flag)
+            try
             {
+                TeamSerie teamSerie = _tsRep.GetTeamSerie(TeamId, SerieId, initDate, endDate);
+
+                var flag = _tsRep.RemoveTeamSerie(teamSerie);
                 return Ok();
+                
             }
-            return NotFound($"Not valid TeamSerie");
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         [HttpPatch("{TeamId}/{SerieId}/{initDate}/{endDate}")]
         [Authorize]
         public IActionResult UpdateTeamSerie(Guid TeamId,Guid SerieId,DateTime initDate, DateTime endDate,TeamSerie teamSerie)
         {
-            teamSerie.TeamId = TeamId;
-            teamSerie.SerieId = SerieId;
-            teamSerie.SerieInitDate = initDate;
-            teamSerie.SerieEndDate = endDate;
-            var teamSerieUpd = _tsRep.UpdateTeamSerie(teamSerie);
-            if(teamSerieUpd == null)
+            try
             {
-                return NotFound($"Not TeamSerie with ids = {TeamId},{SerieId},{initDate},{endDate}");
+                teamSerie.TeamId = TeamId;
+                teamSerie.SerieId = SerieId;
+                teamSerie.SerieInitDate = initDate;
+                teamSerie.SerieEndDate = endDate;
+                var teamSerieUpd = _tsRep.UpdateTeamSerie(teamSerie);
+                return Ok(teamSerieUpd);
             }
-            return Ok(teamSerieUpd);
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
     }

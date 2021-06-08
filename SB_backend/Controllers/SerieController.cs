@@ -28,47 +28,60 @@ namespace SB_backend.Controllers
         [HttpGet("{Id}/{initDate}/{endDate}")]
         public IActionResult GetSerie(Guid Id, DateTime initDate, DateTime endDate)
         {
-            var serie = _serRep.GetSerie(Id,initDate,endDate);
-            if(serie != null)
+            try 
             {
+                var serie = _serRep.GetSerie(Id,initDate,endDate);
                 return Ok(serie);
             }
-            return NotFound($"Not serie with Id = {Id}");
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         [HttpPost]
         [Authorize]
         public IActionResult AddSerie(Serie serie)
         {
-            serie = _serRep.AddSerie(serie);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + serie.Id, serie);
+            try
+            {
+                serie = _serRep.AddSerie(serie);
+                return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + serie.Id, serie);
+            }
+            catch (Exception e) { return BadRequest(e.Message); }
+            
         }
         [HttpPatch("{Id}/{initDate}/{endDate}")]
         [Authorize]
         public IActionResult UpdateSerie(Guid Id,DateTime initDate,DateTime endDate,Serie serie)
         {
-            var current_serie = _serRep.GetSerie(Id,initDate,endDate);
-
-            if (current_serie != null)
+            try
             {
+                var current_serie = _serRep.GetSerie(Id, initDate, endDate);
+
                 serie.Id = current_serie.Id;
                 _serRep.UpdateSerie(serie);
                 return Ok(serie);
             }
 
-            return NotFound($"Not Serie with id = {Id}");
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         [HttpDelete("{Id}/{initDate}/{endDate}")]
         [Authorize]
         public IActionResult RemoveSerie(Guid Id, DateTime initDate, DateTime endDate)
         {
-            var flag = _serRep.RemoveSerie(Id, initDate, endDate);
-            if (flag)
+            try
             {
+                var flag = _serRep.RemoveSerie(Id, initDate, endDate);
                 return Ok();
             }
-
-            return NotFound($"Not Serie with id = {Id}");
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
     }

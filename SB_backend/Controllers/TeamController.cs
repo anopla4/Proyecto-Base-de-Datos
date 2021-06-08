@@ -32,48 +32,58 @@ namespace SB_backend.Controllers
         [Authorize]
         public IActionResult AddTeam([FromForm]Team team)
         {
-            this.SaveFile(team);
+            try
+            {
+                this.SaveFile(team);
 
-            _teamRep.AddTeam(team);
+                _teamRep.AddTeam(team);
 
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + team.Id, team);
+                return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + team.Id, team);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         [Authorize]
         public IActionResult RemoveTeam(Guid Id)
         {
-            var team = _teamRep.getTeam(Id);
-
-            if (team != null)
+            try
             {
+                var team = _teamRep.getTeam(Id);
                 _teamRep.RemoveTeam(team);
                 return Ok();
             }
-
-            return NotFound($"Not Team with id = {Id}");
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         [HttpPatch("{id}")]
         [Authorize]
         public IActionResult UpdateTeam(Guid Id, [FromForm]Team team)
         {
-            var current_team = _teamRep.getTeam(Id);
-
-            if (current_team != null)
+            try
             {
-                if(team.Img != null) {
+                var current_team = _teamRep.getTeam(Id);
+                if (team.Img != null)
+                {
                     if (current_team.ImgPath != null)
-                        System.IO.File.Delete(Path.Combine(Directory.GetCurrentDirectory(), current_team.ImgPath));
+                    System.IO.File.Delete(Path.Combine(Directory.GetCurrentDirectory(), current_team.ImgPath));
                     this.SaveFile(team);
                 }
-                
+
                 team.Id = current_team.Id;
                 _teamRep.UpdateTeam(team);
                 return Ok(team);
             }
-
-            return NotFound($"Not team with id = {Id}");
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         void SaveFile(Team team)

@@ -26,39 +26,48 @@ namespace SB_backend.Controllers
         [Authorize]
         public IActionResult AddPosition(Position position)
         {
-            _posRep.AddPosition(position);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + position.Id,position);
+            try
+            {
+                _posRep.AddPosition(position);
+                return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + position.Id, position);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpDelete("{Id}")]
         [Authorize]
         public IActionResult RemovePosition(Guid Id)
         {
-            var position = _posRep.GetPosition(Id);
-
-            if (position != null)
+            try
             {
+                var position = _posRep.GetPosition(Id);
                 _posRep.RemovePosition(position);
                 return Ok();
             }
-
-            return NotFound($"Not position with id = {Id}");
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         [HttpPatch("{id}")]
         [Authorize]
         public IActionResult UpdateCaracter(Guid Id, Position position)
         {
-            var current_position = _posRep.GetPosition(Id);
-
-            if (current_position != null)
+            try
             {
+                var current_position = _posRep.GetPosition(Id);
                 position.Id = current_position.Id;
                 _posRep.UpdatePosition(position);
                 return Ok(position);
             }
-
-            return NotFound($"Not position with id = {Id}");
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
     }
 }

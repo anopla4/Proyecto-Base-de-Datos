@@ -27,76 +27,99 @@ namespace SB_backend.Controllers
         [HttpGet("{playerId}/Positions")]
         public IActionResult GetPlayerPositions(Guid playerId)
         {
-            var positions = _plrep.GetPlayerPositions(playerId);
-            if (positions == null)
-                return NotFound($"Not Player with Id = {playerId}");
-            return Ok(positions);
+            try
+            {
+                var positions = _plrep.GetPlayerPositions(playerId);
+                return Ok(positions);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         [HttpGet("Pitchers")]
         public IActionResult GetPitchers()
         {
-            var pitchers = _plrep.GetPitchers();
-            return Ok(pitchers);
+            try
+            {
+                var pitchers = _plrep.GetPitchers();
+                return Ok(pitchers);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         [HttpGet("{id}/{PositionId}")]
         public IActionResult GetPlayer(Guid Id, Guid PositionId)
         {
-            var player = _plrep.GetPlayer(Id);
-
-            if (player != null)
+            try
             {
+                var player = _plrep.GetPlayer(Id);
                 return Ok(player);
             }
-
-            return NotFound($"Not player with id = {Id} and posId = {PositionId}");
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         [HttpPost]
         [Authorize]
         public IActionResult AddPlayer([FromForm]Player player, [FromForm]List<Position> positions)
         {
-            this.SaveFile(player);
-            Player p = _plrep.AddPlayer(player, positions);
-            if (p == null)
-                return BadRequest("Not Player Created");
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + player.Id, player);
+            try
+            {
+                this.SaveFile(player);
+                Player p = _plrep.AddPlayer(player, positions);
+                return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + player.Id, player);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         [Authorize]
         public IActionResult RemovePlayer(Guid Id)
         {
-            var player = _plrep.GetPlayer(Id);
-            var flag = _plrep.RemovePlayer(player);
-
-            if (flag)
+            try
             {
-                return Ok();
+                var player = _plrep.GetPlayer(Id);
+                var flag = _plrep.RemovePlayer(player);
+                return Ok();   
             }
-
-            return NotFound($"Not player with id = {Id}");
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         [HttpPatch("{id}")]
         [Authorize]
         public IActionResult UpdatePlayer(Guid id, [FromForm]Player player, [FromForm]List<Position> positions)
         {
-            var current_player = _plrep.GetPlayer(id);
-
-            if (current_player != null)
+            try
             {
-                if (player.Img != null) {
-                    if (current_player.ImgPath != null)
-                        System.IO.File.Delete(Path.Combine(Directory.GetCurrentDirectory(), current_player.ImgPath));
-                    this.SaveFile(player);
-                }
-                
+                var current_player = _plrep.GetPlayer(id);
+
+                if (player.Img != null)
+                    {
+                        if (current_player.ImgPath != null)
+                            System.IO.File.Delete(Path.Combine(Directory.GetCurrentDirectory(), current_player.ImgPath));
+                        this.SaveFile(player);
+                    }
+
                 player.Id = current_player.Id;
                 _plrep.UpdatePlayer(player, positions);
                 return Ok(player);
+                
             }
-
-            return NotFound($"Not player with id = {player.Id}");
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         void SaveFile(Player player)

@@ -22,36 +22,56 @@ namespace SB_backend.Controllers
         [HttpGet("{GameID}/WinerTeam")]    
         public IActionResult GetGameChangesWinerTeam(Guid GameId)
         {
-            var changes = _pchRep.GetPlayersChangesInGameWinerTeam(GameId);
-            if (changes == null)
-                return NotFound($"Not Changes Found in Game {GameId}");
-            return Ok(changes);
+            try
+            {
+                var changes = _pchRep.GetPlayersChangesInGameWinerTeam(GameId);
+                return Ok(changes);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         [HttpGet("{GameID}/LoserTeam")]
         public IActionResult GetGameChangesLoserTeam(Guid GameId)
         {
-            var changes = _pchRep.GetPlayersChangesInGameLoserTeam(GameId);
-            if (changes == null)
-                return NotFound($"Not Changes Found in Game {GameId}");
-            return Ok(changes);
+            try
+            {
+                var changes = _pchRep.GetPlayersChangesInGameLoserTeam(GameId);
+                return Ok(changes);
+            }
+            catch (Exception e) 
+            { 
+                return NotFound(e.Message); 
+            }
         }
         [HttpPost]
         [Authorize]
         public IActionResult AddChange(PlayerChangeGame change)
         {
-            var changeA = _pchRep.AddChangeInGame(change);
-            if (changeA == null)
-                return BadRequest("Not created Object");
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + change.GameId + "/" + change.PlayerIdIn + "/" + change.PositionIdIn, change);
+            try
+            {
+                var changeA = _pchRep.AddChangeInGame(change);
+                return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + change.GameId + "/" + change.PlayerIdIn + "/" + change.PositionIdIn, change);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         [HttpDelete("{GameId}/{PlayerInId}/{PositionIdIn}/{PlayerOutId}/{PositionIdOut}/")]
         [Authorize]
         public IActionResult RemoveChange(Guid GameId, Guid PlayerInId, Guid PositionIdIn, Guid PlayerOutId, Guid PositionIdOut)
         {
-            var rem = _pchRep.RemoveChangeInGame(GameId, PlayerInId, PositionIdIn, PlayerOutId, PositionIdOut);
-            if (rem)
+            try
+            {
+                var rem = _pchRep.RemoveChangeInGame(GameId, PlayerInId, PositionIdIn, PlayerOutId, PositionIdOut);
                 return Ok();
-            return NotFound("Not change Found");
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
     }
 }
