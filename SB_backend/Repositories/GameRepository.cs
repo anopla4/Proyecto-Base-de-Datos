@@ -21,15 +21,15 @@ namespace SB_backend.Repositories
             game.GameId = Guid.NewGuid();
             bool flagSerie = _context.Series.Any(c => c.Id == game.SerieId && c.InitDate == game.SerieInitDate && c.EndDate == game.SerieEndDate);
             if (!flagSerie)
-                return null;
+                throw new KeyNotFoundException("La serie correspondiente a este juego no es válida");
             bool flagWinerTeam = _context.TeamsSeries.Any(c => c.SerieId == game.SerieId && c.TeamId == game.WinerTeamId);
             if (!flagWinerTeam)
-                return null;
+                throw new KeyNotFoundException("El equipo ganador correspondiente a este juego no participa en la serie especificada.");
             bool flagLoserTeam = _context.TeamsSeries.Any(c => c.SerieId == game.SerieId && c.TeamId == game.LoserTeamId);
             if (!flagLoserTeam)
-                return null;
+                throw new KeyNotFoundException("El equipo perdedor correspondiente a este juego no participa en la serie especificada.");
             if (game.WinerTeamId == game.LoserTeamId)
-                return null;
+                throw new KeyNotFoundException("El equipo ganadore coincide con el equipo perdedor.");
             Position pitcher = _context.Positions.SingleOrDefault(c => c.PositionName == "P");
             List<Guid> positionsWinnerPitcher = _context.PlayerPosition
                 .Where(c => c.PlayerId == game.PitcherWinerId)
@@ -38,22 +38,22 @@ namespace SB_backend.Repositories
                 .Where(c => c.PlayerId == game.PitcherLoserId)
                 .Select(c => c.PositionId).ToList();
             if (!positionsWinnerPitcher.Contains(pitcher.Id))
-                return null;
+                throw new KeyNotFoundException("El Pitcher ganador no es válido.");
             if (!positionsLoserPitcher.Contains(pitcher.Id))
-                return null;
+                throw new KeyNotFoundException("El Pitcher perdedor no es válido.");
 
             if (!_context.TeamsSeriesPlayers.Any(c => c.SerieId == game.SerieId && c.TeamId == game.WinerTeamId && c.PlayerId == game.PitcherWinerId))
-                return null;
+                throw new KeyNotFoundException("El Pitcher ganador no es válido. No forma parte del equipo ganador del juego en la serie especificada.");
 
             if (!_context.TeamsSeriesPlayers.Any(c => c.SerieId == game.SerieId && c.TeamId == game.LoserTeamId && c.PlayerId == game.PitcherLoserId))
-                return null;
+                throw new KeyNotFoundException("El Pitcher ganador no es válido. No forma parte del equipo ganador del juego en la serie especificada.");
 
             bool flagWonGames = (_context.TeamsSeries.SingleOrDefault(c => c.TeamId == game.WinerTeamId && c.SerieId == game.SerieId).WonGames >= _context.Games.Where(c => c.SerieId == game.SerieId && c.WinerTeamId == game.WinerTeamId).ToList().Count);
             if (!flagWonGames)
-                return null;
+                throw new FormatException("El Equipo ganador no es válido."); 
             bool flagLostGames = (_context.TeamsSeries.SingleOrDefault(c => c.TeamId == game.LoserTeamId && c.SerieId == game.SerieId).LostGames >= _context.Games.Where(c => c.SerieId == game.SerieId && c.LoserTeamId == game.LoserTeamId).ToList().Count);
             if (!flagLostGames)
-                return null;
+                throw new FormatException("El Equipo perdedor no es válido.");
 
             PlayerGame winnerPitcherplayerGame = new PlayerGame();
             winnerPitcherplayerGame.GameId = game.GameId;
@@ -74,8 +74,8 @@ namespace SB_backend.Repositories
         public Game GetGame(Guid Id)
         {
             var game = _context.Games.Include(c => c.WinerTeam).Include(c => c.LoserTeam).Include(c => c.Serie).Include(c => c.PitcherWiner).Include(c => c.PitcherLoser).SingleOrDefault(c => c.GameId == Id);
-            if (game != null)
-                return null;
+            if (game == null)
+                throw new KeyNotFoundException("No se encuentra el juego especificado"); 
             return game;
         }
 
@@ -87,8 +87,8 @@ namespace SB_backend.Repositories
         public List<Game> GetGames(Guid SerieId, DateTime InitDate, DateTime EndDate)
         {
             var flag = _context.Games.Any(c => c.SerieId == SerieId && c.SerieInitDate == InitDate && c.SerieEndDate == EndDate);
-            if (!flag)
-                return null;
+            if (_context.Series.Find(SerieId, InitDate, EndDate) == null)
+                throw new KeyNotFoundException("No se encuentra la serie especificada.");
             return _context.Games.Include(c => c.Serie).Include(c => c.WinerTeam).Include(c => c.LoserTeam).Include(c => c.PitcherWiner).Include(c => c.PitcherLoser).Where(c => c.SerieId == SerieId && c.SerieInitDate == InitDate && c.SerieEndDate == EndDate).ToList();
         }
 
@@ -96,7 +96,7 @@ namespace SB_backend.Repositories
         {
             var currentGame = _context.Games.SingleOrDefault(c => c.GameId == game.GameId && c.SerieId == game.SerieId && c.SerieInitDate == game.SerieInitDate);
             if (currentGame == null)
-                return false;
+                throw new KeyNotFoundException("El juego no es válido.");
             foreach (var change in _context.PlayersChangesGames.Include(c=>c.Game).Where(c => c.GameId == game.GameId))
                 _context.PlayersChangesGames.Remove(change);
             foreach (var playerGame in _context.PlayersGames.Include(c => c.Game).Where(c => c.GameId == game.GameId))
@@ -110,7 +110,7 @@ namespace SB_backend.Repositories
         {
             var currentGame = _context.Games.SingleOrDefault(c => c.GameId == game.GameId && c.SerieId == c.SerieId && c.SerieInitDate == game.SerieInitDate);
             if (currentGame == null)
-                return null;
+                throw new KeyNotFoundException("No se enccuentra el juego especificado");
             currentGame.PitcherWinerId = game.PitcherWinerId;
             currentGame.PitcherLoserId = game.PitcherLoserId;
             currentGame.InFavorCarrers = game.InFavorCarrers;

@@ -19,23 +19,24 @@ namespace SB_backend.Repositories
         {
             var game = _context.Games.Find(playerChangeGame.GameId);
             if (game == null)
-                return null;
+                throw new KeyNotFoundException("No se encuentra el juego especificado.");
             List<Guid> teamLoser = _context.TeamsSeriesPlayers.Where(d => d.SerieId == game.SerieId && d.TeamId == game.LoserTeamId).Select(d => d.PlayerId).ToList();
             List<Guid> teamWiner = _context.TeamsSeriesPlayers.Where(d => d.SerieId == game.SerieId && d.TeamId == game.WinerTeamId).Select(d => d.PlayerId).ToList();
             var playerPositionInFlag = _context.PlayerPosition.Any(c => c.PlayerId == playerChangeGame.PositionIdIn && c.PositionId == playerChangeGame.PositionIdOut);
             if (!playerPositionInFlag)
-                return null;
+                throw new FormatException("No es valida la posición del cambio para el jugador que entra.");
 
             if (playerChangeGame.PositionIdIn != playerChangeGame.PositionIdOut)
-                return null;
+                throw new FormatException("La posición del jugador que entra no coincide con la del que es cambiado.");
             if ((teamWiner.Contains(playerChangeGame.PlayerIdIn) && teamWiner.Contains(playerChangeGame.PlayerIdOut)) || (teamLoser.Contains(playerChangeGame.PlayerIdOut) && teamLoser.Contains(playerChangeGame.PlayerIdIn)))
-                return null;
+                throw new FormatException("El cambio no es válido.");
 
             var isValidPlayerOut = _context.PlayersGames.Any(c => c.GameId == playerChangeGame.GameId && c.PlayerId == playerChangeGame.PlayerIdOut) 
                 || _context.PlayersChangesGames.Any(c => c.GameId == playerChangeGame.GameId && c.PlayerIdIn == playerChangeGame.PlayerIdOut);
 
             if (!isValidPlayerOut)
-                return null;
+                throw new FormatException("El jugador cambiado no es válido.");
+
 
             _context.PlayersChangesGames.Add(playerChangeGame);
             _context.SaveChanges();
@@ -49,18 +50,18 @@ namespace SB_backend.Repositories
 
         public List<PlayerChangeGame> GetPlayersChangesInGame(Guid GameId)
         {
-            var flag = _context.PlayersChangesGames.Any(c => c.GameId == GameId);
+            var flag = _context.Games.Any(c => c.GameId == GameId);
             if (!flag)
-                return null;
+                throw new FormatException("No se encuentra el juego especificado.");
             return _context.PlayersChangesGames.Where(c => c.GameId == GameId).ToList();
 
         }
 
         public List<PlayerChangeGame> GetPlayersChangesInGameLoserTeam(Guid GameId)
         {
-            var flag = _context.PlayersChangesGames.Any(c => c.GameId == GameId);
+            var flag = _context.Games.Any(c => c.GameId == GameId);
             if (!flag)
-                return null;
+                throw new FormatException("No se encuentra el juego especificado.");
             var game = _context.Games.SingleOrDefault(c => c.GameId == GameId);
             List<Guid> teamLoser = _context.TeamsSeriesPlayers.Where(d => d.SerieId == game.SerieId && d.TeamId == game.LoserTeamId).Select(d => d.PlayerId).ToList();
             return _context.PlayersChangesGames.Include(c => c.PlayerPositionIn).Include(c => c.PlayerPositionOut).Include(c => c.Game).Where(c => c.GameId == GameId && teamLoser.Contains(c.PlayerIdIn)).ToList();
@@ -68,9 +69,9 @@ namespace SB_backend.Repositories
 
         public List<PlayerChangeGame> GetPlayersChangesInGameWinerTeam(Guid GameId)
         {
-            var flag = _context.PlayersChangesGames.Any(c => c.GameId == GameId);
+            var flag = _context.Games.Any(c => c.GameId == GameId);
             if (!flag)
-                return null;
+                throw new FormatException("No se encuentra el juego especificado.");
             var game = _context.Games.SingleOrDefault(c => c.GameId == GameId);
             List<Guid> teamWiner = _context.TeamsSeriesPlayers.Where(d => d.SerieId == game.SerieId && d.TeamId == game.WinerTeamId).Select(d => d.PlayerId).ToList();
             return _context.PlayersChangesGames.Include(c => c.PlayerPositionIn).Include(c => c.PlayerPositionOut).Include(c => c.Game).Where(c => c.GameId == GameId && teamWiner.Contains(c.PlayerIdIn)).ToList();
@@ -84,7 +85,7 @@ namespace SB_backend.Repositories
             && c.PositionIdIn == positionIdIn
             && c.PositionIdOut == positionIdOut);
             if (currPlayerChange == null)
-                return false;
+                throw new FormatException("No se encuentra el juego especificado es válido.");
             _context.PlayersChangesGames.Remove(currPlayerChange);
             _context.SaveChanges();
             return true;

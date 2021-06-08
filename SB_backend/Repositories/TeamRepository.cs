@@ -30,6 +30,8 @@ namespace SB_backend.Repositories
         public Team getTeam(Guid Id)
         {
             var team = _teamContext.Teams.Find(Id);
+            if (team == null)
+                throw new KeyNotFoundException("No se encuentra el equipo especificado");
             return team;
         }
 
@@ -66,7 +68,7 @@ namespace SB_backend.Repositories
                 _teamContext.SaveChanges();
                 return true;
             }
-            return false;
+            throw new KeyNotFoundException("No se encuentra el equipo especificado");
         }
 
         public Team UpdateTeam(Team team)
@@ -82,7 +84,7 @@ namespace SB_backend.Repositories
                 _teamContext.Teams.Update(curr_team);
                 _teamContext.SaveChanges();
             }
-            return team;
+            throw new KeyNotFoundException("No se encuentra el equipo especificado");
         }
     }
 }

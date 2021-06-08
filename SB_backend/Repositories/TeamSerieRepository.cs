@@ -19,15 +19,15 @@ namespace SB_backend.Repositories
         {
             Team team = _context.Teams.Find(teamSerie.TeamId);
             if (team == null)
-                return null;
+                throw new KeyNotFoundException("No se encuentra el equipo especificado");
             Serie serie = _context.Series.Find(teamSerie.SerieId,teamSerie.SerieInitDate,teamSerie.SerieEndDate);
             if (serie == null)
-                return null;
+                throw new KeyNotFoundException("No se encuentra la serie especificado");
             //serie.NumberOfTeams += 1;
             if (teamSerie.FinalPosition > serie.NumberOfTeams)
-                return null;
+                throw new FormatException("No es válida la posición del equipo.");
             if (_context.TeamsSeries.Any(c => c.FinalPosition == teamSerie.FinalPosition && c.SerieId == teamSerie.SerieId && c.SerieInitDate == teamSerie.SerieInitDate && c.SerieEndDate == teamSerie.SerieEndDate))
-                return null;
+                throw new FormatException("No es válida la posición del equipo.");
             if (teamSerie.FinalPosition == 1)
                 serie.WinerId = teamSerie.TeamId;
             if (teamSerie.FinalPosition == serie.NumberOfTeams)
@@ -58,7 +58,7 @@ namespace SB_backend.Repositories
             var someSerie = _context.TeamsSeries.Any(c => c.TeamId == TeamId);
             if(someSerie == false)
             {
-                return null;
+                throw new KeyNotFoundException("El equipo especificado no ha participado en ninguna serie");
             }
             List<Serie> series = _context.TeamsSeries.Include(c => c.Serie).Where(c => c.TeamId == TeamId && c.FinalPosition == 1).Select(c => c.Serie).ToList();
             return series;
@@ -85,7 +85,7 @@ namespace SB_backend.Repositories
                 _context.SaveChanges();
                 return true;
             }
-            return false;
+            throw new KeyNotFoundException("No se encuentra el equipo en el standing de la serie especificada");
         }
 
         public TeamSerie UpdateTeamSerie(TeamSerie teamSerie)
@@ -100,7 +100,7 @@ namespace SB_backend.Repositories
                 _context.SaveChanges();
                 return teamSerie;
             }
-            return null;
+            throw new KeyNotFoundException("No se encuentra el equipo en el standing de la serie especificada");
         }
     }
 }

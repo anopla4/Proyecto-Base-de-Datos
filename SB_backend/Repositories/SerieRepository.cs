@@ -79,7 +79,7 @@ namespace SB_backend.Repositories
                 _context.SaveChanges();
                 return true;
             }
-            return false;
+            throw new KeyNotFoundException("No se encuentra la serie especificada");
         }
 
         public Serie UpdateSerie(Serie serie)
@@ -99,7 +99,7 @@ namespace SB_backend.Repositories
                 _context.SaveChanges();
                 return curr_serie;
             }
-            return null;
+            throw new KeyNotFoundException("No se encuentra la serie especificada");
         }
     }
 }

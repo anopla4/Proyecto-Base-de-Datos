@@ -25,7 +25,10 @@ namespace SB_backend.Repositories
 
         public Director GetDirector(Guid id)
         {
-            return _context.Directors.SingleOrDefault(c => c.Id == id);
+            var director = _context.Directors.SingleOrDefault(c => c.Id == id);
+            if (director == null)
+                throw new KeyNotFoundException("No se encuentra el director especificado");
+            return director;
         }
 
         public List<Director> GetDirectors()
@@ -44,7 +47,7 @@ namespace SB_backend.Repositories
                 _context.SaveChanges();
                 return true;
             }
-            return false;
+            throw new KeyNotFoundException("No se encuentra el direcctor especificado");
         }
 
         public Director UpdateDirector(Director director)
@@ -58,7 +61,7 @@ namespace SB_backend.Repositories
                 _context.SaveChanges();
                 return current_director;
             }
-            return current_director;
+            throw new KeyNotFoundException("No se encuentra el director especificado");
         }
     }
 }

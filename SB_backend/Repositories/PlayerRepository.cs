@@ -20,7 +20,7 @@ namespace SB_backend.Repositories
         {
             player.Id = Guid.NewGuid();
             if (player.Current_TeamId != null && !_playerContext.Teams.Any(c => c.Id == player.Current_TeamId))
-                return null;
+                throw new FormatException("No es válido el equipo actual del jugador.");
             player.Current_Team = _playerContext.Teams.Find(player.Current_TeamId);
             _playerContext.Players.Add(player);
 
@@ -33,13 +33,15 @@ namespace SB_backend.Repositories
         public Player GetPlayer(Guid playerId)
         {
             var player = _playerContext.Players.Include(c => c.Current_Team).SingleOrDefault(c => c.Id == playerId);
+            if (player == null)
+                throw new KeyNotFoundException("No se encuentra el jugador especificado");
             return player;
         }
 
         public List<Position> GetPlayerPositions(Guid playerId)
         {
             if (!_playerContext.Players.Any(c => c.Id == playerId))
-                return null;
+                throw new KeyNotFoundException("No se encuentra el jugador especificado");
             return _playerContext.PlayerPosition.Include(c => c.Position).Where(c => c.PlayerId == playerId).Select(c => c.Position).ToList();
         }
 
@@ -99,7 +101,8 @@ namespace SB_backend.Repositories
                 _playerContext.SaveChanges();
                 return true;
             }
-            return false;
+            throw new KeyNotFoundException("No se encuentra el jugador especificado");
+
         }
 
         public Player UpdatePlayer(Player player, List<Position> positions)
@@ -127,9 +130,11 @@ namespace SB_backend.Repositories
                     _playerContext.PlayerPosition.Remove(position);
                 foreach (var position in positions)
                     _playerContext.PlayerPosition.Add(new PlayerPosition() { PlayerId = player.Id, PositionId = position.Id });
+
+                _playerContext.SaveChanges();
             }
-            _playerContext.SaveChanges();
-            return curr_player;
+            throw new KeyNotFoundException("No se encuentra el jugador especificado");
+
         }
     }
 }

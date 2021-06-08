@@ -19,13 +19,13 @@ namespace SB_backend.Repositories
         {
             Team team = _context.Teams.Find(teamSeriePlayer.TeamId);
             if (team == null)
-                return null;
+                throw new KeyNotFoundException("No se encuentra el equipo especificado");
             Serie serie = _context.Series.Find(teamSeriePlayer.SerieId, teamSeriePlayer.SerieInitDate, teamSeriePlayer.SerieEndDate);
             if (serie == null)
-                return null;
+                throw new KeyNotFoundException("No se encuentra la serie especificada");
             bool player = _context.Players.Any(c => c.Id == teamSeriePlayer.PlayerId);
             if (!player)
-                return null;
+                throw new KeyNotFoundException("No se encuentra el jugador especificado");
             _context.TeamsSeriesPlayers.Add(teamSeriePlayer);
             _context.SaveChanges();
             return teamSeriePlayer;
@@ -35,7 +35,7 @@ namespace SB_backend.Repositories
         {
             bool flag = _context.TeamsSeriesPlayers.Any(c => c.SerieId == SerieId && c.SerieInitDate == SerieInitDate && c.SerieEndDate ==SerieEndDate);
             if (!flag)
-                return null;
+                throw new KeyNotFoundException("No se encuentra el jugador en la serie especificada como parte de este equipo");
 
             return _context.TeamsSeriesPlayers.Include(c => c.Player).Where(c => c.SerieId == SerieId && c.SerieInitDate == SerieInitDate && c.SerieEndDate == SerieEndDate).Select(c => c.Player).ToList();
         }
@@ -44,7 +44,7 @@ namespace SB_backend.Repositories
         {
             var flagPlayer = _context.Players.Any(c => c.Id == PlayerId);
             if (!flagPlayer)
-                return null;
+                throw new KeyNotFoundException("No se encuentra el jugador especificado");
             List<Team> teams = _context.TeamsSeriesPlayers.Include(c => c.Team).Where(c => c.PlayerId == PlayerId).Select(c => c.Team).ToList();
             return teams;
         }
@@ -52,7 +52,7 @@ namespace SB_backend.Repositories
         {
             bool teamSP = _context.TeamsSeriesPlayers.Any(c => c.TeamId == TeamId && c.SerieId == SerieId && c.SerieInitDate == SerieInitDate && c.SerieEndDate == SerieEndDate);
             if (!teamSP)
-                return null;
+                throw new KeyNotFoundException("No se encuentra el jugador en la serie especificada como parte de este equipo");
             return _context.TeamsSeriesPlayers.Include(c => c.Player).Where(c => c.SerieId == SerieId && c.SerieInitDate == SerieInitDate && c.SerieEndDate == SerieEndDate && c.TeamId == TeamId).Select(c => c.Player).ToList();
         }
 
@@ -60,7 +60,7 @@ namespace SB_backend.Repositories
         {
             var aux = _context.TeamsSeriesPlayers.Any(c => c.TeamId == TeamId);
             if (!aux)
-                return null;
+                throw new KeyNotFoundException("No se encuentra el jugador en la serie especificada como parte de este equipo");
             List<Player> players = _context.TeamsSeriesPlayers.Include(c => c.Player).Where(c => c.TeamId == TeamId).Select(c => c.Player).Distinct().ToList();
             
             return players; 
@@ -82,7 +82,7 @@ namespace SB_backend.Repositories
             var currTeamSeriePlayer = _context.TeamsSeriesPlayers.SingleOrDefault(c => c.PlayerId == teamSeriePlayer.PlayerId && c.SerieId == teamSeriePlayer.SerieId && c.SerieInitDate == teamSeriePlayer.SerieInitDate && c.SerieEndDate == teamSeriePlayer.SerieEndDate);
             if(currTeamSeriePlayer == null)
             {
-                return false;
+                throw new KeyNotFoundException("No se encuentra el jugador en la serie especificada como parte de este equipo");
             }
             foreach (var change in _context.PlayersChangesGames.Include(c=>c.Game).Where(c => c.Game.SerieId == teamSeriePlayer.SerieId && c.Game.SerieInitDate == teamSeriePlayer.SerieInitDate && c.Game.SerieEndDate == teamSeriePlayer.SerieEndDate && (c.PlayerIdIn == teamSeriePlayer.PlayerId || c.PlayerIdOut == teamSeriePlayer.PlayerId)))
                 _context.PlayersChangesGames.Remove(change);
@@ -102,7 +102,7 @@ namespace SB_backend.Repositories
             var currTeamSeriePlayer = _context.TeamsSeriesPlayers.SingleOrDefault(c => c.PlayerId == teamSeriePlayer.PlayerId && c.SerieId == teamSeriePlayer.SerieId && c.SerieInitDate == teamSeriePlayer.SerieInitDate && c.SerieEndDate == teamSeriePlayer.SerieEndDate);
             if (currTeamSeriePlayer == null)
             {
-                return null;
+                throw new KeyNotFoundException("No se encuentra el jugador en la serie especificada como parte de este equipo");
             }
             currTeamSeriePlayer.TeamId = teamSeriePlayer.TeamId;
             _context.TeamsSeriesPlayers.Update(currTeamSeriePlayer);
@@ -114,7 +114,7 @@ namespace SB_backend.Repositories
         {
             var flag = _context.TeamsSeriesPlayers.Any(c => c.TeamId == teamId && c.SerieId == SerieId && c.SerieInitDate == InitDate && c.SerieEndDate == EndDate);
             if (!flag)
-                return null;
+                throw new KeyNotFoundException("No se encuentra el jugador en la serie especificada como parte de este equipo");
             Position pitcher = _context.Positions.SingleOrDefault(c => c.PositionName == "P");
             var allPitchersIDs = _context.PlayerPosition.Where(c => c.PositionId == pitcher.Id).Select(c => c.PlayerId).ToList();
             return _context.TeamsSeriesPlayers.Include(c => c.Player).Where(c => c.TeamId == teamId && c.SerieId == SerieId && c.SerieInitDate == InitDate && c.SerieEndDate == EndDate && allPitchersIDs.Contains(c.PlayerId) ).Select(c => c.Player).ToList();

@@ -25,6 +25,10 @@ namespace SB_backend.Repositories
         public Caracter GetCaracter(Guid id)
         {
             Caracter caracter = _context.Caracters.SingleOrDefault(c => c.Id == id);
+            if(caracter == null)
+            {
+                throw new KeyNotFoundException("No se encuentra el carácter especificado.");
+            }
             return caracter;
         }
 
@@ -43,7 +47,7 @@ namespace SB_backend.Repositories
                 _context.SaveChanges();
                 return true;
             }
-            return false;
+            throw new KeyNotFoundException("No se encuentra el caráter especificado");
         }
 
         public Caracter UpdateCaracter(Caracter caracter)
@@ -57,7 +61,7 @@ namespace SB_backend.Repositories
                 _context.SaveChanges();
                 return curr_car;
             }
-            return null;
+            throw new KeyNotFoundException("No se encuentra el carácter especificado");
         }
     }
 }

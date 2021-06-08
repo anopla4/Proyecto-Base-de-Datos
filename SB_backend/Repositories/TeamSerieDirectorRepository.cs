@@ -19,13 +19,13 @@ namespace SB_backend.Repositories
         {
             Team team = _context.Teams.Find(teamSerieDirector.TeamSerieId);
             if (team == null)
-                return null;
+                throw new KeyNotFoundException("No se encuentra el equipo especificado");
             Serie serie = _context.Series.Find(teamSerieDirector.SerieId, teamSerieDirector.SerieInitDate, teamSerieDirector.SerieEndDate);
             if (serie == null)
-                return null;
+                throw new KeyNotFoundException("No se encuentra la serie especificada");
             Director director = _context.Directors.Find(teamSerieDirector.DirectorId);
             if (director == null)
-                return null;
+                throw new KeyNotFoundException("No se encuentra el director especificado");
             _context.TeamsSeriesDirectors.Add(teamSerieDirector);
             _context.SaveChanges();
             return teamSerieDirector;
@@ -35,7 +35,8 @@ namespace SB_backend.Repositories
         {
             bool teamSD = _context.TeamsSeriesDirectors.Any(c => c.TeamSerieId == TeamId && c.SerieId == SerieId);
             if (!teamSD)
-                return null;
+                throw new KeyNotFoundException("No se encuentran directores de este equipo en la serie especificada");
+
             return _context.TeamsSeriesDirectors.Include(c => c.Director).Where(c => c.SerieId == SerieId && c.SerieInitDate == initDate && c.SerieEndDate == endDate && c.TeamSerieId == TeamId).Select(c => c.Director).ToList();
         }
 
@@ -43,7 +44,7 @@ namespace SB_backend.Repositories
         {
             var aux = _context.TeamsSeriesDirectors.Any(c => c.TeamSerieId == TeamId);
             if (!aux)
-                return null;
+                throw new KeyNotFoundException("No se encuentran directores de este equipo en la serie especificada");
             List<Director> directors = _context.TeamsSeriesDirectors.Include(c => c.Director).Where(c => c.TeamSerieId == TeamId).Select(c => c.Director).ToList();
             return directors;
         }
@@ -64,7 +65,7 @@ namespace SB_backend.Repositories
             var currTeamSerieDirector = _context.TeamsSeriesDirectors.SingleOrDefault(c => c.DirectorId == teamSerieDirector.DirectorId && c.SerieId == teamSerieDirector.SerieId);
             if (currTeamSerieDirector == null)
             {
-                return false;
+                throw new KeyNotFoundException("No se encuentra este director en la serie espeificada");
             }
             _context.TeamsSeriesDirectors.Remove(currTeamSerieDirector);
             _context.SaveChanges();

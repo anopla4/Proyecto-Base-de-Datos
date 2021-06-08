@@ -21,14 +21,14 @@ namespace SB_backend.Repositories
             && c.InitDate == starPositionPlayerSerie.SerieInitDate 
             && c.EndDate == starPositionPlayerSerie.SerieEndDate);
             if (!flagSerie)
-                return null;
+                throw new KeyNotFoundException("No se encuentra la serie especificada");
 
             var flagPlayerPosition = _context.PlayerPosition.Any(c => c.PlayerId == starPositionPlayerSerie.PlayerId && c.PositionId == starPositionPlayerSerie.PositionId);
             if (!flagPlayerPosition)
-                return null;
+                throw new FormatException("No es válida la posición para el jugador especificado");
 
             if (_context.StarPositionPlayersSeries.Any(c => c.SerieId == starPositionPlayerSerie.SerieId && c.SerieInitDate == starPositionPlayerSerie.SerieInitDate && c.SerieEndDate == starPositionPlayerSerie.SerieEndDate && (c.PlayerId == starPositionPlayerSerie.PlayerId || c.PositionId == starPositionPlayerSerie.PositionId)))
-                return null;
+                throw new Exception("Ya se incluyo un jugador en esta posición en el equipo todos estrellas de la serie especificada");
             _context.StarPositionPlayersSeries.Add(starPositionPlayerSerie);
             _context.SaveChanges();
             return starPositionPlayerSerie;
@@ -38,7 +38,7 @@ namespace SB_backend.Repositories
         {
             if (!_context.StarPositionPlayersSeries.Any(c => c.SerieId == SerieId && c.SerieInitDate == SerieInitDate && c.SerieEndDate == SerieEndDate)) 
             {
-                return null;
+                throw new Exception("No se ha ingresado el equipo todos estrellas correspondiente a la serie especificada");
             }
             return _context.StarPositionPlayersSeries.Include(c => c.Player).Include(c => c.Player.Position).Where(c => c.SerieId == SerieId && c.SerieInitDate == SerieInitDate && c.SerieEndDate == SerieEndDate).ToList();
         }
@@ -47,7 +47,7 @@ namespace SB_backend.Repositories
         {
             var starPosPlayer = _context.StarPositionPlayersSeries.Include(c => c.Player).Include(c => c.Player.Position).Include(c => c.Serie).SingleOrDefault(c => c.SerieId == SerieId && c.SerieInitDate == SerieInitDate && c.SerieEndDate == SerieEndDate && c.PositionId == PositionId);
             if (starPosPlayer == null)
-                return null;
+                throw new Exception("No se ha ingresado el jugador de esta posición en el equipo todos estrellas correspondiente a la serie especificada");
             return starPosPlayer;
         }
 
@@ -78,7 +78,7 @@ namespace SB_backend.Repositories
         {
             var currStarPosPlayer = _context.StarPositionPlayersSeries.SingleOrDefault(c => c.SerieId == starPositionPlayerSerie.SerieId && c.SerieInitDate == starPositionPlayerSerie.SerieInitDate && c.SerieEndDate == starPositionPlayerSerie.SerieEndDate && c.PositionId == starPositionPlayerSerie.PositionId);
             if (currStarPosPlayer == null)
-                return null;
+                throw new Exception("No se encuentra un jugador en la posición correspondiente en el equipo todos estrellas de la serie especificada");
             currStarPosPlayer.PlayerId = starPositionPlayerSerie.PlayerId;
             _context.StarPositionPlayersSeries.Update(currStarPosPlayer);
             _context.SaveChanges();

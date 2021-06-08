@@ -23,7 +23,10 @@ namespace SB_backend.Repositories
 
         public Position GetPosition(Guid Id)
         {
-            return _context.Positions.SingleOrDefault(c => c.Id == Id);
+            var position = _context.Positions.SingleOrDefault(c => c.Id == Id);
+            if (position == null)
+                throw new KeyNotFoundException("No se encuentra la posición especificada");
+            return position;
         }
 
         public List<Position> GetPositions()
@@ -40,8 +43,8 @@ namespace SB_backend.Repositories
                 _context.SaveChanges();
                 return true;
             }
-            return false;
-            
+            throw new KeyNotFoundException("No se encuentra la posición especificada");
+
         }
 
         public Position UpdatePosition(Position position)
@@ -53,7 +56,7 @@ namespace SB_backend.Repositories
                 _context.Positions.Update(current_position);
                 _context.SaveChanges();
             }
-            return current_position;
+            throw new KeyNotFoundException("No se encuentra la posición especificada");
         }
     }
 }
