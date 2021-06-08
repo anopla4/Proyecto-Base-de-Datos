@@ -37,10 +37,18 @@ namespace SB_backend.Repositories
             var game = _context.Games.SingleOrDefault(c => c.GameId == GameId);
             if (game == null)
                 throw new KeyNotFoundException("No se encuentra el juego especificado.");
-            List<PlayerPosition> lineupWT = _context.PlayersGames.Include(c => c.Player)
-                 .Where(c => c.GameId == GameId && c.Game.WinerTeamId == game.WinerTeamId)
-                 .Select(c => c.Player)
+            List<PlayerPosition> temp = _context.PlayersGames.Include(c => c.Player)
+                 .Where(c => c.GameId == GameId)
+                 .Select(c => c.Player).Include(c=>c.Position).Include(c => c.Player)
                  .ToList();
+            var lineupWT = new List<PlayerPosition>();
+            foreach (var item in temp)
+            {
+                if(_context.TeamsSeriesPlayers.Any(c=>c.SerieId == game.SerieId && c.SerieEndDate == game.SerieEndDate 
+                && c.SerieInitDate == game.SerieInitDate && c.TeamId == game.WinerTeamId && c.PlayerId == item.PlayerId)){
+                    lineupWT.Add(item);
+                }
+            }
             if (lineupWT.Count == 0)
                 throw new Exception("No se han ingresado los jugadores del equipo ganador al juego especificado.");
             return lineupWT;
@@ -51,10 +59,19 @@ namespace SB_backend.Repositories
             var game = _context.Games.SingleOrDefault(c => c.GameId == GameId);
             if (game == null)
                 throw new KeyNotFoundException("No se encuentra el juego especificado.");
-            List<PlayerPosition> lineupWT = _context.PlayersGames.Include(c => c.Player)
+            List<PlayerPosition> temp = _context.PlayersGames.Include(c => c.Player)
                  .Where(c => c.GameId == GameId && c.Game.LoserTeamId == game.LoserTeamId)
-                 .Select(c => c.Player)
+                 .Select(c => c.Player).Include(c => c.Position).Include(c => c.Player)
                  .ToList();
+            var lineupWT = new List<PlayerPosition>();
+            foreach (var item in temp)
+            {
+                if (_context.TeamsSeriesPlayers.Any(c => c.SerieId == game.SerieId && c.SerieEndDate == game.SerieEndDate
+                 && c.SerieInitDate == game.SerieInitDate && c.TeamId == game.LoserTeamId && c.PlayerId == item.PlayerId))
+                {
+                    lineupWT.Add(item);
+                }
+            }
             if (lineupWT.Count == 0)
                 throw new Exception("No se han ingresado jugadores al juego especificado.");
 
@@ -78,7 +95,12 @@ namespace SB_backend.Repositories
             bool flagPlayerPosition = _context.PlayerPosition.Any(c => c.PlayerId == playerGame.PlayerId && c.PositionId == playerGame.PositionId);
             if (!flagPlayerPosition)
                 throw new KeyNotFoundException("La posición no es válida para este jugador.");
-            bool isPositionTaken = _context.PlayersGames.Any(c => c.GameId == playerGame.GameId && c.PositionId == playerGame.PositionId);
+            var record = _context.TeamsSeriesPlayers.SingleOrDefault(c => c.SerieId == game.SerieId && c.SerieEndDate == game.SerieEndDate
+                 && c.SerieInitDate == game.SerieInitDate && c.PlayerId == playerGame.PlayerId);
+            var temp = _context.PlayersGames.SingleOrDefault(c => c.GameId == playerGame.GameId && c.PositionId == playerGame.PositionId);
+            var tempRecord = _context.TeamsSeriesPlayers.SingleOrDefault(c => c.SerieId == game.SerieId && c.SerieEndDate == game.SerieEndDate
+                  && c.SerieInitDate == game.SerieInitDate && c.PlayerId == temp.PlayerId);
+            bool isPositionTaken = record.TeamId == tempRecord.TeamId;
             if(isPositionTaken)
                 throw new FormatException("Ya existe un jugador en la posición espeificada para el equipo correspondiente al jugador.");
             bool isPlayerAlready = _context.PlayersGames.Any(c => c.GameId == playerGame.GameId && c.PlayerId == playerGame.PlayerId);

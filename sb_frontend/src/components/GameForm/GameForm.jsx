@@ -106,7 +106,7 @@ class GameForm extends Component {
     const loser_pitcher = formElements.loser_pitcher;
     const pitcherLoserId =
       loser_pitcher.children[loser_pitcher.selectedIndex].id;
-    const AgaintsCarrers = formElements.runs_against.value;
+    const againstCarrers = formElements.runs_against.value;
     const inFavorCarrers = formElements.runs_in_favor.value;
 
     let game = {
@@ -119,7 +119,7 @@ class GameForm extends Component {
       gameTime,
       pitcherWinerId,
       pitcherLoserId,
-      AgaintsCarrers,
+      againstCarrers,
       inFavorCarrers,
     };
     fetch("https://localhost:44334/api/Game", {

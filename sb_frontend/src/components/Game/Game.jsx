@@ -59,7 +59,7 @@ class Game extends Component {
       serie: this.props.location.state.serie,
     });
     fetch(
-      ` https://localhost:44334/api/TeamSeriePlayer/Players/${this.state.game.winerTeamId}/${this.state.serie.id}/${this.state.serie.initDate}/${this.state.serie.endDate}`,
+      ` https://localhost:44334/api/TeamSeriePlayer/Players/${this.props.location.state.game.winerTeamId}/${this.props.location.state.serie.id}/${this.props.location.state.serie.initDate}/${this.props.location.state.serie.endDate}`,
       {
         mode: "cors",
       }
@@ -77,7 +77,7 @@ class Game extends Component {
         console.log("Hubo un problema con la petición Fetch:" + error.message);
       });
     fetch(
-      ` https://localhost:44334/api/TeamSeriePlayer/Players/${this.state.game.loserTeamId}/${this.state.serie.id}/${this.state.serie.initDate}/${this.state.serie.endDate}`,
+      ` https://localhost:44334/api/TeamSeriePlayer/Players/${this.props.location.state.game.loserTeamId}/${this.props.location.state.serie.id}/${this.props.location.state.serie.initDate}/${this.props.location.state.serie.endDate}`,
       {
         mode: "cors",
       }
@@ -141,7 +141,7 @@ class Game extends Component {
         return response.json();
       })
       .then((response) => {
-        this.setState({ playerLoserGame: response });
+        this.setState({ playersLoserGame: response });
       })
       .catch(function (error) {
         console.log("Hubo un problema con la petición Fetch:" + error.message);
@@ -199,7 +199,11 @@ class Game extends Component {
 
     fetch("https://localhost:44334/api/PlayerGame", {
       mode: "cors",
-      headers: { "Content-Type": "application/json","Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization:
+          "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token,
+      },
       method: "POST",
       body: JSON.stringify(playerGame),
     })
@@ -219,7 +223,7 @@ class Game extends Component {
     let formElements = e.target.elements;
     const playerOut = formElements.changeOut;
     const playerIdOut = playerOut.children[playerOut.selectedIndex].id;
-    const playerIn = formElements.changeOut;
+    const playerIn = formElements.changeIn;
     const playerIdIn = playerIn.children[playerIn.selectedIndex].id;
     const positions = formElements.positions;
     const positionId = positions.children[positions.selectedIndex].id;
@@ -231,10 +235,14 @@ class Game extends Component {
       playerIdIn: playerIdIn,
       positionIdIn: positionId,
     };
-
+    console.log(playerChangeGame);
     fetch("https://localhost:44334/api/PlayerChangeGame", {
       mode: "cors",
-      headers: { "Content-Type": "application/json","Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization:
+          "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token,
+      },
       method: "POST",
       body: JSON.stringify(playerChangeGame),
     })
@@ -247,16 +255,20 @@ class Game extends Component {
       .catch(function (error) {
         console.log("Hubo un problema con la petición Fetch:" + error.message);
       });
-    this.setState({ addPlayer: false });
+    this.setState({ addChange: false });
   };
 
   handleOnDeletePlayer = (player, index, h) => {
     fetch(
-      `https://localhost:44334/api/Player/${this.state.game.gameId}/${this.state.game.player.playerId}/${this.state.game.player.positionId}`,
+      `https://localhost:44334/api/PlayerGame/${this.state.game.gameId}/${player.playerId}/${player.positionId}`,
       {
         mode: "cors",
         method: "DELETE",
-        headers:{"Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token}
+        headers: {
+          Authorization:
+            "Bearer " +
+            JSON.parse(localStorage.getItem("loggedUser")).jwt_token,
+        },
       }
     )
       .then((response) => {
@@ -281,11 +293,15 @@ class Game extends Component {
 
   handleOnDeleteChange = (change, index, h) => {
     fetch(
-      `https://localhost:44334/api/Player/${this.state.game.gameId}/${change.playerIdIn}/${change.positionIdIn}/${change.playerIdOut}/${change.positionIdOut}`,
+      `https://localhost:44334/api/PlayerChangeGame/${this.state.game.gameId}/${change.playerIdIn}/${change.positionIdIn}/${change.playerIdOut}/${change.positionIdOut}`,
       {
         mode: "cors",
         method: "DELETE",
-        headers:{"Authorization": "Bearer " + JSON.parse(localStorage.getItem("loggedUser")).jwt_token}
+        headers: {
+          Authorization:
+            "Bearer " +
+            JSON.parse(localStorage.getItem("loggedUser")).jwt_token,
+        },
       }
     )
       .then((response) => {
@@ -367,24 +383,25 @@ class Game extends Component {
                         <Card key={player.id} className="mb-2">
                           <Card.Header style={{ padding: "0.5%" }}>
                             <Row className="row align-items-center">
-                              <Col md={1}>
+                              <Col md={2}>
                                 <Image
                                   fluid
                                   roundedCircle
-                                  src={`https://localhost:44334/${player.imgPath}`}
-                                  style={{ height: "85px" }}
+                                  src={`https://localhost:44334/${player.player.imgPath}`}
+                                  style={{ width: "100%" }}
                                   alt=""
                                   className="custom-circle-image"
                                 />
                               </Col>
                               <Col>
-                                <h5>{player.name}</h5>
+                                <h5>{player.player.name}</h5>
                                 <h6>{player.position.positionName}</h6>
                               </Col>
                               <Col>
                                 <DeleteEdit
+                                  delete={true}
                                   onDelete={() =>
-                                    this.state.handleOnDeletePlayer(
+                                    this.handleOnDeletePlayer(
                                       player,
                                       index,
                                       "winner"
@@ -407,24 +424,25 @@ class Game extends Component {
                         <Card key={player.id} className="mb-2">
                           <Card.Header style={{ padding: "0.5%" }}>
                             <Row className="row align-items-center">
-                              <Col md={1}>
+                              <Col md={2}>
                                 <Image
                                   fluid
                                   roundedCircle
-                                  src={`https://localhost:44334/${player.imgPath}`}
-                                  style={{ height: "85px" }}
+                                  src={`https://localhost:44334/${player.player.imgPath}`}
+                                  style={{ width: "100%" }}
                                   alt=""
                                   className="custom-circle-image"
                                 />
                               </Col>
                               <Col>
-                                <h5>{player.name}</h5>
+                                <h5>{player.player.name}</h5>
                                 <h6>{player.position.positionName}</h6>
                               </Col>
                               <Col>
                                 <DeleteEdit
+                                  delete={true}
                                   onDelete={() =>
-                                    this.state.handleOnDeletePlayer(
+                                    this.handleOnDeletePlayer(
                                       player,
                                       index,
                                       "loser"
@@ -457,11 +475,11 @@ class Game extends Component {
                         <tbody>
                           {this.state.winnerChanges.map((change, index) => (
                             <tr>
-                              <td>{change.playerPositionOut.name}</td>
+                              <td>{change.playerPositionOut.player.name}</td>
                               <td>
                                 <Image src={arrow} />
                               </td>
-                              <td>{change.playerPositionIn.name}</td>
+                              <td>{change.playerPositionIn.player.name}</td>
                               <DeleteEdit
                                 delete={true}
                                 onDelete={() =>

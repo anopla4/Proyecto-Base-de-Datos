@@ -15,13 +15,11 @@ namespace SB_backend.Models
         public Game Game { get; set; }
         public Guid PlayerIdIn { get; set; }
         public Guid PositionIdIn { get; set; }
-        [Required]
         [ForeignKey("PlayerIdIn,PositionIdIn")]
         public PlayerPosition PlayerPositionIn { get; set; }
 
         public Guid PlayerIdOut { get; set; }
         public Guid PositionIdOut { get; set; }
-        [Required]
         [ForeignKey("PlayerIdOut,PositionIdOut")]
         public PlayerPosition PlayerPositionOut { get; set; }
     }
