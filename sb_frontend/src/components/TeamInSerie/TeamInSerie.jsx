@@ -241,7 +241,6 @@ class TeamInSerie extends Component {
       const player = formElements.player;
       if (player) {
         const playerId = player.children[player.selectedIndex].id;
-        console.log("aaaaaaaaaaaaaaaa");
         let item = {
           playerId: playerId,
           serieId: this.state.serie.id,

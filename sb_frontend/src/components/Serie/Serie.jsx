@@ -157,17 +157,19 @@ class Serie extends Component {
       });
     } else {
       const player = formElements.player;
-      const playerId = player ? player.children[player.selectedIndex].id : "";
+      const playerId = player
+        ? player.children[player.selectedIndex].id
+        : undefined;
       const position = formElements.position;
       const positionId = position
         ? position.children[position.selectedIndex].id
-        : "";
+        : undefined;
       let item = {
         playerId: playerId,
         positionId: positionId,
         serieId: this.state.idSerie,
-        serieInitDate: this.state.serieInitDate,
-        serieEndDate: this.state.serieEndDate,
+        serieInitDate: this.state.initDate,
+        serieEndDate: this.state.endDate,
       };
       fetch("https://localhost:44334/api/StarPositionPlayerSerie", {
         mode: "cors",
@@ -224,8 +226,21 @@ class Serie extends Component {
       .catch(function (error) {
         console.log("Hubo un problema con la petición Fetch:" + error.message);
       });
+
+    this.setState({
+      idSerie: this.props.location.state.serie.id,
+      initDate: this.props.location.state.serie.initDate,
+      endDate: this.props.location.state.serie.endDate,
+    });
+  }
+
+  componentDidMount() {
     fetch(
-      `https://localhost:44334/api/TeamSeriePlayer/${this.state.idSerie}/${this.state.initDate}/${this.state.endDate}`,
+      `https://localhost:44334/api/TeamSeriePlayer/${
+        this.state.idSerie
+      }/${this.formatDate(this.state.initDate)}/${this.formatDate(
+        this.state.endDate
+      )}`,
       { mode: "cors" }
     )
       .then((response) => {
@@ -240,15 +255,6 @@ class Serie extends Component {
       .catch(function (error) {
         console.log("Hubo un problema con la petición Fetch:" + error.message);
       });
-
-    this.setState({
-      idSerie: this.props.location.state.serie.id,
-      initDate: this.props.location.state.serie.initDate,
-      endDate: this.props.location.state.serie.endDate,
-    });
-  }
-
-  componentDidMount() {
     fetch(
       `https://localhost:44334/api/TeamSerie/Standing/${
         this.state.idSerie
@@ -330,6 +336,7 @@ class Serie extends Component {
   };
 
   handleDeletePlayer = (idPos, index) => {
+    console.log("aaaaaaaaaaaaaaaaaaaaa");
     fetch(
       `https://localhost:44334/api/StarPositionPlayerSerie/${
         this.state.idSerie
@@ -465,23 +472,28 @@ class Serie extends Component {
                               <Image
                                 fluid
                                 roundedCircle
-                                src={`https://localhost:44334/${player.imgPath}`}
+                                src={`https://localhost:44334/${player.player.player.imgPath}`}
                                 alt=""
                                 className="custom-circle-image"
                               />
                             </Col>
                             <Col>
-                              <h5>{player.name}</h5>
+                              <h5>{player.player.player.name}</h5>
                             </Col>
                             <Col>
                               <p style={{ display: "inline" }}>
                                 <h className="bold">Posiciones: </h>
-                                {player.position}
+                                {player.player.position.positionName}
                               </p>
                             </Col>
                             <Col md={2}>
                               <DeleteEdit
                                 delete={true}
+                                onDelete={() =>
+                                  this.handleDeletePlayer(
+                                    player.player.position.id
+                                  )
+                                }
                                 size="lg"
                                 top="3"
                                 space="2"
@@ -595,23 +607,23 @@ class Serie extends Component {
               <Navbar fixed="right">
                 <Nav.Item>
                   <Form onSubmit={this.onFormSubmit}>
-                    <Form.Group controlId="name">
+                    <Form.Group controlId="player">
                       <Form.Label>Jugador:</Form.Label>
                       <Form.Control as="select" custom>
                         <option>{""}</option>
                         {this.state.players.map((player) => (
                           <option id={player.id}>
-                            {player.name} ({player.team})
+                            {player.name} ({player.teams})
                           </option>
                         ))}
                       </Form.Control>
                     </Form.Group>
-                    <Form.Group controlId="name">
+                    <Form.Group controlId="position">
                       <Form.Label>Posición:</Form.Label>
                       <Form.Control as="select" custom>
                         <option>{""}</option>
                         {this.state.positions.map((pos) => (
-                          <option id={pos.id}>{pos}</option>
+                          <option id={pos.id}>{pos.positionName}</option>
                         ))}
                       </Form.Control>
                     </Form.Group>
